@@ -17,7 +17,7 @@
   <!-- Estado: no encontrada -->
   <div id="estado-error" class="relative z-10 min-h-screen hidden flex-col items-center justify-center px-4 text-center">
     <div class="glass p-10 max-w-md">
-      <p class="text-5xl mb-4">🔍</p>
+      <span data-icono="buscar" data-clases="w-12 h-12 text-slate-400" class="block mx-auto mb-4 w-12 h-12"></span>
       <h1 class="text-2xl font-bold">Tienda no encontrada</h1>
       <p class="text-slate-400 mt-2">Esta dirección no corresponde a ninguna tienda activa de DGP LinkShop.</p>
       <a href="https://dgp-link.com" class="btn-liquid inline-block mt-6 text-sm">Crear mi propia tienda</a>
@@ -26,20 +26,22 @@
 
   <!-- Tienda -->
   <div id="estado-tienda" class="relative z-10 hidden">
-    <main class="max-w-4xl mx-auto px-4 pb-24 pt-10">
+    <main class="max-w-4xl mx-auto px-4 pb-28 pt-10">
 
       <!-- Cabecera del negocio -->
       <header class="glass p-8 text-center">
-        <div id="tienda-logo" class="w-24 h-24 mx-auto rounded-2xl glass flex items-center justify-center text-4xl overflow-hidden">🏪</div>
+        <div id="tienda-logo" class="w-24 h-24 mx-auto rounded-2xl glass flex items-center justify-center overflow-hidden text-slate-300">
+          <span data-icono="tienda" data-clases="w-10 h-10"></span>
+        </div>
         <h1 id="tienda-nombre" class="mt-4 text-3xl font-extrabold"></h1>
         <p id="tienda-descripcion" class="text-slate-300 mt-2 max-w-xl mx-auto"></p>
       </header>
 
       <!-- Catálogo -->
-      <section class="mt-8">
+      <section class="mt-8" aria-label="Catálogo de productos">
         <div id="tienda-productos" class="grid grid-cols-2 md:grid-cols-3 gap-4"></div>
         <p id="tienda-sin-productos" class="glass p-10 text-center text-slate-400 hidden">
-          Esta tienda aún está preparando su catálogo. ¡Vuelve pronto! ✨
+          Esta tienda aún está preparando su catálogo. ¡Vuelve pronto!
         </p>
         <!-- Centinela del scroll infinito: al verse, carga la siguiente página -->
         <div id="sentinela-scroll" class="h-8 mt-4 flex items-center justify-center text-slate-500 text-xs hidden">
@@ -48,14 +50,10 @@
       </section>
     </main>
 
-    <!-- Botón flotante de WhatsApp -->
-    <a id="tienda-whatsapp" href="#" target="_blank" rel="noopener"
-       class="hidden fixed bottom-6 right-6 z-30 btn-liquid shadow-2xl">
-      💬 Pedir por WhatsApp
-    </a>
-
-    <footer class="relative z-10 text-center text-xs text-slate-500 pb-6">
-      Tienda creada con <a href="https://dgp-link.com" class="text-indigo-300 hover:underline">DGP LinkShop</a>
+    <!-- Footer institucional DGP -->
+    <footer class="relative z-10 text-center text-xs text-slate-500 pb-8 space-y-1">
+      <p>Tienda creada con <a href="https://dgp-link.com" class="text-indigo-300 hover:text-indigo-200 transition">DGP LinkShop</a></p>
+      <p>Desarrollado por <a href="https://dgpglobalgroup.com" target="_blank" rel="noopener" class="text-indigo-300 hover:text-indigo-200 transition font-semibold">DGP Global Group</a></p>
     </footer>
   </div>
 

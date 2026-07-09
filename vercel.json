@@ -1,0 +1,25 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "rewrites": [
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "dgp-link.com" }],
+      "destination": "/public/index.html"
+    },
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "www.dgp-link.com" }],
+      "destination": "/public/index.html"
+    },
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "app.dgp-link.com" }],
+      "destination": "/public/index.html"
+    },
+    {
+      "source": "/",
+      "destination": "/public/tienda.html"
+    }
+  ]
+}

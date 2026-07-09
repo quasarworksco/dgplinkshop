@@ -27,8 +27,11 @@ dgplinkshop/
 │   ├── auth.js              #   Registro, login, guardas de sesión
 │   ├── acceso.js            #   Lógica de la página de acceso
 │   ├── wizard.js            #   Wizard de onboarding + vista previa en vivo
-│   ├── panel.js             #   CRUD de productos con render selectivo del DOM
+│   ├── panel.js             #   Admin: catálogo, pedidos y cupones (render selectivo)
 │   ├── tienda.js            #   Storefront con paginación y scroll infinito
+│   ├── carrito.js           #   Carrito flotante + pedido por WhatsApp
+│   ├── iconos.js            #   Iconografía SVG (estilo Lucide, sin emojis)
+│   ├── notificaciones.js    #   Toasts + registro de errores con contexto
 │   ├── subdominio.js        #   Resolución de tenant por subdominio + slugs
 │   ├── cloudinary.js        #   Subida unsigned + transformaciones de imagen
 │   ├── lazy-imagenes.js     #   Lazy loading con IntersectionObserver
@@ -39,7 +42,8 @@ dgplinkshop/
 │   └── logo.svg             # Logo DGP LinkShop
 ├── supabase/migrations/
 │   ├── 001-esquema-inicial.sql   # Tablas, triggers, límites por plan
-│   └── 002-politicas-rls.sql     # Row Level Security
+│   ├── 002-politicas-rls.sql     # Row Level Security
+│   └── 003-pedidos-cupones.sql   # Pedidos, cupones, destacados y descuentos
 ├── docs/
 │   └── subdominios.md       # Cómo funciona negocio1.dgp-link.com
 ├── scripts/
@@ -60,7 +64,7 @@ aplicarse (los cambios van en una migración nueva: `003-...sql`).
    npm install
    ```
 2. **Supabase**: crea un proyecto y ejecuta en el SQL Editor, en orden,
-   `supabase/migrations/001-esquema-inicial.sql` y `002-politicas-rls.sql`.
+   las migraciones de `supabase/migrations/` (001, 002 y 003).
 3. **Cloudinary**: crea un *upload preset* **unsigned** llamado `dgp-linkshop`
    (Settings → Upload → Add upload preset → Signing mode: Unsigned).
 4. **Configura** `src/config.js` con tu URL/anon key de Supabase y tu cloud
@@ -83,6 +87,9 @@ auth.users ──1:1── profiles ──1:1── businesses ──1:1── s
                                         └────────1:N── products
 ```
 
+Además: `orders` (pedidos por WhatsApp con estado interno) y `coupons`
+(cupones por negocio con vencimiento y usos máximos), ambos por negocio.
+
 - Al registrarse un usuario, un trigger crea su `profile` automáticamente.
 - Al crear un negocio, un trigger crea su suscripción **FREE activa**.
 - El límite de productos (5 free / 50 pro) lo hace cumplir el trigger
@@ -96,6 +103,24 @@ Todas las tablas tienen Row Level Security activo (`002-politicas-rls.sql`):
 un usuario autenticado solo lee/escribe **sus** datos; los visitantes anónimos
 solo leen tiendas publicadas y productos activos; `subscriptions` es de solo
 lectura para el dueño.
+
+Los pedidos y cupones nunca se manipulan directamente desde el navegador del
+cliente: la creación de pedidos y la validación de cupones pasan por las
+funciones `crear_pedido` y `validar_cupon` (security definer), que recalculan
+precios y descuentos **en el servidor**.
+
+## Pedidos por WhatsApp
+
+La plataforma no procesa pagos. Al confirmar el carrito, el pedido se registra
+en `orders` (para el historial y control de estados del panel: pendiente,
+procesado, entregado, cancelado) y el cliente es redirigido al WhatsApp del
+negocio con el detalle estructurado (productos, cantidades, descuentos, total).
+
+## Identidad de marca
+
+Sin emojis en la interfaz: toda la iconografía es SVG (estilo Lucide) generada
+por `src/iconos.js`. Todas las páginas llevan el footer institucional
+"Desarrollado por DGP Global Group" con enlace a dgpglobalgroup.com.
 
 ## Rendimiento (pensado para 50+ negocios activos)
 

@@ -9,6 +9,7 @@ import { supabase } from './supabase-client.js';
 import { requerirSesion } from './auth.js';
 import { subirImagen, optimizada } from './cloudinary.js';
 import { normalizarSlug, urlDeTienda } from './subdominio.js';
+import { hidratarIconos } from './iconos.js';
 
 const TOTAL_PASOS = 4;
 
@@ -41,7 +42,7 @@ function renderPaso() {
     p.textContent = n < estado.paso ? '✓' : n;
   });
   $('btn-atras').classList.toggle('invisible', estado.paso === 1);
-  $('btn-siguiente').textContent = estado.paso === TOTAL_PASOS ? '🚀 Publicar mi tienda' : 'Siguiente →';
+  $('btn-siguiente').textContent = estado.paso === TOTAL_PASOS ? 'Publicar mi tienda' : 'Siguiente →';
   ocultarError();
   if (estado.paso === TOTAL_PASOS) renderResumen();
 }
@@ -249,7 +250,7 @@ async function publicarTienda() {
   } catch (err) {
     mostrarError(err.message);
     boton.disabled = false;
-    boton.textContent = '🚀 Publicar mi tienda';
+    boton.textContent = 'Publicar mi tienda';
   }
 }
 
@@ -257,6 +258,7 @@ async function publicarTienda() {
 // Arranque: exigir sesión y, si ya tiene tienda, ir al panel
 // ------------------------------------------------------------
 (async function iniciar() {
+  hidratarIconos();
   usuario = await requerirSesion();
   if (!usuario) return;
   const { data: existente } = await supabase

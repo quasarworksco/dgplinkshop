@@ -51,17 +51,17 @@
             </div>
             <div>
               <label for="negocio-descripcion" class="block text-sm mb-1 text-slate-300">Descripción corta</label>
-              <textarea id="negocio-descripcion" class="input-glass" rows="3" maxlength="200" placeholder="Postres artesanales hechos con amor 🍰"></textarea>
+              <textarea id="negocio-descripcion" class="input-glass" rows="3" maxlength="200" placeholder="Postres artesanales hechos con amor"></textarea>
             </div>
             <div>
               <label for="negocio-categoria" class="block text-sm mb-1 text-slate-300">Categoría</label>
               <select id="negocio-categoria" class="input-glass">
-                <option value="comida">🍔 Comida y postres</option>
-                <option value="moda">👗 Moda y accesorios</option>
-                <option value="belleza">💄 Belleza y cuidado</option>
-                <option value="hogar">🏠 Hogar y decoración</option>
-                <option value="servicios">🛠️ Servicios</option>
-                <option value="otro">✨ Otro</option>
+                <option value="comida">Comida y postres</option>
+                <option value="moda">Moda y accesorios</option>
+                <option value="belleza">Belleza y cuidado</option>
+                <option value="hogar">Hogar y decoración</option>
+                <option value="servicios">Servicios</option>
+                <option value="otro">Otro</option>
               </select>
             </div>
           </div>
@@ -72,7 +72,7 @@
           <h2 class="text-2xl font-bold mb-1">El rostro de tu marca</h2>
           <p class="text-slate-400 text-sm mb-6">Sube tu logo. Lo optimizamos automáticamente.</p>
           <label id="zona-subida" class="glass glass-hover flex flex-col items-center justify-center gap-3 p-10 cursor-pointer border-dashed" for="input-logo">
-            <span class="text-4xl">🖼️</span>
+            <span data-icono="subir" data-clases="w-10 h-10 text-indigo-300"></span>
             <span class="font-semibold">Toca para elegir tu logo</span>
             <span class="text-xs text-slate-400">JPG, PNG o WebP · máx. 5 MB</span>
             <input id="input-logo" type="file" accept="image/jpeg,image/png,image/webp" class="hidden" />
@@ -110,7 +110,7 @@
 
         <!-- PASO 4: Revisión y publicación -->
         <section class="paso-panel hidden" data-panel="4">
-          <h2 class="text-2xl font-bold mb-1">¡Todo listo! 🎉</h2>
+          <h2 class="text-2xl font-bold mb-1">¡Todo listo!</h2>
           <p class="text-slate-400 text-sm mb-6">Revisa la vista previa y publica tu tienda.</p>
           <div class="glass p-5 space-y-3 text-sm">
             <p><span class="text-slate-400">Negocio:</span> <strong id="resumen-nombre">—</strong></p>
@@ -133,30 +133,38 @@
         <p class="text-center text-xs uppercase tracking-widest text-slate-500 mb-3">Vista previa en vivo</p>
         <div class="glass p-6" id="preview-tienda">
           <div class="text-center">
-            <div id="preview-logo" class="w-20 h-20 mx-auto rounded-2xl glass flex items-center justify-center text-3xl overflow-hidden">🏪</div>
+            <div id="preview-logo" class="w-20 h-20 mx-auto rounded-2xl glass flex items-center justify-center overflow-hidden text-slate-300">
+              <span data-icono="tienda" data-clases="w-8 h-8"></span>
+            </div>
             <h3 id="preview-nombre" class="mt-4 text-xl font-bold">Tu negocio</h3>
             <p id="preview-descripcion" class="text-sm text-slate-400 mt-1">Tu descripción aparecerá aquí</p>
             <p id="preview-url" class="text-xs mt-2 text-cyan-300">tunegocio.dgp-link.com</p>
           </div>
           <div class="grid grid-cols-2 gap-3 mt-6">
             <div class="glass p-3">
-              <div class="h-16 rounded-lg bg-white/10 flex items-center justify-center text-2xl">📦</div>
+              <div class="h-16 rounded-lg bg-white/10 flex items-center justify-center text-slate-400"><span data-icono="paquete" data-clases="w-7 h-7"></span></div>
               <p class="text-xs mt-2 font-semibold">Producto de ejemplo</p>
               <p class="text-xs" id="preview-precio-1" style="color:#818cf8">$10.00</p>
             </div>
             <div class="glass p-3">
-              <div class="h-16 rounded-lg bg-white/10 flex items-center justify-center text-2xl">🎁</div>
+              <div class="h-16 rounded-lg bg-white/10 flex items-center justify-center text-slate-400"><span data-icono="destello" data-clases="w-7 h-7"></span></div>
               <p class="text-xs mt-2 font-semibold">Otro producto</p>
               <p class="text-xs" id="preview-precio-2" style="color:#818cf8">$25.00</p>
             </div>
           </div>
-          <button id="preview-boton" class="w-full mt-5 py-2.5 rounded-full text-sm font-semibold text-white transition" style="background:#818cf8">
-            🛍️ Pedir por WhatsApp
+          <button id="preview-boton" class="w-full mt-5 py-2.5 rounded-full text-sm font-semibold text-white transition flex items-center justify-center gap-2" style="background:#818cf8">
+            <span data-icono="mensaje" data-clases="w-4 h-4"></span> Pedir por WhatsApp
           </button>
         </div>
       </aside>
     </div>
   </main>
+
+  <!-- Footer institucional DGP -->
+  <footer class="relative z-10 text-center text-xs text-slate-500 pb-8 space-y-1">
+    <p>© 2026 DGP LinkShop · dgp-link.com</p>
+    <p>Desarrollado por <a href="https://dgpglobalgroup.com" target="_blank" rel="noopener" class="text-indigo-300 hover:text-indigo-200 transition font-semibold">DGP Global Group</a></p>
+  </footer>
 
   <script type="module" src="/src/wizard.js"></script>
 </body>
