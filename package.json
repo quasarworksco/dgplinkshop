@@ -1,0 +1,16 @@
+{
+  "name": "dgp-linkshop",
+  "version": "0.1.0",
+  "description": "DGP LinkShop — Plataforma SaaS multi-tenant de tiendas online bajo dgp-link.com",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "serve . -l 3000",
+    "start": "serve . -l 3000",
+    "build": "node scripts/build.js"
+  },
+  "devDependencies": {
+    "esbuild": "^0.24.0",
+    "serve": "^14.2.3"
+  }
+}

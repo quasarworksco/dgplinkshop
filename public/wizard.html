@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Configura tu tienda — DGP LinkShop</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/styles/glass.css" />
+</head>
+<body class="dgp-fondo text-slate-100 antialiased">
+
+  <header class="relative z-10 max-w-5xl mx-auto flex items-center justify-between px-6 py-6">
+    <img src="/assets/logo.svg" alt="DGP LinkShop" class="h-9" />
+    <button id="btn-salir" class="text-sm text-slate-400 hover:text-white transition">Guardar y salir</button>
+  </header>
+
+  <main class="relative z-10 max-w-5xl mx-auto px-6 pb-16">
+
+    <!-- Indicador de pasos -->
+    <div class="flex items-center justify-center gap-3 mb-10" id="indicador-pasos">
+      <div class="paso-punto" data-paso="1">1</div>
+      <div class="w-10 h-px bg-white/20"></div>
+      <div class="paso-punto" data-paso="2">2</div>
+      <div class="w-10 h-px bg-white/20"></div>
+      <div class="paso-punto" data-paso="3">3</div>
+      <div class="w-10 h-px bg-white/20"></div>
+      <div class="paso-punto" data-paso="4">4</div>
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-8 items-start">
+
+      <!-- Columna izquierda: formulario del paso -->
+      <div class="glass p-8">
+
+        <!-- PASO 1: Datos del negocio -->
+        <section class="paso-panel" data-panel="1">
+          <h2 class="text-2xl font-bold mb-1">Cuéntanos de tu negocio</h2>
+          <p class="text-slate-400 text-sm mb-6">Esto es lo primero que verán tus clientes.</p>
+          <div class="space-y-4">
+            <div>
+              <label for="negocio-nombre" class="block text-sm mb-1 text-slate-300">Nombre del negocio *</label>
+              <input id="negocio-nombre" class="input-glass" placeholder="Ej: Dulces María" maxlength="60" />
+            </div>
+            <div>
+              <label for="negocio-slug" class="block text-sm mb-1 text-slate-300">Tu dirección web</label>
+              <div class="flex items-center gap-2">
+                <input id="negocio-slug" class="input-glass flex-1" placeholder="dulces-maria" />
+                <span class="text-slate-400 text-sm whitespace-nowrap">.dgp-link.com</span>
+              </div>
+              <p id="slug-estado" class="text-xs mt-1 h-4"></p>
+            </div>
+            <div>
+              <label for="negocio-descripcion" class="block text-sm mb-1 text-slate-300">Descripción corta</label>
+              <textarea id="negocio-descripcion" class="input-glass" rows="3" maxlength="200" placeholder="Postres artesanales hechos con amor 🍰"></textarea>
+            </div>
+            <div>
+              <label for="negocio-categoria" class="block text-sm mb-1 text-slate-300">Categoría</label>
+              <select id="negocio-categoria" class="input-glass">
+                <option value="comida">🍔 Comida y postres</option>
+                <option value="moda">👗 Moda y accesorios</option>
+                <option value="belleza">💄 Belleza y cuidado</option>
+                <option value="hogar">🏠 Hogar y decoración</option>
+                <option value="servicios">🛠️ Servicios</option>
+                <option value="otro">✨ Otro</option>
+              </select>
+            </div>
+          </div>
+        </section>
+
+        <!-- PASO 2: Logo (Cloudinary) -->
+        <section class="paso-panel hidden" data-panel="2">
+          <h2 class="text-2xl font-bold mb-1">El rostro de tu marca</h2>
+          <p class="text-slate-400 text-sm mb-6">Sube tu logo. Lo optimizamos automáticamente.</p>
+          <label id="zona-subida" class="glass glass-hover flex flex-col items-center justify-center gap-3 p-10 cursor-pointer border-dashed" for="input-logo">
+            <span class="text-4xl">🖼️</span>
+            <span class="font-semibold">Toca para elegir tu logo</span>
+            <span class="text-xs text-slate-400">JPG, PNG o WebP · máx. 5 MB</span>
+            <input id="input-logo" type="file" accept="image/jpeg,image/png,image/webp" class="hidden" />
+          </label>
+          <div id="progreso-wrap" class="mt-4 hidden">
+            <div class="barra-progreso"><div id="progreso-barra" style="width:0%"></div></div>
+            <p id="progreso-texto" class="text-xs text-slate-400 mt-1 text-center">Subiendo… 0%</p>
+          </div>
+          <p class="text-xs text-slate-500 mt-4">Este paso es opcional: puedes continuar sin logo y añadirlo después desde tu panel.</p>
+        </section>
+
+        <!-- PASO 3: Personalización -->
+        <section class="paso-panel hidden" data-panel="3">
+          <h2 class="text-2xl font-bold mb-1">Dale tu estilo</h2>
+          <p class="text-slate-400 text-sm mb-6">Elige los colores y tu WhatsApp de pedidos.</p>
+          <div class="space-y-5">
+            <div>
+              <span class="block text-sm mb-2 text-slate-300">Color principal</span>
+              <div class="flex gap-3" id="paleta-colores">
+                <button type="button" class="w-9 h-9 rounded-full ring-offset-2 transition hover:scale-110" data-color="#818cf8" style="background:#818cf8"></button>
+                <button type="button" class="w-9 h-9 rounded-full transition hover:scale-110" data-color="#f472b6" style="background:#f472b6"></button>
+                <button type="button" class="w-9 h-9 rounded-full transition hover:scale-110" data-color="#34d399" style="background:#34d399"></button>
+                <button type="button" class="w-9 h-9 rounded-full transition hover:scale-110" data-color="#fbbf24" style="background:#fbbf24"></button>
+                <button type="button" class="w-9 h-9 rounded-full transition hover:scale-110" data-color="#22d3ee" style="background:#22d3ee"></button>
+                <button type="button" class="w-9 h-9 rounded-full transition hover:scale-110" data-color="#fb7185" style="background:#fb7185"></button>
+              </div>
+            </div>
+            <div>
+              <label for="negocio-whatsapp" class="block text-sm mb-1 text-slate-300">WhatsApp para pedidos (con código de país)</label>
+              <input id="negocio-whatsapp" class="input-glass" placeholder="Ej: 50588887777" inputmode="numeric" />
+              <p class="text-xs text-slate-500 mt-1">Tus clientes te escribirán directo con un toque.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- PASO 4: Revisión y publicación -->
+        <section class="paso-panel hidden" data-panel="4">
+          <h2 class="text-2xl font-bold mb-1">¡Todo listo! 🎉</h2>
+          <p class="text-slate-400 text-sm mb-6">Revisa la vista previa y publica tu tienda.</p>
+          <div class="glass p-5 space-y-3 text-sm">
+            <p><span class="text-slate-400">Negocio:</span> <strong id="resumen-nombre">—</strong></p>
+            <p><span class="text-slate-400">Tu URL:</span> <strong id="resumen-url" class="text-cyan-300 break-all">—</strong></p>
+            <p><span class="text-slate-400">Plan:</span> <strong>Gratuito · hasta 5 productos</strong></p>
+          </div>
+          <p class="text-xs text-slate-500 mt-4">Después de publicar irás a tu panel para añadir tus primeros productos.</p>
+        </section>
+
+        <!-- Navegación -->
+        <div class="flex justify-between mt-8">
+          <button id="btn-atras" class="glass glass-hover px-6 py-2.5 rounded-full text-sm font-semibold invisible">← Atrás</button>
+          <button id="btn-siguiente" class="btn-liquid text-sm">Siguiente →</button>
+        </div>
+        <p id="wizard-error" class="text-rose-400 text-sm mt-4 hidden"></p>
+      </div>
+
+      <!-- Columna derecha: vista previa en vivo -->
+      <aside class="sticky top-6">
+        <p class="text-center text-xs uppercase tracking-widest text-slate-500 mb-3">Vista previa en vivo</p>
+        <div class="glass p-6" id="preview-tienda">
+          <div class="text-center">
+            <div id="preview-logo" class="w-20 h-20 mx-auto rounded-2xl glass flex items-center justify-center text-3xl overflow-hidden">🏪</div>
+            <h3 id="preview-nombre" class="mt-4 text-xl font-bold">Tu negocio</h3>
+            <p id="preview-descripcion" class="text-sm text-slate-400 mt-1">Tu descripción aparecerá aquí</p>
+            <p id="preview-url" class="text-xs mt-2 text-cyan-300">tunegocio.dgp-link.com</p>
+          </div>
+          <div class="grid grid-cols-2 gap-3 mt-6">
+            <div class="glass p-3">
+              <div class="h-16 rounded-lg bg-white/10 flex items-center justify-center text-2xl">📦</div>
+              <p class="text-xs mt-2 font-semibold">Producto de ejemplo</p>
+              <p class="text-xs" id="preview-precio-1" style="color:#818cf8">$10.00</p>
+            </div>
+            <div class="glass p-3">
+              <div class="h-16 rounded-lg bg-white/10 flex items-center justify-center text-2xl">🎁</div>
+              <p class="text-xs mt-2 font-semibold">Otro producto</p>
+              <p class="text-xs" id="preview-precio-2" style="color:#818cf8">$25.00</p>
+            </div>
+          </div>
+          <button id="preview-boton" class="w-full mt-5 py-2.5 rounded-full text-sm font-semibold text-white transition" style="background:#818cf8">
+            🛍️ Pedir por WhatsApp
+          </button>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <script type="module" src="/src/wizard.js"></script>
+</body>
+</html>

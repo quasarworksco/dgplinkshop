@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Acceso — DGP LinkShop</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/styles/glass.css" />
+</head>
+<body class="dgp-fondo text-slate-100 antialiased flex items-center justify-center min-h-screen px-4">
+
+  <div class="relative z-10 w-full max-w-md">
+    <a href="/public/index.html" class="block text-center mb-8">
+      <img src="/assets/logo.svg" alt="DGP LinkShop" class="h-10 mx-auto" />
+    </a>
+
+    <div class="glass p-8">
+      <!-- Pestañas -->
+      <div class="grid grid-cols-2 gap-2 mb-8 glass p-1 rounded-full">
+        <button id="tab-login" class="py-2 rounded-full font-semibold transition text-sm">Iniciar sesión</button>
+        <button id="tab-registro" class="py-2 rounded-full font-semibold transition text-sm">Crear cuenta</button>
+      </div>
+
+      <!-- Formulario login -->
+      <form id="form-login" class="space-y-4 hidden">
+        <input type="email" id="login-email" class="input-glass" placeholder="Correo electrónico" required autocomplete="email" />
+        <input type="password" id="login-password" class="input-glass" placeholder="Contraseña" required autocomplete="current-password" />
+        <button type="submit" class="btn-liquid w-full">Entrar a mi panel</button>
+      </form>
+
+      <!-- Formulario registro -->
+      <form id="form-registro" class="space-y-4 hidden">
+        <input type="text" id="reg-nombre" class="input-glass" placeholder="Tu nombre completo" required autocomplete="name" />
+        <input type="email" id="reg-email" class="input-glass" placeholder="Correo electrónico" required autocomplete="email" />
+        <input type="password" id="reg-password" class="input-glass" placeholder="Contraseña (mínimo 6 caracteres)" required minlength="6" autocomplete="new-password" />
+        <button type="submit" class="btn-liquid w-full">Crear mi cuenta gratis</button>
+        <p class="text-xs text-slate-400 text-center">Al registrarte inicias en el plan Gratuito (5 productos). Puedes mejorar a PRO cuando quieras.</p>
+      </form>
+
+      <p id="mensaje" class="mt-4 text-sm text-center hidden"></p>
+    </div>
+  </div>
+
+  <script type="module" src="/src/acceso.js"></script>
+</body>
+</html>

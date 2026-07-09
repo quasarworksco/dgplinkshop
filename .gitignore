@@ -1,0 +1,18 @@
+# Dependencias
+node_modules/
+
+# Entorno local (nunca subir credenciales privadas)
+.env
+.env.local
+*.local.js
+
+# Sistema operativo / editores
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Logs y temporales
+*.log
+dist/
+.cache/

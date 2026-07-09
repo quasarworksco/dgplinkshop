@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DGP LinkShop — Tu tienda online en minutos</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/styles/glass.css" />
+</head>
+<body class="dgp-fondo text-slate-100 antialiased">
+
+  <!-- Barra de navegación -->
+  <header class="relative z-10 max-w-6xl mx-auto flex items-center justify-between px-6 py-6">
+    <img src="/assets/logo.svg" alt="DGP LinkShop" class="h-10" />
+    <nav class="flex items-center gap-4">
+      <a href="/public/acceso.html" class="text-slate-300 hover:text-white transition">Iniciar sesión</a>
+      <a href="/public/acceso.html#registro" class="btn-liquid text-sm">Crear mi tienda</a>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <main class="relative z-10 max-w-6xl mx-auto px-6">
+    <section class="text-center pt-16 pb-20">
+      <p class="inline-block glass px-4 py-1.5 text-sm text-cyan-300 mb-6">✨ Sin conocimientos técnicos</p>
+      <h1 class="text-4xl md:text-6xl font-extrabold leading-tight">
+        Tu negocio, tu tienda,<br />
+        <span class="bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent">tu propio link</span>
+      </h1>
+      <p class="mt-6 text-lg text-slate-300 max-w-2xl mx-auto">
+        Regístrate, configura tu negocio en 4 pasos y obtén tu tienda online en
+        <strong class="text-white">tunegocio.dgp-link.com</strong>. Así de simple.
+      </p>
+      <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="/public/acceso.html#registro" class="btn-liquid text-lg">Empezar gratis</a>
+        <a href="#planes" class="glass glass-hover px-8 py-3 rounded-full font-semibold">Ver planes</a>
+      </div>
+    </section>
+
+    <!-- Planes -->
+    <section id="planes" class="pb-24">
+      <h2 class="text-3xl font-bold text-center mb-12">Planes simples y transparentes</h2>
+      <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+
+        <div class="glass glass-hover p-8">
+          <h3 class="text-xl font-semibold text-slate-300">Gratuito</h3>
+          <p class="mt-4 text-5xl font-extrabold">$0<span class="text-lg font-normal text-slate-400">/mes</span></p>
+          <ul class="mt-8 space-y-3 text-slate-300">
+            <li>✅ Hasta <strong>5 productos</strong></li>
+            <li>✅ Tu subdominio <em>tunegocio</em>.dgp-link.com</li>
+            <li>✅ Diseño Glassmorphism profesional</li>
+            <li>✅ Imágenes optimizadas con Cloudinary</li>
+            <li>✅ Botón de pedidos por WhatsApp</li>
+          </ul>
+          <a href="/public/acceso.html#registro" class="mt-8 block text-center glass glass-hover py-3 rounded-full font-semibold">Empezar gratis</a>
+        </div>
+
+        <div class="glass glass-hover p-8 border-2" style="border-color: rgba(129,140,248,0.5)">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xl font-semibold text-indigo-300">PRO</h3>
+            <span class="text-xs font-bold bg-indigo-500/30 text-indigo-200 px-3 py-1 rounded-full">RECOMENDADO</span>
+          </div>
+          <p class="mt-4 text-5xl font-extrabold">$20<span class="text-lg font-normal text-slate-400">/mes</span></p>
+          <p class="text-sm text-slate-400 mt-1">+ $30 de inscripción única</p>
+          <ul class="mt-8 space-y-3 text-slate-300">
+            <li>🚀 Hasta <strong>50 productos</strong></li>
+            <li>🚀 Todo lo del plan Gratuito</li>
+            <li>🚀 Prioridad en soporte</li>
+            <li>🚀 Ideal para catálogos completos</li>
+          </ul>
+          <a href="/public/acceso.html#registro" class="mt-8 block text-center btn-liquid">Quiero ser PRO</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="relative z-10 text-center text-slate-500 text-sm pb-10">
+    © 2026 DGP LinkShop · dgp-link.com
+  </footer>
+</body>
+</html>
