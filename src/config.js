@@ -27,17 +27,20 @@ export const PLANES = {
     limiteProductos: 5,
     inscripcion: 0,
     mensualidad: 0,
+    mayorista: false,
   },
   pro: {
     nombre: 'PRO',
     limiteProductos: 100,
     inscripcion: 0,
     mensualidad: 15,
+    mayorista: true,
   },
   premium: {
     nombre: 'Premium',
     limiteProductos: 400,
     inscripcion: 0,
     mensualidad: 25,
+    mayorista: true,
   },
 };

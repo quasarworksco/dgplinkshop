@@ -90,6 +90,7 @@ const ESTADOS_PEDIDO = {
 
   renderEncabezado();
   renderCatalogoQR();
+  configurarMayorista();
   activarPestanas();
   verificarAcceso();
 
@@ -283,6 +284,7 @@ function pintarTarjetaProducto(tarjeta, p) {
       ${dinero(p.price * (1 - (p.discount_percent ?? 0) / 100))}
     </p>
     ${p.stock != null ? `<p class="text-xs mt-0.5 ${p.stock === 0 ? 'text-rose-600 font-semibold' : 'text-slate-400'}">${p.stock === 0 ? 'Agotado' : 'Stock: ' + p.stock}</p>` : ''}
+    ${p.wholesale_price != null ? `<p class="text-xs mt-0.5 text-slate-500">Al mayor: <span class="font-semibold text-slate-700">${dinero(p.wholesale_price)}</span>${(p.wholesale_min ?? 1) > 1 ? ` · mín. ${p.wholesale_min}` : ''}</p>` : ''}
     <div class="flex gap-2 mt-3">
       <button data-accion="editar" class="btn btn-claro flex-1 py-1.5 text-xs">${icono('lapiz', 'w-3.5 h-3.5')} Editar</button>
       <button data-accion="eliminar" class="btn btn-claro flex-1 py-1.5 text-xs text-rose-600">${icono('basura', 'w-3.5 h-3.5')} Eliminar</button>
@@ -316,6 +318,9 @@ function abrirModalProducto(producto = null) {
   $('prod-categoria').value = producto?.category_id ?? '';
   $('prod-stock').value = producto?.stock ?? '';
   $('prod-descripcion').value = producto?.description ?? '';
+  $('prod-precio-mayor').value = producto?.wholesale_price ?? '';
+  $('prod-min-mayor').value = producto?.wholesale_min ?? '';
+  $('prod-mayor-bloque').classList.toggle('hidden', !negocio.wholesale_enabled);
   $('prod-imagen').value = '';
   $('modal-error').classList.add('hidden');
   $('modal-producto').classList.remove('hidden');
@@ -368,6 +373,8 @@ $('form-producto').addEventListener('submit', async (e) => {
     category_id: $('prod-categoria').value || null,
     stock: $('prod-stock').value === '' ? null : Math.max(0, parseInt($('prod-stock').value, 10) || 0),
     description: $('prod-descripcion').value.trim() || null,
+    wholesale_price: $('prod-precio-mayor').value === '' ? null : Math.max(0, Number($('prod-precio-mayor').value) || 0),
+    wholesale_min: Math.max(1, parseInt($('prod-min-mayor').value, 10) || 1),
     image_url: imagenSubidaUrl,
   };
   const id = $('prod-id').value;
@@ -741,33 +748,87 @@ $('btn-guardar-tasa').addEventListener('click', async () => {
   notificar(tasa === null ? 'Precios en Bs desactivados.' : `Tasa guardada: ${tasa} Bs/$`, 'exito');
 });
 
+// --- Catálogo mayorista (interruptor, solo PRO/Premium) ---
+function mostrarTarjetaMayor(visible) {
+  const card = $('dash-mayor-card');
+  card.classList.toggle('hidden', !visible);
+  card.classList.toggle('flex', visible);
+}
+
+function configurarMayorista() {
+  const permitido = PLANES[suscripcion?.plan ?? 'free'].mayorista;
+  const chk = $('cfg-mayor');
+  chk.checked = !!negocio.wholesale_enabled;
+  chk.disabled = !permitido;
+  $('cfg-mayor-pro').classList.toggle('hidden', permitido);
+  chk.closest('label').style.opacity = permitido ? '1' : '0.55';
+  mostrarTarjetaMayor(!!negocio.wholesale_enabled);
+
+  chk.addEventListener('change', async () => {
+    if (!permitido) { chk.checked = false; return; }
+    const activo = chk.checked;
+    chk.disabled = true;
+    const { error } = await supabase.from('businesses').update({ wholesale_enabled: activo }).eq('id', negocio.id);
+    chk.disabled = false;
+    if (error) {
+      chk.checked = !activo;
+      registrarError('panel/mayorista', error);
+      return notificar('No se pudo guardar. Intenta de nuevo.', 'error');
+    }
+    negocio.wholesale_enabled = activo;
+    mostrarTarjetaMayor(activo);
+    if (activo) renderCatalogoMayoristaQR();
+    const msg = $('cfg-mayor-msg');
+    msg.classList.remove('hidden');
+    setTimeout(() => msg.classList.add('hidden'), 2500);
+  });
+}
+
 // ============================================================
 // Catálogo: link + QR (Dashboard)
 // ============================================================
-async function renderCatalogoQR() {
-  const url = urlDeTienda(negocio.slug);
-  $('dash-link').value = url;
-  $('dash-copiar').addEventListener('click', async () => {
-    try {
-      await navigator.clipboard.writeText(url);
-    } catch {
-      $('dash-link').select();
-      document.execCommand('copy');
-    }
-    notificar('Link copiado', 'exito');
-  });
+async function pintarQR(idContenedor, idDescarga, url, alt) {
   try {
     const { default: qrcode } = await import('https://esm.sh/qrcode-generator@1.4.4');
     const qr = qrcode(0, 'M');
     qr.addData(url);
     qr.make();
     const dataUrl = qr.createDataURL(6, 0);
-    $('dash-qr').innerHTML = `<img src="${dataUrl}" alt="QR de mi catálogo" class="w-full h-full object-contain rounded-lg" />`;
-    $('dash-descargar').href = dataUrl;
+    $(idContenedor).innerHTML = `<img src="${dataUrl}" alt="${alt}" class="w-full h-full object-contain rounded-lg" />`;
+    $(idDescarga).href = dataUrl;
   } catch (err) {
     registrarError('panel/qr', err);
-    $('dash-qr').innerHTML = '<span class="text-xs text-slate-400">QR no disponible</span>';
+    $(idContenedor).innerHTML = '<span class="text-xs text-slate-400">QR no disponible</span>';
   }
+}
+
+function copiarAlPortapapeles(input, texto) {
+  try {
+    navigator.clipboard.writeText(texto);
+  } catch {
+    input.select();
+    document.execCommand('copy');
+  }
+  notificar('Link copiado', 'exito');
+}
+
+async function renderCatalogoQR() {
+  const url = urlDeTienda(negocio.slug);
+  $('dash-link').value = url;
+  $('dash-copiar').addEventListener('click', () => copiarAlPortapapeles($('dash-link'), url));
+  await pintarQR('dash-qr', 'dash-descargar', url, 'QR de mi catálogo');
+  if (negocio.wholesale_enabled) renderCatalogoMayoristaQR();
+}
+
+let mayoristaQRPintado = false;
+async function renderCatalogoMayoristaQR() {
+  const url = urlDeTienda(negocio.slug) + '?mayor=1';
+  $('dash-mayor-link').value = url;
+  if (!mayoristaQRPintado) {
+    $('dash-mayor-copiar').addEventListener('click', () => copiarAlPortapapeles($('dash-mayor-link'), url));
+    mayoristaQRPintado = true;
+  }
+  await pintarQR('dash-mayor-qr', 'dash-mayor-descargar', url, 'QR del catálogo mayorista');
 }
 
 // ============================================================

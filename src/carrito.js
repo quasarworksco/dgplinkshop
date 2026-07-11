@@ -20,9 +20,11 @@ let items = new Map();
 let cupon = null;
 let entrega = 'recoger';         // 'recoger' | 'local' | 'nacional'
 let ubicacion = null;            // {lat, lng}
+let modoMayorista = false;       // carrito del catálogo mayorista
 const filas = new Map();
 
-const claveAlmacen = () => `dgp:carrito:${negocio.slug}`;
+// El carrito mayorista se guarda aparte para no mezclarlo con el normal.
+const claveAlmacen = () => `dgp:carrito:${negocio.slug}${modoMayorista ? ':mayor' : ''}`;
 const usd = (n) => `$${Number(n).toFixed(2)}`;
 const fmtBs = new Intl.NumberFormat('es-VE', { maximumFractionDigits: 2 });
 const enBs = (n) => `Bs ${fmtBs.format(Number(n) * tasaBs)}`;
@@ -36,8 +38,9 @@ const ETIQUETA_ENTREGA = {
 // ------------------------------------------------------------
 // API pública
 // ------------------------------------------------------------
-export function inicializarCarrito(negocioActual) {
+export function inicializarCarrito(negocioActual, { mayorista = false } = {}) {
   negocio = negocioActual;
+  modoMayorista = mayorista;
   color = negocio.theme?.color_primario ?? '#2563eb';
   tasaBs = negocio.tasa_bs ? Number(negocio.tasa_bs) : null;
   restaurar();
@@ -45,10 +48,11 @@ export function inicializarCarrito(negocioActual) {
   actualizarBurbuja();
 }
 
-export function agregarAlCarrito({ id, nombre, precio }) {
+export function agregarAlCarrito({ id, nombre, precio, minimo = 1 }) {
+  const min = Math.max(1, minimo | 0);
   const ex = items.get(id);
   if (ex) ex.cantidad = Math.min(ex.cantidad + 1, 99);
-  else items.set(id, { id, nombre, precio, cantidad: 1 });
+  else items.set(id, { id, nombre, precio, cantidad: min, minimo: min });
   persistir();
   actualizarBurbuja();
   sincronizarFila(id);
@@ -242,7 +246,15 @@ function sincronizarFila(id) {
 function cambiarCantidad(id, delta) {
   const item = items.get(id);
   if (!item) return;
-  item.cantidad = Math.max(1, Math.min(99, item.cantidad + delta));
+  const min = Math.max(1, item.minimo ?? 1);
+  const nueva = item.cantidad + delta;
+  if (nueva < min) {
+    // Al mayor, bajar del mínimo quita el producto; al detal se queda en el tope.
+    if (modoMayorista) { quitar(id); return; }
+    item.cantidad = min;
+  } else {
+    item.cantidad = Math.min(99, nueva);
+  }
   persistir(); sincronizarFila(id); actualizarBurbuja(); actualizarTotales();
 }
 function quitar(id) { items.delete(id); persistir(); sincronizarFila(id); actualizarBurbuja(); actualizarTotales(); }
@@ -321,6 +333,7 @@ async function confirmarPedido() {
       p_items: [...items.values()].map((it) => ({ id: it.id, cantidad: it.cantidad })),
       p_codigo_cupon: cupon?.codigo ?? null,
       p_nombre_cliente: document.getElementById('carrito-nombre').value.trim() || null,
+      p_mayorista: modoMayorista,
     });
     if (error) throw error;
 
@@ -335,6 +348,8 @@ async function confirmarPedido() {
     registrarError('carrito/crear-pedido', err);
     const msg = err.message ?? '';
     if (msg.includes('CUPON_INVALIDO')) { cupon = null; actualizarTotales(); notificar('El cupón dejó de ser válido.', 'error'); }
+    else if (msg.includes('CANTIDAD_MINIMA')) notificar('No alcanzas la cantidad mínima al mayor de un producto.', 'error');
+    else if (msg.includes('MAYORISTA_NO_DISPONIBLE')) notificar('Esta tienda ya no ofrece catálogo mayorista.', 'error');
     else if (msg.includes('PRODUCTO_NO_DISPONIBLE')) notificar('Un producto ya no está disponible. Actualiza la página.', 'error');
     else notificar('No se pudo registrar el pedido. Revisa tu conexión.', 'error');
   } finally {

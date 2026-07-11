@@ -26,6 +26,7 @@ let tasaBs = null;
 let todos = [];
 let categorias = [];
 let topVendidos = new Set(); // ids con badge "Más vendido"
+let modoMayorista = false;   // catálogo mayorista (?mayor=1)
 
 let categoriaActual = 'all';
 let busqueda = '';
@@ -44,7 +45,10 @@ function tinte(hex, a) {
   const n = parseInt(h.length === 3 ? h.replace(/(.)/g, '$1$1') : h, 16);
   return `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${a})`;
 }
-const precioFinal = (p) => Math.round(p.price * (1 - (p.discount_percent ?? 0) / 100) * 100) / 100;
+const precioFinal = (p) =>
+  modoMayorista
+    ? Number(p.wholesale_price)
+    : Math.round(p.price * (1 - (p.discount_percent ?? 0) / 100) * 100) / 100;
 
 // ------------------------------------------------------------
 // Datos
@@ -64,8 +68,9 @@ async function obtenerNegocio(slug) {
 // ------------------------------------------------------------
 function crearTarjeta(p, { compacta = false } = {}) {
   const final = precioFinal(p);
-  const conDesc = (p.discount_percent ?? 0) > 0;
-  const esTop = topVendidos.has(p.id);
+  const conDesc = !modoMayorista && (p.discount_percent ?? 0) > 0;
+  const minMayor = modoMayorista ? Math.max(1, p.wholesale_min ?? 1) : 1;
+  const esTop = !modoMayorista && topVendidos.has(p.id);
   const agotado = p.stock === 0;
 
   const art = document.createElement('article');
@@ -87,12 +92,13 @@ function crearTarjeta(p, { compacta = false } = {}) {
         ${conDesc ? `<p class="text-[11px] text-slate-400 line-through leading-none">${usd(p.price)}</p>` : ''}
         <p class="font-extrabold leading-tight" style="color:${colorPrimario}">${usd(final)}</p>
         ${tasaBs ? `<p class="text-[11px] text-slate-500 leading-tight">Bs ${fmtBs.format(final * tasaBs)}</p>` : ''}
+        ${modoMayorista && minMayor > 1 ? `<p class="text-[11px] font-semibold text-slate-500 leading-tight mt-0.5">Mín. ${minMayor} uds</p>` : ''}
       </div>
       <button data-add aria-label="Agregar ${escapar(p.name)}" ${agotado ? 'disabled' : ''} class="w-9 h-9 rounded-full flex items-center justify-center text-white shadow-sm transition hover:brightness-110 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed" style="background:${colorPrimario}">${icono('mas', 'w-4 h-4')}</button>
     </div>`;
   if (!agotado) {
     art.querySelector('[data-add]').addEventListener('click', () =>
-      agregarAlCarrito({ id: p.id, nombre: p.name, precio: final })
+      agregarAlCarrito({ id: p.id, nombre: p.name, precio: final, minimo: minMayor })
     );
   }
   return art;
@@ -177,6 +183,10 @@ function pintarTabActiva() {
   negocio = await obtenerNegocio(slug);
   if (!negocio) return mostrarEstado('error');
 
+  // Modo mayorista: solo si la tienda lo activó y viene ?mayor=1
+  const pideMayor = new URLSearchParams(window.location.search).has('mayor');
+  modoMayorista = pideMayor && negocio.wholesale_enabled === true;
+
   colorPrimario = negocio.theme?.color_primario ?? '#2563eb';
   tasaBs = negocio.tasa_bs ? Number(negocio.tasa_bs) : null;
   document.documentElement.style.setProperty('--tienda', colorPrimario);
@@ -208,7 +218,7 @@ function pintarTabActiva() {
   // Todos los productos activos (una sola consulta)
   const { data: prods, error } = await supabase
     .from('products')
-    .select('id, name, description, price, image_url, is_featured, discount_percent, category_id, sold_count, stock')
+    .select('id, name, description, price, image_url, is_featured, discount_percent, category_id, sold_count, stock, wholesale_price, wholesale_min')
     .eq('business_id', negocio.id)
     .eq('is_active', true)
     .order('is_featured', { ascending: false })
@@ -217,22 +227,31 @@ function pintarTabActiva() {
   if (error) registrarError('tienda/cargar-productos', error);
   todos = prods ?? [];
 
-  // Top vendidos (badge): top 5 con ventas > 0
-  const conVentas = todos.filter((p) => (p.sold_count ?? 0) > 0).sort((a, b) => b.sold_count - a.sold_count);
-  topVendidos = new Set(conVentas.slice(0, 5).map((p) => p.id));
-
-  // Fila "Más vendidos" (hasta 8)
-  if (conVentas.length > 0) {
-    const cont = $('tienda-vendidos');
-    conVentas.slice(0, 8).forEach((p) => cont.appendChild(crearTarjeta(p, { compacta: true })));
-    observarImagenesLazy(cont);
+  // Al mayor: solo productos con precio mayorista, y aviso visible.
+  if (modoMayorista) {
+    todos = todos.filter((p) => p.wholesale_price != null);
+    $('tienda-mayor-aviso').classList.remove('hidden');
   }
-  // Fila "Recomendados" (destacados)
-  const destacados = todos.filter((p) => p.is_featured);
-  if (destacados.length > 0) {
-    const cont = $('tienda-destacados');
-    destacados.slice(0, 10).forEach((p) => cont.appendChild(crearTarjeta(p, { compacta: true })));
-    observarImagenesLazy(cont);
+
+  // Las filas "Más vendidos" y "Recomendados" no aplican al mayor.
+  if (!modoMayorista) {
+    // Top vendidos (badge): top 5 con ventas > 0
+    const conVentas = todos.filter((p) => (p.sold_count ?? 0) > 0).sort((a, b) => b.sold_count - a.sold_count);
+    topVendidos = new Set(conVentas.slice(0, 5).map((p) => p.id));
+
+    // Fila "Más vendidos" (hasta 8)
+    if (conVentas.length > 0) {
+      const cont = $('tienda-vendidos');
+      conVentas.slice(0, 8).forEach((p) => cont.appendChild(crearTarjeta(p, { compacta: true })));
+      observarImagenesLazy(cont);
+    }
+    // Fila "Recomendados" (destacados)
+    const destacados = todos.filter((p) => p.is_featured);
+    if (destacados.length > 0) {
+      const cont = $('tienda-destacados');
+      destacados.slice(0, 10).forEach((p) => cont.appendChild(crearTarjeta(p, { compacta: true })));
+      observarImagenesLazy(cont);
+    }
   }
 
   // Buscador
@@ -245,7 +264,7 @@ function pintarTabActiva() {
   $('pag-prev').addEventListener('click', () => { pagina--; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
   $('pag-next').addEventListener('click', () => { pagina++; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
 
-  inicializarCarrito(negocio);
+  inicializarCarrito(negocio, { mayorista: modoMayorista });
   // Cuenta la visita (contador de la tienda), sin bloquear el render
   supabase.rpc('sumar_vista', { p_business_id: negocio.id }).then(() => {}, () => {});
   render();
