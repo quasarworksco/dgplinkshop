@@ -74,6 +74,12 @@ const ESTADOS_PEDIDO = {
 
   renderEncabezado();
   activarPestanas();
+
+  // Enlace al panel súper-admin, solo si esta cuenta lo es
+  supabase.rpc('es_superadmin').then(({ data }) => {
+    if (data) $('enlace-admin').classList.remove('hidden');
+  });
+
   await cargarCatalogo();
 })();
 

@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Panel súper-admin — DGP LinkShop</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/styles/dgp.css" />
+</head>
+<body class="dgp-lienzo">
+
+  <header class="nav-glass sticky top-0 z-40">
+    <div class="contenedor flex items-center justify-between h-16">
+      <div class="flex items-center gap-3">
+        <img src="/assets/logo.svg" alt="DGP LinkShop" class="h-8" />
+        <span class="chip">Súper-admin</span>
+      </div>
+      <div class="flex items-center gap-2 sm:gap-3">
+        <a href="/public/panel.html" class="btn btn-claro text-sm">Mi panel</a>
+        <button id="btn-logout" class="btn btn-fantasma text-sm">Salir</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Cargando / no autorizado -->
+  <div id="estado-cargando" class="min-h-[60vh] flex items-center justify-center">
+    <div class="w-10 h-10 rounded-full border-2 border-slate-200 border-t-blue-500 animate-spin"></div>
+  </div>
+  <div id="estado-denegado" class="min-h-[60vh] hidden flex-col items-center justify-center text-center px-4">
+    <div class="tarjeta-solida p-10 max-w-md">
+      <h1 class="text-2xl font-extrabold text-slate-900">Acceso restringido</h1>
+      <p class="text-slate-500 mt-2">Esta sección es solo para el administrador de DGP LinkShop.</p>
+      <a href="/public/panel.html" class="btn btn-primario mt-6">Ir a mi panel</a>
+    </div>
+  </div>
+
+  <!-- Contenido -->
+  <main id="estado-ok" class="contenedor py-8 hidden">
+    <h1 class="text-2xl font-extrabold text-slate-900 mb-1">Todas las tiendas</h1>
+    <p class="text-slate-500 text-sm mb-6">Vista general de los negocios activos en la plataforma.</p>
+
+    <!-- Métricas -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      <div class="tarjeta-solida p-5">
+        <p class="text-xs text-slate-400 uppercase tracking-wide">Tiendas</p>
+        <p id="m-total" class="text-3xl font-extrabold text-slate-900 mt-1">—</p>
+      </div>
+      <div class="tarjeta-solida p-5">
+        <p class="text-xs text-slate-400 uppercase tracking-wide">Publicadas</p>
+        <p id="m-publicadas" class="text-3xl font-extrabold text-slate-900 mt-1">—</p>
+      </div>
+      <div class="tarjeta-solida p-5">
+        <p class="text-xs text-slate-400 uppercase tracking-wide">Plan PRO</p>
+        <p id="m-pro" class="text-3xl font-extrabold text-blue-600 mt-1">—</p>
+      </div>
+      <div class="tarjeta-solida p-5">
+        <p class="text-xs text-slate-400 uppercase tracking-wide">Productos</p>
+        <p id="m-productos" class="text-3xl font-extrabold text-slate-900 mt-1">—</p>
+      </div>
+    </div>
+
+    <!-- Tabla de tiendas -->
+    <div class="tarjeta-solida overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="text-left text-slate-500 border-b border-slate-100">
+              <th class="px-5 py-3 font-semibold">Negocio</th>
+              <th class="px-5 py-3 font-semibold">Dueño</th>
+              <th class="px-5 py-3 font-semibold">Plan</th>
+              <th class="px-5 py-3 font-semibold text-center">Productos</th>
+              <th class="px-5 py-3 font-semibold">Estado</th>
+              <th class="px-5 py-3 font-semibold">Creada</th>
+              <th class="px-5 py-3"></th>
+            </tr>
+          </thead>
+          <tbody id="tabla-tiendas"></tbody>
+        </table>
+      </div>
+    </div>
+    <p id="admin-vacio" class="tarjeta-solida p-10 text-center text-slate-500 hidden mt-4">
+      Aún no hay tiendas registradas.
+    </p>
+  </main>
+
+  <footer class="border-t border-slate-200 bg-white/70 mt-8">
+    <div class="contenedor py-6 text-center text-xs text-slate-500">
+      DGP LinkShop · Panel interno · Desarrollado por
+      <a href="https://dgpglobalgroup.com" target="_blank" rel="noopener" class="text-blue-600 font-semibold">DGP Global Group</a>
+    </div>
+  </footer>
+
+  <script type="module" src="/src/admin.js"></script>
+</body>
+</html>
