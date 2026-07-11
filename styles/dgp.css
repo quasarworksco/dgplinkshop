@@ -99,6 +99,29 @@ h1, h2, h3, h4 { color: var(--tinta); letter-spacing: -0.02em; }
 .btn-claro:hover { transform: translateY(-2px); box-shadow: var(--sombra-md); border-color: #cbd5e1; }
 .btn-fantasma { background: transparent; color: var(--azul-700); }
 .btn-fantasma:hover { background: var(--azul-suave); }
+/* Botón compacto para tarjetas angostas (no se sale del contenedor) */
+.btn-compacto { padding-left: .7rem; padding-right: .7rem; gap: .35rem; min-width: 0; overflow: hidden; }
+
+/* ---------- Zona para subir archivos (bonita, reutilizable) ---------- */
+.subida {
+  display: flex; align-items: center; gap: .75rem; width: 100%;
+  padding: .85rem 1rem; cursor: pointer;
+  border: 1.5px dashed var(--linea); border-radius: .9rem;
+  background: var(--azul-suave, #eff6ff);
+  color: var(--tinta); transition: border-color .2s ease, background .2s ease;
+}
+.subida:hover { border-color: var(--azul-500, #3b82f6); background: #e6efff; }
+.subida .subida-ico {
+  width: 2.5rem; height: 2.5rem; flex-shrink: 0; border-radius: .7rem;
+  display: flex; align-items: center; justify-content: center;
+  background: #fff; color: var(--azul-600, #2563eb); box-shadow: var(--sombra-sm);
+}
+.subida-txt { min-width: 0; }
+.subida-titulo { font-weight: 600; font-size: .875rem; line-height: 1.2; }
+.subida-sub { font-size: .72rem; color: #94a3b8; }
+:root[data-theme="dark"] .subida { background: #0f1e33; border-color: #334155; }
+:root[data-theme="dark"] .subida:hover { background: #14263f; }
+:root[data-theme="dark"] .subida .subida-ico { background: #1e293b; }
 
 /* ---------- Inputs ---------- */
 .campo {

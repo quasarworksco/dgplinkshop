@@ -47,6 +47,8 @@ let suscripcionCargada = false;
 let planElegido = null;
 let metodoPago = 'pagomovil';
 let comprobanteUrl = null;
+let colorTiendaElegido = '#2563eb';
+let logoTiendaUrl = null;
 
 const ESTADOS_PEDIDO = {
   pendiente: { texto: 'Pendiente', clase: 'text-amber-600' },
@@ -91,6 +93,7 @@ const ESTADOS_PEDIDO = {
   renderEncabezado();
   renderCatalogoQR();
   configurarMayorista();
+  configurarDatosTienda();
   activarPestanas();
   verificarAcceso();
 
@@ -286,8 +289,8 @@ function pintarTarjetaProducto(tarjeta, p) {
     ${p.stock != null ? `<p class="text-xs mt-0.5 ${p.stock === 0 ? 'text-rose-600 font-semibold' : 'text-slate-400'}">${p.stock === 0 ? 'Agotado' : 'Stock: ' + p.stock}</p>` : ''}
     ${p.wholesale_price != null ? `<p class="text-xs mt-0.5 text-slate-500">Al mayor: <span class="font-semibold text-slate-700">${dinero(p.wholesale_price)}</span>${(p.wholesale_min ?? 1) > 1 ? ` · mín. ${p.wholesale_min}` : ''}</p>` : ''}
     <div class="flex gap-2 mt-3">
-      <button data-accion="editar" class="btn btn-claro flex-1 py-1.5 text-xs">${icono('lapiz', 'w-3.5 h-3.5')} Editar</button>
-      <button data-accion="eliminar" class="btn btn-claro flex-1 py-1.5 text-xs text-rose-600">${icono('basura', 'w-3.5 h-3.5')} Eliminar</button>
+      <button data-accion="editar" class="btn btn-claro btn-compacto flex-1 min-w-0 py-1.5 text-xs">${icono('lapiz', 'w-3.5 h-3.5')} Editar</button>
+      <button data-accion="eliminar" class="btn btn-claro btn-compacto flex-1 min-w-0 py-1.5 text-xs text-rose-600">${icono('basura', 'w-3.5 h-3.5')} Eliminar</button>
     </div>`;
   tarjeta.querySelector('[data-accion="editar"]').addEventListener('click', () => abrirModalProducto(p));
   tarjeta.querySelector('[data-accion="eliminar"]').addEventListener('click', () => eliminarProducto(p.id));
@@ -322,6 +325,7 @@ function abrirModalProducto(producto = null) {
   $('prod-min-mayor').value = producto?.wholesale_min ?? '';
   $('prod-mayor-bloque').classList.toggle('hidden', !negocio.wholesale_enabled);
   $('prod-imagen').value = '';
+  $('prod-imagen-nombre').textContent = producto?.image_url ? 'Cambiar la foto actual' : 'Toca para subir una foto';
   $('modal-error').classList.add('hidden');
   $('modal-producto').classList.remove('hidden');
   $('modal-producto').classList.add('flex');
@@ -341,6 +345,7 @@ $('modal-producto').addEventListener('click', (e) => {
 $('prod-imagen').addEventListener('change', async (e) => {
   const archivo = e.target.files[0];
   if (!archivo) return;
+  $('prod-imagen-nombre').textContent = archivo.name;
   const barra = $('prod-progreso');
   barra.classList.remove('hidden');
   try {
@@ -351,6 +356,7 @@ $('prod-imagen').addEventListener('change', async (e) => {
     registrarError('panel/subir-imagen', err);
     errorModal('modal-error', err.message);
     e.target.value = '';
+    $('prod-imagen-nombre').textContent = 'Toca para subir una foto';
   }
 });
 
@@ -552,10 +558,10 @@ function pintarTarjetaCupon(tarjeta, cupon) {
       <p>Vence: ${cupon.valid_until ? new Date(cupon.valid_until).toLocaleDateString('es') : 'sin vencimiento'}</p>
     </div>
     <div class="flex gap-2 mt-4">
-      <button data-accion="alternar" class="btn btn-claro flex-1 py-1.5 text-xs">
+      <button data-accion="alternar" class="btn btn-claro btn-compacto flex-1 min-w-0 py-1.5 text-xs">
         ${cupon.is_active ? 'Desactivar' : 'Activar'}
       </button>
-      <button data-accion="eliminar" class="btn btn-claro flex-1 py-1.5 text-xs text-rose-600">
+      <button data-accion="eliminar" class="btn btn-claro btn-compacto flex-1 min-w-0 py-1.5 text-xs text-rose-600">
         ${icono('basura', 'w-3.5 h-3.5')} Eliminar
       </button>
     </div>`;
@@ -784,6 +790,101 @@ function configurarMayorista() {
   });
 }
 
+// --- Datos de la tienda (nombre, descripción, WhatsApp, color, logo) ---
+function pintarSwatchActivo() {
+  document.querySelectorAll('.cfg-swatch').forEach((b) => {
+    b.style.outline = b.dataset.color === colorTiendaElegido ? '3px solid #0f172a' : 'none';
+    b.style.outlineOffset = '2px';
+  });
+}
+
+function pintarLogoPreview(url) {
+  $('cfg-logo-preview').innerHTML = url
+    ? `<img src="${optimizada(url, 'w_112,h_112,c_fill,q_auto,f_auto')}" alt="Logo" class="w-full h-full object-cover" />`
+    : `<span data-icono="tienda" data-clases="w-6 h-6"></span>`;
+  if (!url) hidratarIconos($('cfg-logo-preview'));
+}
+
+function configurarDatosTienda() {
+  colorTiendaElegido = negocio.theme?.color_primario ?? '#2563eb';
+  logoTiendaUrl = negocio.logo_url ?? null;
+
+  $('cfg-nombre').value = negocio.name ?? '';
+  $('cfg-descripcion').value = negocio.description ?? '';
+  if (negocio.category) $('cfg-categoria').value = negocio.category;
+  $('cfg-whatsapp').value = negocio.whatsapp ?? '';
+  $('cfg-color').value = colorTiendaElegido;
+  pintarSwatchActivo();
+  pintarLogoPreview(logoTiendaUrl);
+
+  document.querySelectorAll('.cfg-swatch').forEach((btn) =>
+    btn.addEventListener('click', () => {
+      colorTiendaElegido = btn.dataset.color;
+      $('cfg-color').value = colorTiendaElegido;
+      pintarSwatchActivo();
+    })
+  );
+  $('cfg-color').addEventListener('input', (e) => {
+    colorTiendaElegido = e.target.value;
+    pintarSwatchActivo();
+  });
+
+  $('cfg-logo').addEventListener('change', async (e) => {
+    const archivo = e.target.files[0];
+    if (!archivo) return;
+    $('cfg-logo-nombre').textContent = archivo.name;
+    const barra = $('cfg-logo-barra');
+    barra.classList.remove('hidden');
+    $('cfg-datos-error').classList.add('hidden');
+    try {
+      logoTiendaUrl = await subirImagen(archivo, 'logos', (pct) => { barra.firstElementChild.style.width = pct + '%'; });
+      pintarLogoPreview(logoTiendaUrl);
+    } catch (err) {
+      registrarError('panel/cfg-logo', err);
+      $('cfg-datos-error').textContent = err.message;
+      $('cfg-datos-error').classList.remove('hidden');
+      e.target.value = '';
+      $('cfg-logo-nombre').textContent = 'Cambiar el logo';
+    }
+  });
+
+  $('cfg-guardar-datos').addEventListener('click', guardarDatosTienda);
+}
+
+async function guardarDatosTienda() {
+  const nombre = $('cfg-nombre').value.trim();
+  const err = $('cfg-datos-error');
+  err.classList.add('hidden');
+  if (nombre.length < 2) {
+    err.textContent = 'El nombre de la tienda es obligatorio.';
+    return err.classList.remove('hidden');
+  }
+  const whatsapp = $('cfg-whatsapp').value.replace(/\D/g, '') || null;
+
+  const boton = $('cfg-guardar-datos');
+  boton.disabled = true;
+  boton.innerHTML = '<span class="spinner"></span> Guardando…';
+  const datos = {
+    name: nombre,
+    description: $('cfg-descripcion').value.trim() || null,
+    category: $('cfg-categoria').value,
+    whatsapp,
+    logo_url: logoTiendaUrl,
+    theme: { ...(negocio.theme ?? {}), color_primario: colorTiendaElegido },
+  };
+  const { error } = await supabase.from('businesses').update(datos).eq('id', negocio.id);
+  boton.disabled = false;
+  boton.innerHTML = 'Guardar cambios';
+  if (error) {
+    registrarError('panel/guardar-datos', error);
+    err.textContent = 'No se pudieron guardar los cambios. Intenta de nuevo.';
+    return err.classList.remove('hidden');
+  }
+  Object.assign(negocio, datos);
+  renderEncabezado();
+  notificar('Datos de la tienda actualizados.', 'exito');
+}
+
 // ============================================================
 // Catálogo: link + QR (Dashboard)
 // ============================================================
@@ -920,6 +1021,7 @@ document.querySelectorAll('.sus-metodo').forEach((b) => b.addEventListener('clic
 $('sus-comprobante').addEventListener('change', async (e) => {
   const archivo = e.target.files[0];
   if (!archivo) return;
+  $('sus-comprobante-nombre').textContent = archivo.name;
   const barra = $('sus-comprobante-barra');
   barra.classList.remove('hidden');
   $('sus-error').classList.add('hidden');
@@ -929,6 +1031,7 @@ $('sus-comprobante').addEventListener('change', async (e) => {
     registrarError('panel/comprobante', err);
     errorSus(err.message);
     e.target.value = '';
+    $('sus-comprobante-nombre').textContent = 'Toca para subir tu comprobante';
   }
 });
 

@@ -88,13 +88,13 @@ function crearTarjeta(p, { compacta = false } = {}) {
     <h3 class="font-semibold text-slate-900 mt-3 text-sm leading-snug line-clamp-2">${escapar(p.name)}</h3>
     ${p.description ? `<p class="text-xs text-slate-500 mt-1 line-clamp-2">${escapar(p.description)}</p>` : ''}
     <div class="mt-auto pt-3 flex items-end justify-between gap-2">
-      <div>
-        ${conDesc ? `<p class="text-[11px] text-slate-400 line-through leading-none">${usd(p.price)}</p>` : ''}
-        <p class="font-extrabold leading-tight" style="color:${colorPrimario}">${usd(final)}</p>
-        ${tasaBs ? `<p class="text-[11px] text-slate-500 leading-tight">Bs ${fmtBs.format(final * tasaBs)}</p>` : ''}
+      <div class="min-w-0">
+        ${conDesc ? `<p class="text-[11px] text-slate-400 line-through leading-none truncate">${usd(p.price)}</p>` : ''}
+        <p class="font-extrabold leading-tight truncate" style="color:${colorPrimario}">${usd(final)}</p>
+        ${tasaBs ? `<p class="text-[11px] text-slate-500 leading-tight truncate">Bs ${fmtBs.format(final * tasaBs)}</p>` : ''}
         ${modoMayorista && minMayor > 1 ? `<p class="text-[11px] font-semibold text-slate-500 leading-tight mt-0.5">Mín. ${minMayor} uds</p>` : ''}
       </div>
-      <button data-add aria-label="Agregar ${escapar(p.name)}" ${agotado ? 'disabled' : ''} class="w-9 h-9 rounded-full flex items-center justify-center text-white shadow-sm transition hover:brightness-110 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed" style="background:${colorPrimario}">${icono('mas', 'w-4 h-4')}</button>
+      <button data-add aria-label="Agregar ${escapar(p.name)}" ${agotado ? 'disabled' : ''} class="w-9 h-9 shrink-0 rounded-full flex items-center justify-center text-white shadow-sm transition hover:brightness-110 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed" style="background:${colorPrimario}">${icono('mas', 'w-4 h-4')}</button>
     </div>`;
   if (!agotado) {
     art.querySelector('[data-add]').addEventListener('click', () =>
