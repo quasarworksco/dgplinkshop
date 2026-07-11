@@ -46,6 +46,20 @@ export async function requerirSesion() {
   return user;
 }
 
+/** Envía el correo con el enlace para restablecer la contraseña */
+export async function enviarRecuperacion(email) {
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${window.location.origin}/public/recuperar.html`,
+  });
+  if (error) throw traducirError(error);
+}
+
+/** Fija la nueva contraseña (usando la sesión de recuperación del enlace) */
+export async function actualizarContrasena(nueva) {
+  const { error } = await supabase.auth.updateUser({ password: nueva });
+  if (error) throw traducirError(error);
+}
+
 /** Mensajes de error amigables en español */
 function traducirError(error) {
   const mapa = {

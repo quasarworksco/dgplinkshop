@@ -1,23 +1,49 @@
 // ============================================================
 // DGP LinkShop — Página de acceso (login / registro)
 // ============================================================
-import { registrar, iniciarSesion, usuarioActual } from './auth.js';
+import { registrar, iniciarSesion, usuarioActual, enviarRecuperacion } from './auth.js';
 import { supabase } from './supabase-client.js';
 
 const tabLogin = document.getElementById('tab-login');
 const tabRegistro = document.getElementById('tab-registro');
 const formLogin = document.getElementById('form-login');
 const formRegistro = document.getElementById('form-registro');
+const formRecuperar = document.getElementById('form-recuperar');
 const mensaje = document.getElementById('mensaje');
 
 function mostrarTab(cual) {
   const esLogin = cual === 'login';
   formLogin.classList.toggle('hidden', !esLogin);
   formRegistro.classList.toggle('hidden', esLogin);
+  formRecuperar.classList.add('hidden');
   tabLogin.classList.toggle('activa', esLogin);
   tabRegistro.classList.toggle('activa', !esLogin);
   mensaje.classList.add('hidden');
 }
+
+// Recuperar contraseña
+document.getElementById('link-olvide').addEventListener('click', () => {
+  formLogin.classList.add('hidden');
+  formRegistro.classList.add('hidden');
+  formRecuperar.classList.remove('hidden');
+  mensaje.classList.add('hidden');
+});
+document.getElementById('link-volver-login').addEventListener('click', () => mostrarTab('login'));
+
+formRecuperar.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const boton = formRecuperar.querySelector('button[type="submit"]');
+  iniciarCarga(boton, 'Enviando…');
+  try {
+    await enviarRecuperacion(document.getElementById('rec-email').value.trim());
+    avisar('Si el correo existe, te enviamos un enlace para restablecer tu contraseña. Revisa tu bandeja (y spam).', false);
+    mostrarTab('login');
+  } catch (err) {
+    avisar(err.message);
+  } finally {
+    terminarCarga(boton);
+  }
+});
 
 tabLogin.addEventListener('click', () => mostrarTab('login'));
 tabRegistro.addEventListener('click', () => mostrarTab('registro'));
