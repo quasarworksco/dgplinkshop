@@ -181,5 +181,28 @@ h1, h2, h3, h4 { color: var(--tinta); letter-spacing: -0.02em; }
 }
 .seg-tab.activa { background: #fff; color: var(--azul-700); box-shadow: var(--sombra-sm); }
 
+/* ---------- Wizard: pasos y progreso (tema claro) ---------- */
+.paso-punto {
+  width: 2.25rem; height: 2.25rem; border-radius: 9999px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; border: 1px solid var(--linea);
+  background: #fff; color: #94a3b8; transition: all .3s ease;
+}
+.paso-punto.activo {
+  background: linear-gradient(135deg, var(--azul-600), var(--azul-500));
+  color: #fff; border-color: transparent; box-shadow: var(--sombra-azul);
+}
+.paso-punto.completado {
+  background: var(--azul-suave); border-color: var(--azul-500); color: var(--azul-700);
+}
+.paso-panel { animation: subir .35s ease; }
+
+.barra-progreso { height: .5rem; border-radius: 9999px; background: #e2e8f0; overflow: hidden; }
+.barra-progreso > div {
+  height: 100%; border-radius: 9999px;
+  background: linear-gradient(90deg, var(--azul-600), var(--cyan-500));
+  transition: width .2s ease;
+}
+
 /* Utilidades de scroll suave */
 html { scroll-behavior: smooth; }

@@ -5,57 +5,57 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Configura tu tienda — DGP LinkShop</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="/styles/glass.css" />
+  <link rel="stylesheet" href="/styles/dgp.css" />
 </head>
-<body class="dgp-fondo text-slate-100 antialiased">
+<body class="dgp-lienzo">
 
-  <header class="relative z-10 max-w-5xl mx-auto flex items-center justify-between px-6 py-6">
-    <img src="/assets/logo.svg" alt="DGP LinkShop" class="h-9" />
-    <button id="btn-salir" class="text-sm text-slate-400 hover:text-white transition">Guardar y salir</button>
+  <header class="contenedor flex items-center justify-between h-16">
+    <img src="/assets/logo.svg" alt="DGP LinkShop" class="h-8" />
+    <button id="btn-salir" class="btn btn-fantasma text-sm">Guardar y salir</button>
   </header>
 
-  <main class="relative z-10 max-w-5xl mx-auto px-6 pb-16">
+  <main class="contenedor pb-16 pt-4">
 
     <!-- Indicador de pasos -->
     <div class="flex items-center justify-center gap-3 mb-10" id="indicador-pasos">
       <div class="paso-punto" data-paso="1">1</div>
-      <div class="w-10 h-px bg-white/20"></div>
+      <div class="w-10 h-px bg-slate-200"></div>
       <div class="paso-punto" data-paso="2">2</div>
-      <div class="w-10 h-px bg-white/20"></div>
+      <div class="w-10 h-px bg-slate-200"></div>
       <div class="paso-punto" data-paso="3">3</div>
-      <div class="w-10 h-px bg-white/20"></div>
+      <div class="w-10 h-px bg-slate-200"></div>
       <div class="paso-punto" data-paso="4">4</div>
     </div>
 
     <div class="grid lg:grid-cols-2 gap-8 items-start">
 
       <!-- Columna izquierda: formulario del paso -->
-      <div class="glass p-8">
+      <div class="tarjeta-solida p-8">
 
         <!-- PASO 1: Datos del negocio -->
         <section class="paso-panel" data-panel="1">
-          <h2 class="text-2xl font-bold mb-1">Cuéntanos de tu negocio</h2>
-          <p class="text-slate-400 text-sm mb-6">Esto es lo primero que verán tus clientes.</p>
+          <h2 class="text-2xl font-extrabold text-slate-900 mb-1">Cuéntanos de tu negocio</h2>
+          <p class="text-slate-500 text-sm mb-6">Esto es lo primero que verán tus clientes.</p>
           <div class="space-y-4">
             <div>
-              <label for="negocio-nombre" class="block text-sm mb-1 text-slate-300">Nombre del negocio *</label>
-              <input id="negocio-nombre" class="input-glass" placeholder="Ej: Dulces María" maxlength="60" />
+              <label for="negocio-nombre" class="block text-sm font-medium text-slate-700 mb-1.5">Nombre del negocio *</label>
+              <input id="negocio-nombre" class="campo" placeholder="Ej: Dulces María" maxlength="60" />
             </div>
             <div>
-              <label for="negocio-slug" class="block text-sm mb-1 text-slate-300">Tu dirección web</label>
+              <label for="negocio-slug" class="block text-sm font-medium text-slate-700 mb-1.5">Tu dirección web</label>
               <div class="flex items-center gap-2">
-                <input id="negocio-slug" class="input-glass flex-1" placeholder="dulces-maria" />
+                <input id="negocio-slug" class="campo flex-1" placeholder="dulces-maria" />
                 <span class="text-slate-400 text-sm whitespace-nowrap">.dgpgroupusa.com</span>
               </div>
               <p id="slug-estado" class="text-xs mt-1 h-4"></p>
             </div>
             <div>
-              <label for="negocio-descripcion" class="block text-sm mb-1 text-slate-300">Descripción corta</label>
-              <textarea id="negocio-descripcion" class="input-glass" rows="3" maxlength="200" placeholder="Postres artesanales hechos con amor"></textarea>
+              <label for="negocio-descripcion" class="block text-sm font-medium text-slate-700 mb-1.5">Descripción corta</label>
+              <textarea id="negocio-descripcion" class="campo" rows="3" maxlength="200" placeholder="Postres artesanales hechos con amor"></textarea>
             </div>
             <div>
-              <label for="negocio-categoria" class="block text-sm mb-1 text-slate-300">Categoría</label>
-              <select id="negocio-categoria" class="input-glass">
+              <label for="negocio-categoria" class="block text-sm font-medium text-slate-700 mb-1.5">Categoría</label>
+              <select id="negocio-categoria" class="campo">
                 <option value="comida">Comida y postres</option>
                 <option value="moda">Moda y accesorios</option>
                 <option value="belleza">Belleza y cuidado</option>
@@ -69,102 +69,102 @@
 
         <!-- PASO 2: Logo (Cloudinary) -->
         <section class="paso-panel hidden" data-panel="2">
-          <h2 class="text-2xl font-bold mb-1">El rostro de tu marca</h2>
-          <p class="text-slate-400 text-sm mb-6">Sube tu logo. Lo optimizamos automáticamente.</p>
-          <label id="zona-subida" class="glass glass-hover flex flex-col items-center justify-center gap-3 p-10 cursor-pointer border-dashed" for="input-logo">
-            <span data-icono="subir" data-clases="w-10 h-10 text-indigo-300"></span>
-            <span class="font-semibold">Toca para elegir tu logo</span>
+          <h2 class="text-2xl font-extrabold text-slate-900 mb-1">El rostro de tu marca</h2>
+          <p class="text-slate-500 text-sm mb-6">Sube tu logo. Lo optimizamos automáticamente.</p>
+          <label id="zona-subida" class="flex flex-col items-center justify-center gap-3 p-10 cursor-pointer rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 hover:bg-blue-50/50 hover:border-blue-300 transition" for="input-logo">
+            <span data-icono="subir" data-clases="w-10 h-10 text-blue-500"></span>
+            <span class="font-semibold text-slate-700">Toca para elegir tu logo</span>
             <span class="text-xs text-slate-400">JPG, PNG o WebP · máx. 5 MB</span>
             <input id="input-logo" type="file" accept="image/jpeg,image/png,image/webp" class="hidden" />
           </label>
           <div id="progreso-wrap" class="mt-4 hidden">
             <div class="barra-progreso"><div id="progreso-barra" style="width:0%"></div></div>
-            <p id="progreso-texto" class="text-xs text-slate-400 mt-1 text-center">Subiendo… 0%</p>
+            <p id="progreso-texto" class="text-xs text-slate-500 mt-1 text-center">Subiendo… 0%</p>
           </div>
-          <p class="text-xs text-slate-500 mt-4">Este paso es opcional: puedes continuar sin logo y añadirlo después desde tu panel.</p>
+          <p class="text-xs text-slate-400 mt-4">Este paso es opcional: puedes continuar sin logo y añadirlo después desde tu panel.</p>
         </section>
 
         <!-- PASO 3: Personalización -->
         <section class="paso-panel hidden" data-panel="3">
-          <h2 class="text-2xl font-bold mb-1">Dale tu estilo</h2>
-          <p class="text-slate-400 text-sm mb-6">Elige los colores y tu WhatsApp de pedidos.</p>
+          <h2 class="text-2xl font-extrabold text-slate-900 mb-1">Dale tu estilo</h2>
+          <p class="text-slate-500 text-sm mb-6">Elige los colores y tu WhatsApp de pedidos.</p>
           <div class="space-y-5">
             <div>
-              <span class="block text-sm mb-2 text-slate-300">Color principal</span>
+              <span class="block text-sm font-medium text-slate-700 mb-2">Color principal</span>
               <div class="flex flex-wrap gap-3 items-center" id="paleta-colores">
-                <button type="button" class="paleta-swatch w-9 h-9 rounded-full transition hover:scale-110" data-color="#818cf8" style="background:#818cf8"></button>
-                <button type="button" class="paleta-swatch w-9 h-9 rounded-full transition hover:scale-110" data-color="#6366f1" style="background:#6366f1"></button>
-                <button type="button" class="paleta-swatch w-9 h-9 rounded-full transition hover:scale-110" data-color="#a855f7" style="background:#a855f7"></button>
-                <button type="button" class="paleta-swatch w-9 h-9 rounded-full transition hover:scale-110" data-color="#f472b6" style="background:#f472b6"></button>
-                <button type="button" class="paleta-swatch w-9 h-9 rounded-full transition hover:scale-110" data-color="#fb7185" style="background:#fb7185"></button>
-                <button type="button" class="paleta-swatch w-9 h-9 rounded-full transition hover:scale-110" data-color="#ef4444" style="background:#ef4444"></button>
-                <button type="button" class="paleta-swatch w-9 h-9 rounded-full transition hover:scale-110" data-color="#f97316" style="background:#f97316"></button>
-                <button type="button" class="paleta-swatch w-9 h-9 rounded-full transition hover:scale-110" data-color="#fbbf24" style="background:#fbbf24"></button>
-                <button type="button" class="paleta-swatch w-9 h-9 rounded-full transition hover:scale-110" data-color="#34d399" style="background:#34d399"></button>
-                <button type="button" class="paleta-swatch w-9 h-9 rounded-full transition hover:scale-110" data-color="#10b981" style="background:#10b981"></button>
-                <button type="button" class="paleta-swatch w-9 h-9 rounded-full transition hover:scale-110" data-color="#22d3ee" style="background:#22d3ee"></button>
-                <button type="button" class="paleta-swatch w-9 h-9 rounded-full transition hover:scale-110" data-color="#0ea5e9" style="background:#0ea5e9"></button>
+                <button type="button" class="paleta-swatch w-9 h-9 rounded-full transition hover:scale-110 ring-1 ring-black/5" data-color="#2563eb" style="background:#2563eb"></button>
+                <button type="button" class="paleta-swatch w-9 h-9 rounded-full transition hover:scale-110 ring-1 ring-black/5" data-color="#6366f1" style="background:#6366f1"></button>
+                <button type="button" class="paleta-swatch w-9 h-9 rounded-full transition hover:scale-110 ring-1 ring-black/5" data-color="#a855f7" style="background:#a855f7"></button>
+                <button type="button" class="paleta-swatch w-9 h-9 rounded-full transition hover:scale-110 ring-1 ring-black/5" data-color="#ec4899" style="background:#ec4899"></button>
+                <button type="button" class="paleta-swatch w-9 h-9 rounded-full transition hover:scale-110 ring-1 ring-black/5" data-color="#ef4444" style="background:#ef4444"></button>
+                <button type="button" class="paleta-swatch w-9 h-9 rounded-full transition hover:scale-110 ring-1 ring-black/5" data-color="#f97316" style="background:#f97316"></button>
+                <button type="button" class="paleta-swatch w-9 h-9 rounded-full transition hover:scale-110 ring-1 ring-black/5" data-color="#f59e0b" style="background:#f59e0b"></button>
+                <button type="button" class="paleta-swatch w-9 h-9 rounded-full transition hover:scale-110 ring-1 ring-black/5" data-color="#10b981" style="background:#10b981"></button>
+                <button type="button" class="paleta-swatch w-9 h-9 rounded-full transition hover:scale-110 ring-1 ring-black/5" data-color="#14b8a6" style="background:#14b8a6"></button>
+                <button type="button" class="paleta-swatch w-9 h-9 rounded-full transition hover:scale-110 ring-1 ring-black/5" data-color="#06b6d4" style="background:#06b6d4"></button>
+                <button type="button" class="paleta-swatch w-9 h-9 rounded-full transition hover:scale-110 ring-1 ring-black/5" data-color="#0ea5e9" style="background:#0ea5e9"></button>
+                <button type="button" class="paleta-swatch w-9 h-9 rounded-full transition hover:scale-110 ring-1 ring-black/5" data-color="#0f172a" style="background:#0f172a"></button>
                 <!-- Selector de color personalizado -->
-                <label class="relative w-9 h-9 rounded-full cursor-pointer transition hover:scale-110 flex items-center justify-center overflow-hidden border border-white/30"
+                <label class="relative w-9 h-9 rounded-full cursor-pointer transition hover:scale-110 flex items-center justify-center overflow-hidden ring-1 ring-black/10"
                        style="background: conic-gradient(from 0deg, #f43f5e, #f59e0b, #10b981, #06b6d4, #6366f1, #a855f7, #f43f5e)" title="Elegir cualquier color">
-                  <input type="color" id="color-personalizado" class="absolute inset-0 opacity-0 cursor-pointer" value="#818cf8" />
+                  <input type="color" id="color-personalizado" class="absolute inset-0 opacity-0 cursor-pointer" value="#2563eb" />
                 </label>
               </div>
-              <p class="text-xs text-slate-500 mt-2">Elige un tono o toca el círculo de arcoíris para un color personalizado.</p>
+              <p class="text-xs text-slate-400 mt-2">Elige un tono o toca el círculo de arcoíris para un color personalizado.</p>
             </div>
             <div>
-              <label for="negocio-whatsapp" class="block text-sm mb-1 text-slate-300">WhatsApp para pedidos (con código de país)</label>
-              <input id="negocio-whatsapp" class="input-glass" placeholder="Ej: 50588887777" inputmode="numeric" />
-              <p class="text-xs text-slate-500 mt-1">Tus clientes te escribirán directo con un toque.</p>
+              <label for="negocio-whatsapp" class="block text-sm font-medium text-slate-700 mb-1.5">WhatsApp para pedidos (con código de país)</label>
+              <input id="negocio-whatsapp" class="campo" placeholder="Ej: 50588887777" inputmode="numeric" />
+              <p class="text-xs text-slate-400 mt-1">Tus clientes te escribirán directo con un toque.</p>
             </div>
           </div>
         </section>
 
         <!-- PASO 4: Revisión y publicación -->
         <section class="paso-panel hidden" data-panel="4">
-          <h2 class="text-2xl font-bold mb-1">¡Todo listo!</h2>
-          <p class="text-slate-400 text-sm mb-6">Revisa la vista previa y publica tu tienda.</p>
-          <div class="glass p-5 space-y-3 text-sm">
-            <p><span class="text-slate-400">Negocio:</span> <strong id="resumen-nombre">—</strong></p>
-            <p><span class="text-slate-400">Tu URL:</span> <strong id="resumen-url" class="text-cyan-300 break-all">—</strong></p>
-            <p><span class="text-slate-400">Plan:</span> <strong>Gratuito · hasta 5 productos</strong></p>
+          <h2 class="text-2xl font-extrabold text-slate-900 mb-1">¡Todo listo!</h2>
+          <p class="text-slate-500 text-sm mb-6">Revisa la vista previa y publica tu tienda.</p>
+          <div class="rounded-2xl bg-slate-50 border border-slate-200 p-5 space-y-3 text-sm">
+            <p><span class="text-slate-400">Negocio:</span> <strong id="resumen-nombre" class="text-slate-900">—</strong></p>
+            <p><span class="text-slate-400">Tu URL:</span> <strong id="resumen-url" class="text-blue-600 break-all">—</strong></p>
+            <p><span class="text-slate-400">Plan:</span> <strong class="text-slate-900">Gratuito · hasta 5 productos</strong></p>
           </div>
-          <p class="text-xs text-slate-500 mt-4">Después de publicar irás a tu panel para añadir tus primeros productos.</p>
+          <p class="text-xs text-slate-400 mt-4">Después de publicar irás a tu panel para añadir tus primeros productos.</p>
         </section>
 
         <!-- Navegación -->
         <div class="flex justify-between mt-8">
-          <button id="btn-atras" class="glass glass-hover px-6 py-2.5 rounded-full text-sm font-semibold invisible">← Atrás</button>
-          <button id="btn-siguiente" class="btn-liquid text-sm">Siguiente →</button>
+          <button id="btn-atras" class="btn btn-claro text-sm invisible">← Atrás</button>
+          <button id="btn-siguiente" class="btn btn-primario text-sm">Siguiente →</button>
         </div>
-        <p id="wizard-error" class="text-rose-400 text-sm mt-4 hidden"></p>
+        <p id="wizard-error" class="text-rose-600 text-sm mt-4 hidden"></p>
       </div>
 
       <!-- Columna derecha: vista previa en vivo -->
       <aside class="sticky top-6">
-        <p class="text-center text-xs uppercase tracking-widest text-slate-500 mb-3">Vista previa en vivo</p>
-        <div class="glass p-6" id="preview-tienda">
+        <p class="text-center text-xs uppercase tracking-widest text-slate-400 mb-3">Vista previa en vivo</p>
+        <div class="tarjeta p-6" id="preview-tienda">
           <div class="text-center">
-            <div id="preview-logo" class="w-20 h-20 mx-auto rounded-2xl glass flex items-center justify-center overflow-hidden text-slate-300">
+            <div id="preview-logo" class="w-20 h-20 mx-auto rounded-2xl bg-white shadow-md ring-1 ring-black/5 flex items-center justify-center overflow-hidden text-slate-300">
               <span data-icono="tienda" data-clases="w-8 h-8"></span>
             </div>
-            <h3 id="preview-nombre" class="mt-4 text-xl font-bold">Tu negocio</h3>
-            <p id="preview-descripcion" class="text-sm text-slate-400 mt-1">Tu descripción aparecerá aquí</p>
-            <p id="preview-url" class="text-xs mt-2 text-cyan-300">tunegocio.dgpgroupusa.com</p>
+            <h3 id="preview-nombre" class="mt-4 text-xl font-bold text-slate-900">Tu negocio</h3>
+            <p id="preview-descripcion" class="text-sm text-slate-500 mt-1">Tu descripción aparecerá aquí</p>
+            <p id="preview-url" class="text-xs mt-2 text-blue-600">tunegocio.dgpgroupusa.com</p>
           </div>
           <div class="grid grid-cols-2 gap-3 mt-6">
-            <div class="glass p-3">
-              <div class="h-16 rounded-lg bg-white/10 flex items-center justify-center text-slate-400"><span data-icono="paquete" data-clases="w-7 h-7"></span></div>
-              <p class="text-xs mt-2 font-semibold">Producto de ejemplo</p>
-              <p class="text-xs" id="preview-precio-1" style="color:#818cf8">$10.00</p>
+            <div class="tarjeta-solida p-3">
+              <div class="h-16 rounded-lg bg-slate-100 flex items-center justify-center text-slate-300"><span data-icono="paquete" data-clases="w-7 h-7"></span></div>
+              <p class="text-xs mt-2 font-semibold text-slate-800">Producto de ejemplo</p>
+              <p class="text-xs font-bold" id="preview-precio-1" style="color:#2563eb">$10.00</p>
             </div>
-            <div class="glass p-3">
-              <div class="h-16 rounded-lg bg-white/10 flex items-center justify-center text-slate-400"><span data-icono="destello" data-clases="w-7 h-7"></span></div>
-              <p class="text-xs mt-2 font-semibold">Otro producto</p>
-              <p class="text-xs" id="preview-precio-2" style="color:#818cf8">$25.00</p>
+            <div class="tarjeta-solida p-3">
+              <div class="h-16 rounded-lg bg-slate-100 flex items-center justify-center text-slate-300"><span data-icono="destello" data-clases="w-7 h-7"></span></div>
+              <p class="text-xs mt-2 font-semibold text-slate-800">Otro producto</p>
+              <p class="text-xs font-bold" id="preview-precio-2" style="color:#2563eb">$25.00</p>
             </div>
           </div>
-          <button id="preview-boton" class="w-full mt-5 py-2.5 rounded-full text-sm font-semibold text-white transition flex items-center justify-center gap-2" style="background:#818cf8">
+          <button id="preview-boton" class="w-full mt-5 py-2.5 rounded-xl text-sm font-semibold text-white transition flex items-center justify-center gap-2" style="background:#2563eb">
             <span data-icono="mensaje" data-clases="w-4 h-4"></span> Pedir por WhatsApp
           </button>
         </div>
@@ -172,10 +172,9 @@
     </div>
   </main>
 
-  <!-- Footer institucional DGP -->
-  <footer class="relative z-10 text-center text-xs text-slate-500 pb-8 space-y-1">
+  <footer class="contenedor text-center text-xs text-slate-400 pb-8 space-y-1">
     <p>© 2026 DGP LinkShop · dgpgroupusa.com</p>
-    <p>Desarrollado por <a href="https://dgpglobalgroup.com" target="_blank" rel="noopener" class="text-indigo-300 hover:text-indigo-200 transition font-semibold">DGP Global Group</a></p>
+    <p>Desarrollado por <a href="https://dgpglobalgroup.com" target="_blank" rel="noopener" class="text-blue-600 hover:text-blue-700 font-semibold">DGP Global Group</a></p>
   </footer>
 
   <script type="module" src="/src/wizard.js"></script>

@@ -5,58 +5,62 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Mi panel — DGP LinkShop</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="/styles/glass.css" />
+  <link rel="stylesheet" href="/styles/dgp.css" />
 </head>
-<body class="dgp-fondo text-slate-100 antialiased">
+<body class="dgp-lienzo">
 
-  <header class="relative z-10 max-w-6xl mx-auto flex items-center justify-between px-6 py-6">
-    <img src="/assets/logo.svg" alt="DGP LinkShop" class="h-9" />
-    <div class="flex items-center gap-4">
-      <a id="ver-tienda" href="#" target="_blank" rel="noopener" class="glass glass-hover px-4 py-2 rounded-full text-sm font-semibold flex items-center gap-2">
-        <span data-icono="ojo" data-clases="w-4 h-4"></span> Ver mi tienda
-      </a>
-      <button id="btn-logout" class="text-sm text-slate-400 hover:text-white transition flex items-center gap-1.5">
-        <span data-icono="salir" data-clases="w-4 h-4"></span> Salir
-      </button>
+  <header class="nav-glass sticky top-0 z-40">
+    <div class="contenedor flex items-center justify-between h-16">
+      <img src="/assets/logo.svg" alt="DGP LinkShop" class="h-8" />
+      <div class="flex items-center gap-2 sm:gap-3">
+        <a id="ver-tienda" href="#" target="_blank" rel="noopener" class="btn btn-claro text-sm">
+          <span data-icono="ojo" data-clases="w-4 h-4"></span> <span class="hidden sm:inline">Ver mi tienda</span>
+        </a>
+        <button id="btn-logout" class="btn btn-fantasma text-sm">
+          <span data-icono="salir" data-clases="w-4 h-4"></span> <span class="hidden sm:inline">Salir</span>
+        </button>
+      </div>
     </div>
   </header>
 
-  <main class="relative z-10 max-w-6xl mx-auto px-6 pb-16">
+  <main class="contenedor py-8">
 
     <!-- Encabezado del negocio -->
-    <section class="glass p-6 flex flex-col md:flex-row md:items-center gap-5">
-      <div id="panel-logo" class="w-16 h-16 rounded-2xl glass flex items-center justify-center overflow-hidden shrink-0 text-slate-300">
+    <section class="tarjeta-solida p-6 flex flex-col md:flex-row md:items-center gap-5">
+      <div id="panel-logo" class="w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center overflow-hidden shrink-0 text-slate-400 ring-1 ring-black/5">
         <span data-icono="tienda" data-clases="w-7 h-7"></span>
       </div>
       <div class="flex-1 min-w-0">
-        <h1 id="panel-nombre" class="text-2xl font-bold truncate">Cargando…</h1>
-        <a id="panel-url" href="#" target="_blank" rel="noopener" class="text-sm text-cyan-300 hover:underline break-all"></a>
+        <h1 id="panel-nombre" class="text-2xl font-extrabold text-slate-900 truncate">Cargando…</h1>
+        <a id="panel-url" href="#" target="_blank" rel="noopener" class="text-sm text-blue-600 hover:underline break-all"></a>
       </div>
-      <div class="glass px-5 py-3 text-center">
-        <p class="text-xs text-slate-400 uppercase tracking-wide">Plan</p>
-        <p id="panel-plan" class="font-bold text-indigo-300">—</p>
-      </div>
-      <div class="glass px-5 py-3 text-center">
-        <p class="text-xs text-slate-400 uppercase tracking-wide">Productos</p>
-        <p class="font-bold"><span id="panel-conteo">0</span><span class="text-slate-400">/<span id="panel-limite">5</span></span></p>
+      <div class="flex gap-3">
+        <div class="rounded-xl bg-slate-50 border border-slate-200 px-5 py-3 text-center">
+          <p class="text-xs text-slate-400 uppercase tracking-wide">Plan</p>
+          <p id="panel-plan" class="font-bold text-blue-600">—</p>
+        </div>
+        <div class="rounded-xl bg-slate-50 border border-slate-200 px-5 py-3 text-center">
+          <p class="text-xs text-slate-400 uppercase tracking-wide">Productos</p>
+          <p class="font-bold text-slate-900"><span id="panel-conteo">0</span><span class="text-slate-400">/<span id="panel-limite">5</span></span></p>
+        </div>
       </div>
     </section>
 
     <!-- Aviso de límite / upgrade -->
-    <div id="aviso-limite" class="glass p-4 mt-4 hidden items-center justify-between gap-4 flex-wrap" style="border-color: rgba(251,191,36,0.4)">
-      <p class="text-sm text-amber-300">Alcanzaste el límite de tu plan. Mejora a <strong>PRO</strong> ($30 inscripción + $20/mes) y vende hasta 50 productos.</p>
-      <button id="btn-upgrade" class="btn-liquid text-sm">Quiero el plan PRO</button>
+    <div id="aviso-limite" class="tarjeta-solida p-4 mt-4 hidden items-center justify-between gap-4 flex-wrap" style="border-color:#fde68a;background:#fffbeb">
+      <p class="text-sm text-amber-700">Alcanzaste el límite de tu plan. Mejora a <strong>PRO</strong> ($30 inscripción + $20/mes) y vende hasta 50 productos.</p>
+      <button id="btn-upgrade" class="btn btn-primario text-sm">Quiero el plan PRO</button>
     </div>
 
     <!-- Pestañas -->
-    <nav class="glass p-1.5 mt-8 grid grid-cols-3 gap-1.5 rounded-full max-w-lg" aria-label="Secciones del panel">
-      <button data-tab="catalogo" class="tab-panel py-2 rounded-full text-sm font-semibold flex items-center justify-center gap-2">
+    <nav class="seg mt-8 max-w-lg" style="grid-template-columns:repeat(3,1fr)" aria-label="Secciones">
+      <button data-tab="catalogo" class="seg-tab flex items-center justify-center gap-2">
         <span data-icono="paquete" data-clases="w-4 h-4"></span> Catálogo
       </button>
-      <button data-tab="pedidos" class="tab-panel py-2 rounded-full text-sm font-semibold flex items-center justify-center gap-2">
+      <button data-tab="pedidos" class="seg-tab flex items-center justify-center gap-2">
         <span data-icono="pedidos" data-clases="w-4 h-4"></span> Pedidos
       </button>
-      <button data-tab="cupones" class="tab-panel py-2 rounded-full text-sm font-semibold flex items-center justify-center gap-2">
+      <button data-tab="cupones" class="seg-tab flex items-center justify-center gap-2">
         <span data-icono="cupon" data-clases="w-4 h-4"></span> Cupones
       </button>
     </nav>
@@ -64,13 +68,13 @@
     <!-- SECCIÓN: Catálogo -->
     <section data-seccion="catalogo" class="mt-6">
       <div class="flex items-center justify-between mb-5">
-        <h2 class="text-xl font-bold">Mi catálogo</h2>
-        <button id="btn-nuevo-producto" class="btn-liquid text-sm flex items-center gap-2">
+        <h2 class="text-xl font-bold text-slate-900">Mi catálogo</h2>
+        <button id="btn-nuevo-producto" class="btn btn-primario text-sm">
           <span data-icono="mas" data-clases="w-4 h-4"></span> Añadir producto
         </button>
       </div>
       <div id="lista-productos" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
-      <p id="catalogo-vacio" class="glass p-10 text-center text-slate-400 hidden">
+      <p id="catalogo-vacio" class="tarjeta-solida p-10 text-center text-slate-500 hidden">
         Aún no tienes productos. ¡Añade el primero y empieza a vender!
       </p>
     </section>
@@ -78,11 +82,11 @@
     <!-- SECCIÓN: Pedidos -->
     <section data-seccion="pedidos" class="mt-6 hidden">
       <div class="flex items-center justify-between mb-5">
-        <h2 class="text-xl font-bold">Pedidos recibidos</h2>
-        <p class="text-xs text-slate-400">Los pedidos entran cuando un cliente confirma su carrito por WhatsApp.</p>
+        <h2 class="text-xl font-bold text-slate-900">Pedidos recibidos</h2>
+        <p class="text-xs text-slate-400 hidden sm:block">Entran cuando un cliente confirma su carrito por WhatsApp.</p>
       </div>
       <div id="lista-pedidos" class="space-y-4"></div>
-      <p id="pedidos-vacio" class="glass p-10 text-center text-slate-400 hidden">
+      <p id="pedidos-vacio" class="tarjeta-solida p-10 text-center text-slate-500 hidden">
         Todavía no has recibido pedidos. Comparte tu tienda para empezar a vender.
       </p>
     </section>
@@ -90,108 +94,109 @@
     <!-- SECCIÓN: Cupones -->
     <section data-seccion="cupones" class="mt-6 hidden">
       <div class="flex items-center justify-between mb-5">
-        <h2 class="text-xl font-bold">Mis cupones</h2>
-        <button id="btn-nuevo-cupon" class="btn-liquid text-sm flex items-center gap-2">
+        <h2 class="text-xl font-bold text-slate-900">Mis cupones</h2>
+        <button id="btn-nuevo-cupon" class="btn btn-primario text-sm">
           <span data-icono="mas" data-clases="w-4 h-4"></span> Crear cupón
         </button>
       </div>
       <div id="lista-cupones" class="grid sm:grid-cols-2 gap-4"></div>
-      <p id="cupones-vacio" class="glass p-10 text-center text-slate-400 hidden">
+      <p id="cupones-vacio" class="tarjeta-solida p-10 text-center text-slate-500 hidden">
         Sin cupones todavía. Crea uno para premiar a tus clientes.
       </p>
     </section>
   </main>
 
   <!-- Modal producto -->
-  <div id="modal-producto" class="fixed inset-0 z-40 hidden items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-    <div class="glass p-8 w-full max-w-md max-h-[90vh] overflow-y-auto">
-      <h3 id="modal-titulo" class="text-xl font-bold mb-6">Nuevo producto</h3>
+  <div id="modal-producto" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm">
+    <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md max-h-[90vh] overflow-y-auto">
+      <h3 id="modal-titulo" class="text-xl font-bold text-slate-900 mb-6">Nuevo producto</h3>
       <form id="form-producto" class="space-y-4">
         <input type="hidden" id="prod-id" />
         <div>
-          <label for="prod-nombre" class="block text-sm mb-1 text-slate-300">Nombre *</label>
-          <input id="prod-nombre" class="input-glass" required maxlength="120" placeholder="Ej: Pastel de chocolate" />
+          <label for="prod-nombre" class="block text-sm font-medium text-slate-700 mb-1.5">Nombre *</label>
+          <input id="prod-nombre" class="campo" required maxlength="120" placeholder="Ej: Pastel de chocolate" />
         </div>
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label for="prod-precio" class="block text-sm mb-1 text-slate-300">Precio *</label>
-            <input id="prod-precio" class="input-glass" type="number" min="0" step="0.01" required placeholder="0.00" />
+            <label for="prod-precio" class="block text-sm font-medium text-slate-700 mb-1.5">Precio *</label>
+            <input id="prod-precio" class="campo" type="number" min="0" step="0.01" required placeholder="0.00" />
           </div>
           <div>
-            <label for="prod-descuento" class="block text-sm mb-1 text-slate-300">Descuento %</label>
-            <input id="prod-descuento" class="input-glass" type="number" min="0" max="90" step="1" value="0" />
+            <label for="prod-descuento" class="block text-sm font-medium text-slate-700 mb-1.5">Descuento %</label>
+            <input id="prod-descuento" class="campo" type="number" min="0" max="90" step="1" value="0" />
           </div>
         </div>
         <div>
-          <label for="prod-descripcion" class="block text-sm mb-1 text-slate-300">Descripción</label>
-          <textarea id="prod-descripcion" class="input-glass" rows="2" maxlength="300"></textarea>
+          <label for="prod-descripcion" class="block text-sm font-medium text-slate-700 mb-1.5">Descripción</label>
+          <textarea id="prod-descripcion" class="campo" rows="2" maxlength="300"></textarea>
         </div>
-        <label class="flex items-center gap-3 glass p-3 rounded-xl cursor-pointer">
-          <input id="prod-destacado" type="checkbox" class="w-4 h-4 accent-indigo-400" />
-          <span class="text-sm flex items-center gap-2"><span data-icono="estrella" data-clases="w-4 h-4 text-amber-300"></span> Producto destacado (aparece primero en tu tienda)</span>
+        <label class="flex items-center gap-3 rounded-xl bg-slate-50 border border-slate-200 p-3 cursor-pointer">
+          <input id="prod-destacado" type="checkbox" class="w-4 h-4 accent-blue-600" />
+          <span class="text-sm text-slate-700 flex items-center gap-2"><span data-icono="estrella" data-clases="w-4 h-4 text-amber-500"></span> Producto destacado (aparece primero en tu tienda)</span>
         </label>
         <div>
-          <label for="prod-imagen" class="block text-sm mb-1 text-slate-300">Foto del producto</label>
-          <input id="prod-imagen" type="file" accept="image/jpeg,image/png,image/webp" class="input-glass text-sm" />
-          <div id="prod-progreso" class="barra-progreso mt-2 hidden"><div style="width:0%"></div></div>
+          <label for="prod-imagen" class="block text-sm font-medium text-slate-700 mb-1.5">Foto del producto</label>
+          <input id="prod-imagen" type="file" accept="image/jpeg,image/png,image/webp" class="campo text-sm" />
+          <div id="prod-progreso" class="mt-2 h-2 rounded-full bg-slate-100 overflow-hidden hidden"><div class="h-full bg-blue-500" style="width:0%"></div></div>
         </div>
-        <p id="modal-error" class="text-rose-400 text-sm hidden"></p>
+        <p id="modal-error" class="text-rose-600 text-sm hidden"></p>
         <div class="flex gap-3 pt-2">
-          <button type="button" id="btn-cancelar" class="glass glass-hover flex-1 py-2.5 rounded-full text-sm font-semibold">Cancelar</button>
-          <button type="submit" id="btn-guardar-producto" class="btn-liquid flex-1 text-sm">Guardar</button>
+          <button type="button" id="btn-cancelar" class="btn btn-claro flex-1 text-sm">Cancelar</button>
+          <button type="submit" id="btn-guardar-producto" class="btn btn-primario flex-1 text-sm">Guardar</button>
         </div>
       </form>
     </div>
   </div>
 
   <!-- Modal cupón -->
-  <div id="modal-cupon" class="fixed inset-0 z-40 hidden items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-    <div class="glass p-8 w-full max-w-md max-h-[90vh] overflow-y-auto">
-      <h3 class="text-xl font-bold mb-6">Crear cupón</h3>
+  <div id="modal-cupon" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm">
+    <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md max-h-[90vh] overflow-y-auto">
+      <h3 class="text-xl font-bold text-slate-900 mb-6">Crear cupón</h3>
       <form id="form-cupon" class="space-y-4">
         <div>
-          <label for="cupon-codigo" class="block text-sm mb-1 text-slate-300">Código *</label>
-          <input id="cupon-codigo" class="input-glass uppercase" required maxlength="24" pattern="[A-Za-z0-9-]{3,24}" placeholder="Ej: BIENVENIDA10" />
-          <p class="text-xs text-slate-500 mt-1">Solo letras, números y guiones (3 a 24 caracteres).</p>
+          <label for="cupon-codigo" class="block text-sm font-medium text-slate-700 mb-1.5">Código *</label>
+          <input id="cupon-codigo" class="campo uppercase" required maxlength="24" pattern="[A-Za-z0-9-]{3,24}" placeholder="Ej: BIENVENIDA10" />
+          <p class="text-xs text-slate-400 mt-1">Solo letras, números y guiones (3 a 24 caracteres).</p>
         </div>
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label for="cupon-tipo" class="block text-sm mb-1 text-slate-300">Tipo *</label>
-            <select id="cupon-tipo" class="input-glass">
+            <label for="cupon-tipo" class="block text-sm font-medium text-slate-700 mb-1.5">Tipo *</label>
+            <select id="cupon-tipo" class="campo">
               <option value="percent">% de descuento</option>
               <option value="fixed">Monto fijo ($)</option>
             </select>
           </div>
           <div>
-            <label for="cupon-valor" class="block text-sm mb-1 text-slate-300">Valor *</label>
-            <input id="cupon-valor" class="input-glass" type="number" min="0.01" step="0.01" required placeholder="10" />
+            <label for="cupon-valor" class="block text-sm font-medium text-slate-700 mb-1.5">Valor *</label>
+            <input id="cupon-valor" class="campo" type="number" min="0.01" step="0.01" required placeholder="10" />
           </div>
         </div>
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label for="cupon-vence" class="block text-sm mb-1 text-slate-300">Vence el</label>
-            <input id="cupon-vence" class="input-glass text-sm" type="date" />
-            <p class="text-xs text-slate-500 mt-1">Vacío = sin vencimiento</p>
+            <label for="cupon-vence" class="block text-sm font-medium text-slate-700 mb-1.5">Vence el</label>
+            <input id="cupon-vence" class="campo text-sm" type="date" />
+            <p class="text-xs text-slate-400 mt-1">Vacío = sin vencimiento</p>
           </div>
           <div>
-            <label for="cupon-usos" class="block text-sm mb-1 text-slate-300">Usos máximos</label>
-            <input id="cupon-usos" class="input-glass" type="number" min="1" step="1" placeholder="Ilimitado" />
-            <p class="text-xs text-slate-500 mt-1">Vacío = ilimitado</p>
+            <label for="cupon-usos" class="block text-sm font-medium text-slate-700 mb-1.5">Usos máximos</label>
+            <input id="cupon-usos" class="campo" type="number" min="1" step="1" placeholder="Ilimitado" />
+            <p class="text-xs text-slate-400 mt-1">Vacío = ilimitado</p>
           </div>
         </div>
-        <p id="cupon-error" class="text-rose-400 text-sm hidden"></p>
+        <p id="cupon-error" class="text-rose-600 text-sm hidden"></p>
         <div class="flex gap-3 pt-2">
-          <button type="button" id="btn-cancelar-cupon" class="glass glass-hover flex-1 py-2.5 rounded-full text-sm font-semibold">Cancelar</button>
-          <button type="submit" id="btn-guardar-cupon" class="btn-liquid flex-1 text-sm">Crear cupón</button>
+          <button type="button" id="btn-cancelar-cupon" class="btn btn-claro flex-1 text-sm">Cancelar</button>
+          <button type="submit" id="btn-guardar-cupon" class="btn btn-primario flex-1 text-sm">Crear cupón</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- Footer institucional DGP -->
-  <footer class="relative z-10 text-center text-xs text-slate-500 pb-8 space-y-1">
-    <p>© 2026 DGP LinkShop · dgpgroupusa.com</p>
-    <p>Desarrollado por <a href="https://dgpglobalgroup.com" target="_blank" rel="noopener" class="text-indigo-300 hover:text-indigo-200 transition font-semibold">DGP Global Group</a></p>
+  <footer class="border-t border-slate-200 bg-white/70">
+    <div class="contenedor py-6 text-center text-xs text-slate-500 space-y-1">
+      <p>© 2026 DGP LinkShop · dgpgroupusa.com</p>
+      <p>Desarrollado por <a href="https://dgpglobalgroup.com" target="_blank" rel="noopener" class="text-blue-600 hover:text-blue-700 font-semibold">DGP Global Group</a></p>
+    </div>
   </footer>
 
   <script type="module" src="/src/panel.js"></script>

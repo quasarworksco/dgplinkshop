@@ -33,10 +33,10 @@ let pedidosCargados = false;
 let cuponesCargados = false;
 
 const ESTADOS_PEDIDO = {
-  pendiente: { texto: 'Pendiente', clase: 'text-amber-300' },
-  procesado: { texto: 'Procesado', clase: 'text-cyan-300' },
-  entregado: { texto: 'Entregado', clase: 'text-emerald-300' },
-  cancelado: { texto: 'Cancelado', clase: 'text-rose-300' },
+  pendiente: { texto: 'Pendiente', clase: 'text-amber-600' },
+  procesado: { texto: 'Procesado', clase: 'text-blue-600' },
+  entregado: { texto: 'Entregado', clase: 'text-emerald-600' },
+  cancelado: { texto: 'Cancelado', clase: 'text-rose-600' },
 };
 
 // ------------------------------------------------------------
@@ -102,7 +102,7 @@ function activarPestanas() {
   const botones = document.querySelectorAll('[data-tab]');
   botones.forEach((btn) =>
     btn.addEventListener('click', async () => {
-      botones.forEach((b) => b.classList.toggle('btn-liquid', b === btn));
+      botones.forEach((b) => b.classList.toggle('activa', b === btn));
       document.querySelectorAll('[data-seccion]').forEach((sec) =>
         sec.classList.toggle('hidden', sec.dataset.seccion !== btn.dataset.tab)
       );
@@ -110,7 +110,7 @@ function activarPestanas() {
       if (btn.dataset.tab === 'cupones' && !cuponesCargados) await cargarCupones();
     })
   );
-  document.querySelector('[data-tab="catalogo"]').classList.add('btn-liquid');
+  document.querySelector('[data-tab="catalogo"]').classList.add('activa');
 }
 
 function escapar(texto) {
@@ -148,7 +148,7 @@ async function cargarCatalogo() {
 
 function crearTarjetaProducto(p) {
   const tarjeta = document.createElement('article');
-  tarjeta.className = 'glass glass-hover p-4 flex flex-col relative';
+  tarjeta.className = 'tarjeta-solida tarjeta-hover p-4 flex flex-col relative';
   pintarTarjetaProducto(tarjeta, p);
   return tarjeta;
 }
@@ -158,26 +158,26 @@ function pintarTarjetaProducto(tarjeta, p) {
   const conDescuento = (p.discount_percent ?? 0) > 0;
   tarjeta.innerHTML = `
     ${p.is_featured ? `
-      <span class="absolute top-2 left-2 z-10 glass px-2 py-0.5 rounded-full text-[10px] font-bold text-amber-300 flex items-center gap-1">
+      <span class="absolute top-2 left-2 z-10 bg-white shadow-sm px-2 py-0.5 rounded-full text-[10px] font-bold text-amber-600 flex items-center gap-1">
         ${icono('estrella', 'w-3 h-3')} Destacado
       </span>` : ''}
     ${conDescuento ? `
-      <span class="absolute top-2 right-2 z-10 glass px-2 py-0.5 rounded-full text-[10px] font-bold text-indigo-300 flex items-center gap-1">
+      <span class="absolute top-2 right-2 z-10 bg-white shadow-sm px-2 py-0.5 rounded-full text-[10px] font-bold text-blue-600 flex items-center gap-1">
         ${icono('porcentaje', 'w-3 h-3')} -${p.discount_percent}%
       </span>` : ''}
-    <div class="h-36 rounded-xl overflow-hidden bg-white/5 flex items-center justify-center text-slate-400">
+    <div class="h-36 rounded-xl overflow-hidden bg-slate-100 flex items-center justify-center text-slate-300">
       ${p.image_url
         ? imgLazy(p.image_url, 'w_500,h_300,c_fill,q_auto,f_auto', escapar(p.name))
         : icono('paquete', 'w-9 h-9')}
     </div>
-    <h3 class="font-semibold mt-3 truncate">${escapar(p.name)}</h3>
-    <p class="text-indigo-300 font-bold">
-      ${conDescuento ? `<span class="text-slate-500 line-through text-sm font-normal mr-1">${dinero(p.price)}</span>` : ''}
+    <h3 class="font-semibold text-slate-900 mt-3 truncate">${escapar(p.name)}</h3>
+    <p class="text-blue-600 font-bold">
+      ${conDescuento ? `<span class="text-slate-400 line-through text-sm font-normal mr-1">${dinero(p.price)}</span>` : ''}
       ${dinero(p.price * (1 - (p.discount_percent ?? 0) / 100))}
     </p>
     <div class="flex gap-2 mt-3">
-      <button data-accion="editar" class="glass glass-hover flex-1 py-1.5 rounded-full text-xs font-semibold flex items-center justify-center gap-1.5">${icono('lapiz', 'w-3.5 h-3.5')} Editar</button>
-      <button data-accion="eliminar" class="glass glass-hover flex-1 py-1.5 rounded-full text-xs font-semibold text-rose-300 flex items-center justify-center gap-1.5">${icono('basura', 'w-3.5 h-3.5')} Eliminar</button>
+      <button data-accion="editar" class="btn btn-claro flex-1 py-1.5 text-xs">${icono('lapiz', 'w-3.5 h-3.5')} Editar</button>
+      <button data-accion="eliminar" class="btn btn-claro flex-1 py-1.5 text-xs text-rose-600">${icono('basura', 'w-3.5 h-3.5')} Eliminar</button>
     </div>`;
   tarjeta.querySelector('[data-accion="editar"]').addEventListener('click', () => abrirModalProducto(p));
   tarjeta.querySelector('[data-accion="eliminar"]').addEventListener('click', () => eliminarProducto(p.id));
@@ -339,26 +339,26 @@ function crearTarjetaPedido(pedido) {
     .join('');
 
   const tarjeta = document.createElement('article');
-  tarjeta.className = 'glass p-5';
+  tarjeta.className = 'tarjeta-solida p-5';
   tarjeta.innerHTML = `
     <div class="flex flex-wrap items-center justify-between gap-3">
       <div>
-        <p class="font-bold">Pedido #${pedido.numero}
-          ${pedido.customer_name ? `<span class="font-normal text-slate-300">· ${escapar(pedido.customer_name)}</span>` : ''}
+        <p class="font-bold text-slate-900">Pedido #${pedido.numero}
+          ${pedido.customer_name ? `<span class="font-normal text-slate-500">· ${escapar(pedido.customer_name)}</span>` : ''}
         </p>
         <p class="text-xs text-slate-400 flex items-center gap-1">${icono('reloj', 'w-3 h-3')} ${fecha}</p>
       </div>
       <div class="flex items-center gap-3">
-        <p class="font-bold text-lg">${dinero(pedido.total)}</p>
-        <select data-campo="estado" class="input-glass text-xs py-1.5 px-3 w-auto ${ESTADOS_PEDIDO[pedido.status]?.clase ?? ''}" aria-label="Estado del pedido #${pedido.numero}">
+        <p class="font-bold text-lg text-slate-900">${dinero(pedido.total)}</p>
+        <select data-campo="estado" class="campo text-xs py-1.5 px-3 w-auto font-semibold ${ESTADOS_PEDIDO[pedido.status]?.clase ?? ''}" aria-label="Estado del pedido #${pedido.numero}">
           ${Object.entries(ESTADOS_PEDIDO)
             .map(([valor, e]) => `<option value="${valor}" ${valor === pedido.status ? 'selected' : ''}>${e.texto}</option>`)
             .join('')}
         </select>
       </div>
     </div>
-    <ul class="mt-3 pt-3 border-t border-white/10 text-sm text-slate-300 space-y-1">${lineas}</ul>
-    ${pedido.coupon_code ? `<p class="text-xs text-emerald-300 mt-2 flex items-center gap-1">${icono('cupon', 'w-3 h-3')} Cupón ${pedido.coupon_code}: -${dinero(pedido.discount_total)}</p>` : ''}`;
+    <ul class="mt-3 pt-3 border-t border-slate-100 text-sm text-slate-600 space-y-1">${lineas}</ul>
+    ${pedido.coupon_code ? `<p class="text-xs text-emerald-600 mt-2 flex items-center gap-1">${icono('cupon', 'w-3 h-3')} Cupón ${pedido.coupon_code}: -${dinero(pedido.discount_total)}</p>` : ''}`;
 
   const selector = tarjeta.querySelector('[data-campo="estado"]');
   selector.addEventListener('change', async () => {
@@ -370,7 +370,7 @@ function crearTarjetaPedido(pedido) {
       return notificar('No se pudo actualizar el estado.', 'error');
     }
     pedido.status = nuevo;
-    selector.className = `input-glass text-xs py-1.5 px-3 w-auto ${ESTADOS_PEDIDO[nuevo].clase}`;
+    selector.className = `campo text-xs py-1.5 px-3 w-auto font-semibold ${ESTADOS_PEDIDO[nuevo].clase}`;
     notificar(`Pedido #${pedido.numero} marcado como ${ESTADOS_PEDIDO[nuevo].texto.toLowerCase()}.`, 'exito');
   });
   return tarjeta;
@@ -407,7 +407,7 @@ function actualizarVacioCupones() {
 
 function crearTarjetaCupon(cupon) {
   const tarjeta = document.createElement('article');
-  tarjeta.className = 'glass p-5';
+  tarjeta.className = 'tarjeta-solida p-5';
   pintarTarjetaCupon(tarjeta, cupon);
   return tarjeta;
 }
@@ -416,27 +416,27 @@ function pintarTarjetaCupon(tarjeta, cupon) {
   const vencido = cupon.valid_until && new Date(cupon.valid_until) < new Date();
   const agotado = cupon.max_uses !== null && cupon.times_used >= cupon.max_uses;
   const estado = !cupon.is_active ? 'Inactivo' : vencido ? 'Vencido' : agotado ? 'Agotado' : 'Activo';
-  const claseEstado = estado === 'Activo' ? 'text-emerald-300' : 'text-slate-400';
+  const claseEstado = estado === 'Activo' ? 'text-emerald-700 bg-emerald-50' : 'text-slate-500 bg-slate-100';
 
   tarjeta.innerHTML = `
     <div class="flex items-start justify-between gap-3">
       <div>
-        <p class="font-mono font-bold text-lg tracking-wider flex items-center gap-2">${icono('cupon', 'w-4 h-4 text-indigo-300')} ${cupon.code}</p>
-        <p class="text-sm text-slate-300 mt-1">
+        <p class="font-mono font-bold text-lg tracking-wider text-slate-900 flex items-center gap-2">${icono('cupon', 'w-4 h-4 text-blue-500')} ${cupon.code}</p>
+        <p class="text-sm text-slate-500 mt-1">
           ${cupon.discount_type === 'percent' ? `${Number(cupon.discount_value)}% de descuento` : `${dinero(cupon.discount_value)} de descuento`}
         </p>
       </div>
-      <span class="glass px-3 py-1 rounded-full text-xs font-bold ${claseEstado}">${estado}</span>
+      <span class="px-3 py-1 rounded-full text-xs font-bold ${claseEstado}">${estado}</span>
     </div>
-    <div class="mt-3 pt-3 border-t border-white/10 text-xs text-slate-400 space-y-1">
+    <div class="mt-3 pt-3 border-t border-slate-100 text-xs text-slate-400 space-y-1">
       <p>Usos: ${cupon.times_used}${cupon.max_uses ? ` de ${cupon.max_uses}` : ' (ilimitado)'}</p>
       <p>Vence: ${cupon.valid_until ? new Date(cupon.valid_until).toLocaleDateString('es') : 'sin vencimiento'}</p>
     </div>
     <div class="flex gap-2 mt-4">
-      <button data-accion="alternar" class="glass glass-hover flex-1 py-1.5 rounded-full text-xs font-semibold">
+      <button data-accion="alternar" class="btn btn-claro flex-1 py-1.5 text-xs">
         ${cupon.is_active ? 'Desactivar' : 'Activar'}
       </button>
-      <button data-accion="eliminar" class="glass glass-hover flex-1 py-1.5 rounded-full text-xs font-semibold text-rose-300 flex items-center justify-center gap-1.5">
+      <button data-accion="eliminar" class="btn btn-claro flex-1 py-1.5 text-xs text-rose-600">
         ${icono('basura', 'w-3.5 h-3.5')} Eliminar
       </button>
     </div>`;

@@ -21,7 +21,7 @@ const estado = {
   descripcion: '',
   categoria: 'comida',
   logoUrl: null,
-  colorPrimario: '#818cf8',
+  colorPrimario: '#2563eb',
   whatsapp: '',
 };
 
@@ -148,7 +148,7 @@ async function verificarSlug() {
   if (esSlugReservado(estado.slug)) {
     estado.slugDisponible = false;
     el.textContent = '✗ Esa dirección está reservada. Elige otra.';
-    el.className = 'text-xs mt-1 h-4 text-rose-400';
+    el.className = 'text-xs mt-1 h-4 text-rose-600';
     return;
   }
 
@@ -159,14 +159,14 @@ async function verificarSlug() {
     .maybeSingle();
   if (error) {
     el.textContent = 'No se pudo comprobar. Se validará al publicar.';
-    el.className = 'text-xs mt-1 h-4 text-amber-400';
+    el.className = 'text-xs mt-1 h-4 text-amber-600';
     return;
   }
   estado.slugDisponible = !data;
   el.textContent = estado.slugDisponible
     ? `✓ ${estado.slug}.dgpgroupusa.com está disponible`
     : '✗ Esa dirección ya está ocupada';
-  el.className = `text-xs mt-1 h-4 ${estado.slugDisponible ? 'text-emerald-400' : 'text-rose-400'}`;
+  el.className = `text-xs mt-1 h-4 ${estado.slugDisponible ? 'text-emerald-600' : 'text-rose-600'}`;
 }
 
 $('negocio-descripcion').addEventListener('input', (e) => {
