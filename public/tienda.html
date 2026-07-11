@@ -5,55 +5,74 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Tienda — DGP LinkShop</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="/styles/glass.css" />
+  <link rel="stylesheet" href="/styles/dgp.css" />
 </head>
-<body class="dgp-fondo text-slate-100 antialiased">
+<body class="dgp-lienzo">
 
   <!-- Estado: cargando -->
-  <div id="estado-cargando" class="relative z-10 min-h-screen flex items-center justify-center">
-    <div class="glass px-8 py-6 text-slate-300 animate-pulse">Cargando tienda…</div>
+  <div id="estado-cargando" class="min-h-screen flex items-center justify-center">
+    <div class="flex flex-col items-center gap-3 text-slate-400">
+      <div class="w-10 h-10 rounded-full border-2 border-slate-200 border-t-blue-500 animate-spin"></div>
+      <p class="text-sm">Cargando tienda…</p>
+    </div>
   </div>
 
   <!-- Estado: no encontrada -->
-  <div id="estado-error" class="relative z-10 min-h-screen hidden flex-col items-center justify-center px-4 text-center">
-    <div class="glass p-10 max-w-md">
-      <span data-icono="buscar" data-clases="w-12 h-12 text-slate-400" class="block mx-auto mb-4 w-12 h-12"></span>
-      <h1 class="text-2xl font-bold">Tienda no encontrada</h1>
-      <p class="text-slate-400 mt-2">Esta dirección no corresponde a ninguna tienda activa de DGP LinkShop.</p>
-      <a href="https://dgpgroupusa.com" class="btn-liquid inline-block mt-6 text-sm">Crear mi propia tienda</a>
+  <div id="estado-error" class="min-h-screen hidden flex-col items-center justify-center px-4 text-center">
+    <div class="tarjeta-solida p-10 max-w-md">
+      <div class="icono-circulo mx-auto mb-4 w-14 h-14">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-7 h-7"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      </div>
+      <h1 class="text-2xl font-extrabold text-slate-900">Tienda no encontrada</h1>
+      <p class="text-slate-500 mt-2">Esta dirección no corresponde a ninguna tienda activa de DGP LinkShop.</p>
+      <a href="https://dgpgroupusa.com" class="btn btn-primario mt-6">Crear mi propia tienda</a>
     </div>
   </div>
 
   <!-- Tienda -->
-  <div id="estado-tienda" class="relative z-10 hidden">
-    <main class="max-w-4xl mx-auto px-4 pb-28 pt-10">
+  <div id="estado-tienda" class="hidden">
 
-      <!-- Cabecera del negocio -->
-      <header class="glass p-8 text-center">
-        <div id="tienda-logo" class="w-24 h-24 mx-auto rounded-2xl glass flex items-center justify-center overflow-hidden text-slate-300">
-          <span data-icono="tienda" data-clases="w-10 h-10"></span>
+    <!-- Banner / cabecera del negocio -->
+    <header class="relative overflow-hidden" id="tienda-banner">
+      <div class="contenedor pt-12 pb-14 text-center relative z-10">
+        <div id="tienda-logo" class="w-24 h-24 mx-auto rounded-3xl bg-white shadow-lg flex items-center justify-center overflow-hidden ring-1 ring-black/5">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.5" class="w-10 h-10"><path d="M3 9 5 3h14l2 6"/><path d="M3 9h18v3a3 3 0 0 1-6 0 3 3 0 0 1-6 0 3 3 0 0 1-6 0Z"/><path d="M5 14v7h14v-7"/></svg>
         </div>
-        <h1 id="tienda-nombre" class="mt-4 text-3xl font-extrabold"></h1>
-        <p id="tienda-descripcion" class="text-slate-300 mt-2 max-w-xl mx-auto"></p>
-      </header>
+        <h1 id="tienda-nombre" class="mt-5 text-3xl md:text-4xl font-extrabold text-slate-900"></h1>
+        <p id="tienda-descripcion" class="text-slate-600 mt-2 max-w-xl mx-auto"></p>
+      </div>
+    </header>
 
-      <!-- Catálogo -->
-      <section class="mt-8" aria-label="Catálogo de productos">
-        <div id="tienda-productos" class="grid grid-cols-2 md:grid-cols-3 gap-4"></div>
-        <p id="tienda-sin-productos" class="glass p-10 text-center text-slate-400 hidden">
+    <main class="contenedor pb-28">
+
+      <!-- Productos destacados -->
+      <section id="tienda-destacados-seccion" class="hidden -mt-6 mb-10">
+        <div class="flex items-center gap-2 mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5" id="ico-destacados"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <h2 class="text-lg font-bold text-slate-900">Productos recomendados</h2>
+        </div>
+        <div id="tienda-destacados" class="flex gap-4 overflow-x-auto pb-3 -mx-1 px-1 snap-x"></div>
+      </section>
+
+      <!-- Catálogo completo -->
+      <section aria-label="Catálogo">
+        <h2 class="text-lg font-bold text-slate-900 mb-4">Catálogo</h2>
+        <div id="tienda-productos" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
+        <p id="tienda-sin-productos" class="tarjeta-solida p-10 text-center text-slate-500 hidden">
           Esta tienda aún está preparando su catálogo. ¡Vuelve pronto!
         </p>
-        <!-- Centinela del scroll infinito: al verse, carga la siguiente página -->
-        <div id="sentinela-scroll" class="h-8 mt-4 flex items-center justify-center text-slate-500 text-xs hidden">
+        <div id="sentinela-scroll" class="h-8 mt-4 flex items-center justify-center text-slate-400 text-xs hidden">
           Cargando más productos…
         </div>
       </section>
     </main>
 
-    <!-- Footer institucional DGP -->
-    <footer class="relative z-10 text-center text-xs text-slate-500 pb-8 space-y-1">
-      <p>Tienda creada con <a href="https://dgpgroupusa.com" class="text-indigo-300 hover:text-indigo-200 transition">DGP LinkShop</a></p>
-      <p>Desarrollado por <a href="https://dgpglobalgroup.com" target="_blank" rel="noopener" class="text-indigo-300 hover:text-indigo-200 transition font-semibold">DGP Global Group</a></p>
+    <!-- Footer institucional -->
+    <footer class="border-t border-slate-200 bg-white/70">
+      <div class="contenedor py-6 text-center text-xs text-slate-500 space-y-1">
+        <p>Tienda creada con <a href="https://dgpgroupusa.com" class="text-blue-600 hover:text-blue-700 font-medium">DGP LinkShop</a></p>
+        <p>Desarrollado por <a href="https://dgpglobalgroup.com" target="_blank" rel="noopener" class="text-blue-600 hover:text-blue-700 font-semibold">DGP Global Group</a></p>
+      </div>
     </footer>
   </div>
 

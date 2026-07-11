@@ -15,21 +15,25 @@ export function registrarError(contexto, error) {
   console.error(`[DGP][${contexto}]`, error?.message ?? error, error);
 }
 
-/** Toast Glassmorphism: tipo 'exito' | 'error' | 'info' */
+/** Toast autocontenido (funciona en tema claro u oscuro):
+ *  tipo 'exito' | 'error' | 'info' */
 export function notificar(mensaje, tipo = 'info') {
-  const colores = {
-    exito: 'text-emerald-300',
-    error: 'text-rose-300',
-    info: 'text-slate-200',
-  };
+  const acentos = { exito: '#34d399', error: '#fb7185', info: '#93c5fd' };
   const iconos = { exito: 'check', error: 'alerta', info: 'destello' };
 
   const toast = document.createElement('div');
-  toast.className = `toast glass px-5 py-3 text-sm flex items-center gap-2 ${colores[tipo]}`;
   toast.setAttribute('role', 'status');
   toast.setAttribute('aria-live', 'polite');
-  toast.innerHTML = `${icono(iconos[tipo], 'w-4 h-4')}<span></span>`;
-  toast.querySelector('span').textContent = mensaje;
+  toast.style.cssText = [
+    'position:fixed', 'bottom:1.5rem', 'left:50%', 'transform:translateX(-50%)',
+    'z-index:60', 'display:flex', 'align-items:center', 'gap:.5rem',
+    'padding:.7rem 1.1rem', 'border-radius:9999px', 'font-size:.875rem',
+    'color:#fff', 'background:rgba(15,23,42,0.94)',
+    'box-shadow:0 10px 30px rgba(2,6,23,0.35)', 'max-width:90vw',
+    'animation:subir .3s ease',
+  ].join(';');
+  toast.innerHTML = `<span style="color:${acentos[tipo]};display:inline-flex">${icono(iconos[tipo], 'w-4 h-4')}</span><span></span>`;
+  toast.querySelector('span:last-child').textContent = mensaje;
   document.body.appendChild(toast);
   setTimeout(() => toast.remove(), 4500);
 }
