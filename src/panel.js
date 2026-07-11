@@ -16,6 +16,16 @@ import { urlDeTienda } from './subdominio.js';
 import { PLANES } from './config.js';
 import { icono, hidratarIconos } from './iconos.js';
 import { notificar, registrarError } from './notificaciones.js';
+import { iniciarTutorial } from './tutorial.js';
+
+const PASOS_TUTORIAL = [
+  { tab: 'dashboard', icono: 'cuadricula', titulo: '¡Bienvenido a tu panel!', texto: 'Te muestro en 30 segundos cómo manejar tu tienda. Usa el menú lateral para moverte entre secciones.' },
+  { tab: 'catalogo', icono: 'paquete', titulo: 'Productos', texto: 'Aquí agregas y editas tus productos con foto, precio, descuento y categoría. Puedes marcar los destacados.' },
+  { tab: 'pedidos', icono: 'pedidos', titulo: 'Pedidos', texto: 'Cuando un cliente confirma su carrito por WhatsApp, el pedido aparece aquí para gestionarlo (pendiente, procesado, entregado).' },
+  { tab: 'categorias', icono: 'etiqueta', titulo: 'Categorías', texto: 'Organiza tu catálogo en categorías para que tus clientes encuentren todo más fácil.' },
+  { tab: 'configuracion', icono: 'engranaje', titulo: 'Configuración', texto: 'Configura la tasa del dólar en Bs para mostrar precios en bolívares, y otros ajustes de tu tienda.' },
+  { tab: 'dashboard', icono: 'ojo', titulo: '¡Listo para vender!', texto: 'Cuando quieras, usa "Ver catálogo" para abrir tu tienda y comparte el link con tus clientes. ¡Éxitos!' },
+];
 
 const $ = (id) => document.getElementById(id);
 const dinero = (n) => `$${Number(n).toFixed(2)}`;
@@ -84,6 +94,9 @@ const ESTADOS_PEDIDO = {
   $('ajuste-tasa').value = negocio.tasa_bs ?? '';
   await cargarCategorias();
   await cargarCatalogo();
+
+  // Tutorial la primera vez (deja el panel en Dashboard al terminar)
+  iniciarTutorial(PASOS_TUTORIAL, { alIr: irASeccion });
 })();
 
 function planActual() {
