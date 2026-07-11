@@ -89,6 +89,7 @@ const ESTADOS_PEDIDO = {
   suscripcion = s;
 
   renderEncabezado();
+  renderCatalogoQR();
   activarPestanas();
 
   // Enlace al panel súper-admin, solo si esta cuenta lo es
@@ -689,6 +690,35 @@ $('btn-guardar-tasa').addEventListener('click', async () => {
   negocio.tasa_bs = tasa;
   notificar(tasa === null ? 'Precios en Bs desactivados.' : `Tasa guardada: ${tasa} Bs/$`, 'exito');
 });
+
+// ============================================================
+// Catálogo: link + QR (Dashboard)
+// ============================================================
+async function renderCatalogoQR() {
+  const url = urlDeTienda(negocio.slug);
+  $('dash-link').value = url;
+  $('dash-copiar').addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(url);
+    } catch {
+      $('dash-link').select();
+      document.execCommand('copy');
+    }
+    notificar('Link copiado', 'exito');
+  });
+  try {
+    const { default: qrcode } = await import('https://esm.sh/qrcode-generator@1.4.4');
+    const qr = qrcode(0, 'M');
+    qr.addData(url);
+    qr.make();
+    const dataUrl = qr.createDataURL(6, 0);
+    $('dash-qr').innerHTML = `<img src="${dataUrl}" alt="QR de mi catálogo" class="w-full h-full object-contain rounded-lg" />`;
+    $('dash-descargar').href = dataUrl;
+  } catch (err) {
+    registrarError('panel/qr', err);
+    $('dash-qr').innerHTML = '<span class="text-xs text-slate-400">QR no disponible</span>';
+  }
+}
 
 // ============================================================
 // SECCIÓN: ESTADÍSTICAS
