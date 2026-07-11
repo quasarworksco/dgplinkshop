@@ -14,8 +14,8 @@ function mostrarTab(cual) {
   const esLogin = cual === 'login';
   formLogin.classList.toggle('hidden', !esLogin);
   formRegistro.classList.toggle('hidden', esLogin);
-  tabLogin.classList.toggle('btn-liquid', esLogin);
-  tabRegistro.classList.toggle('btn-liquid', !esLogin);
+  tabLogin.classList.toggle('activa', esLogin);
+  tabRegistro.classList.toggle('activa', !esLogin);
   mensaje.classList.add('hidden');
 }
 
@@ -25,7 +25,7 @@ mostrarTab(window.location.hash === '#registro' ? 'registro' : 'login');
 
 function avisar(texto, esError = true) {
   mensaje.textContent = texto;
-  mensaje.className = `mt-4 text-sm text-center ${esError ? 'text-rose-400' : 'text-cyan-300'}`;
+  mensaje.className = `mt-4 text-sm text-center ${esError ? 'text-rose-600' : 'text-emerald-600'}`;
 }
 
 /** Tras iniciar sesión: si ya tiene negocio → panel; si no → wizard */

@@ -1,0 +1,185 @@
+/* ============================================================
+   DGP LinkShop — Sistema de diseño (tema claro "Soft Glass")
+   Paleta: blancos, grises suaves y azul de marca.
+   Estética: minimalista profesional con vidrio esmerilado sutil,
+   sombras suaves en capas y transiciones fluidas.
+   Se usa junto a Tailwind CDN.
+   ============================================================ */
+
+:root {
+  /* Marca */
+  --azul-700: #1d4ed8;
+  --azul-600: #2563eb;
+  --azul-500: #3b82f6;
+  --cyan-500: #06b6d4;
+  --azul-suave: #eff6ff;
+
+  /* Neutros */
+  --tinta: #0f172a;   /* títulos */
+  --texto: #334155;   /* cuerpo */
+  --muted: #64748b;   /* secundario */
+  --linea: #e2e8f0;   /* bordes */
+  --fondo: #f6f8fc;   /* fondo base */
+  --panel: #ffffff;
+
+  /* Sombras en capas */
+  --sombra-sm: 0 1px 2px rgba(2, 6, 23, 0.04), 0 1px 3px rgba(2, 6, 23, 0.06);
+  --sombra-md: 0 4px 12px rgba(2, 6, 23, 0.05), 0 12px 32px rgba(2, 6, 23, 0.07);
+  --sombra-lg: 0 8px 24px rgba(2, 6, 23, 0.08), 0 30px 60px rgba(2, 6, 23, 0.10);
+  --sombra-azul: 0 8px 24px rgba(37, 99, 235, 0.28);
+
+  --radio: 1rem;
+  --radio-lg: 1.5rem;
+}
+
+* { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+
+body {
+  background-color: var(--fondo);
+  color: var(--texto);
+  font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Fondo con degradado suave y auroras azules muy tenues */
+.dgp-lienzo {
+  position: relative;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background:
+    radial-gradient(1200px 600px at 85% -10%, rgba(59, 130, 246, 0.10), transparent 60%),
+    radial-gradient(900px 500px at -5% 10%, rgba(6, 182, 212, 0.08), transparent 55%),
+    linear-gradient(180deg, #ffffff 0%, var(--fondo) 100%);
+}
+
+/* Tipografía */
+h1, h2, h3, h4 { color: var(--tinta); letter-spacing: -0.02em; }
+.titulo-degradado {
+  background: linear-gradient(120deg, var(--azul-600), var(--cyan-500));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ---------- Tarjeta de vidrio claro ---------- */
+.tarjeta {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: var(--sombra-md);
+  border-radius: var(--radio-lg);
+  /* Fuerza el pintado inmediato (evita el bug de backdrop-filter en Chrome) */
+  transform: translateZ(0);
+}
+.tarjeta-solida {
+  background: var(--panel);
+  border: 1px solid var(--linea);
+  box-shadow: var(--sombra-sm);
+  border-radius: var(--radio-lg);
+}
+.tarjeta-hover { transition: transform .3s ease, box-shadow .3s ease; }
+.tarjeta-hover:hover { transform: translateY(-6px); box-shadow: var(--sombra-lg); }
+
+/* ---------- Botones ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+  font-weight: 600; border-radius: .75rem; padding: .75rem 1.5rem;
+  transition: transform .18s ease, box-shadow .18s ease, background .18s ease, filter .18s ease;
+  cursor: pointer; white-space: nowrap;
+}
+.btn-primario {
+  background: linear-gradient(135deg, var(--azul-600), var(--azul-500));
+  color: #fff; box-shadow: var(--sombra-azul);
+}
+.btn-primario:hover:not(:disabled) { transform: translateY(-2px); filter: brightness(1.05); box-shadow: 0 12px 28px rgba(37, 99, 235, 0.4); }
+.btn-primario:disabled { opacity: .55; cursor: not-allowed; }
+.btn-claro {
+  background: #fff; color: var(--tinta); border: 1px solid var(--linea); box-shadow: var(--sombra-sm);
+}
+.btn-claro:hover { transform: translateY(-2px); box-shadow: var(--sombra-md); border-color: #cbd5e1; }
+.btn-fantasma { background: transparent; color: var(--azul-700); }
+.btn-fantasma:hover { background: var(--azul-suave); }
+
+/* ---------- Inputs ---------- */
+.campo {
+  width: 100%; background: #fff; border: 1px solid var(--linea);
+  border-radius: .75rem; padding: .8rem 1rem; color: var(--tinta);
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+.campo::placeholder { color: #94a3b8; }
+.campo:focus {
+  outline: none; border-color: var(--azul-500);
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+}
+
+/* ---------- Chips / etiquetas ---------- */
+.chip {
+  display: inline-flex; align-items: center; gap: .4rem;
+  padding: .35rem .85rem; border-radius: 9999px;
+  background: var(--azul-suave); color: var(--azul-700);
+  font-size: .8rem; font-weight: 600; border: 1px solid rgba(37, 99, 235, 0.12);
+}
+
+/* ---------- Navegación ---------- */
+.nav-glass {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+/* ---------- Secciones ---------- */
+.seccion { padding: 5rem 0; }
+.contenedor { width: 100%; max-width: 72rem; margin: 0 auto; padding: 0 1.5rem; }
+
+/* Icono en círculo */
+.icono-circulo {
+  width: 3rem; height: 3rem; border-radius: .9rem;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--azul-suave); color: var(--azul-600);
+  border: 1px solid rgba(37, 99, 235, 0.12);
+}
+
+/* ---------- Mockups (hero / showcase) ---------- */
+.marco-navegador {
+  background: #fff; border: 1px solid var(--linea);
+  border-radius: 1rem; box-shadow: var(--sombra-lg); overflow: hidden;
+}
+.barra-navegador {
+  display: flex; align-items: center; gap: .4rem;
+  padding: .7rem .9rem; border-bottom: 1px solid var(--linea); background: #f8fafc;
+}
+.punto { width: .6rem; height: .6rem; border-radius: 9999px; }
+
+/* ---------- Animaciones de entrada ---------- */
+@keyframes subir { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes flotar-suave { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+.animar { animation: subir .6s cubic-bezier(.2,.7,.2,1) both; }
+.animar-2 { animation: subir .6s cubic-bezier(.2,.7,.2,1) .12s both; }
+.animar-3 { animation: subir .6s cubic-bezier(.2,.7,.2,1) .24s both; }
+.flotar { animation: flotar-suave 5s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .animar, .animar-2, .animar-3, .flotar { animation: none; }
+}
+
+/* Lista con check */
+.lista-check li { position: relative; padding-left: 1.9rem; }
+.lista-check li::before {
+  content: ''; position: absolute; left: 0; top: .15em; width: 1.25rem; height: 1.25rem;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232563eb' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E") no-repeat center / contain;
+}
+
+/* ---------- Control segmentado (pestañas login/registro) ---------- */
+.seg {
+  background: #eef2f7; border-radius: 9999px; padding: .3rem;
+  display: grid; grid-template-columns: 1fr 1fr; gap: .3rem;
+}
+.seg-tab {
+  padding: .6rem; border-radius: 9999px; font-weight: 600; font-size: .875rem;
+  color: #64748b; transition: all .2s ease; cursor: pointer;
+}
+.seg-tab.activa { background: #fff; color: var(--azul-700); box-shadow: var(--sombra-sm); }
+
+/* Utilidades de scroll suave */
+html { scroll-behavior: smooth; }

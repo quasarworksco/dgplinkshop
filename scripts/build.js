@@ -24,9 +24,13 @@ buildSync({
   target: 'es2020',
 });
 
-// CSS de /styles → /dist/styles (minificado)
+// CSS de /styles → /dist/styles (minificado, todos los .css)
+const estilos = readdirSync('styles')
+  .filter((f) => f.endsWith('.css'))
+  .map((f) => `styles/${f}`);
+
 buildSync({
-  entryPoints: ['styles/glass.css'],
+  entryPoints: estilos,
   outdir: 'dist/styles',
   minify: true,
 });
