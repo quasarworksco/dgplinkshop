@@ -538,9 +538,9 @@ $('form-cupon').addEventListener('submit', async (e) => {
 // ------------------------------------------------------------
 $('btn-upgrade').addEventListener('click', () => {
   alert(
-    'Plan PRO — $30 de inscripción + $20/mes.\n\n' +
+    'Plan PRO — $15/mes.\n\n' +
       'Escríbenos por WhatsApp para activar tu plan; en cuanto confirmemos el pago, ' +
-      'tu límite sube a 50 productos automáticamente.'
+      'tu límite sube a más de 100 productos automáticamente.'
   );
 });
 

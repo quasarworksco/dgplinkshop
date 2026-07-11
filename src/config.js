@@ -30,8 +30,8 @@ export const PLANES = {
   },
   pro: {
     nombre: 'PRO',
-    limiteProductos: 50,
-    inscripcion: 30,
-    mensualidad: 20,
+    limiteProductos: 100,
+    inscripcion: 0,
+    mensualidad: 15,
   },
 };
