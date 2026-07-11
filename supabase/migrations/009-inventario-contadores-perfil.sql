@@ -47,3 +47,19 @@ alter table public.profiles
   add column if not exists last_name  text,
   add column if not exists cedula_rif text,
   add column if not exists phone      text;
+
+-- El trigger de registro copia los nuevos campos desde los metadatos
+create or replace function public.handle_new_user()
+returns trigger language plpgsql security definer set search_path = public as $$
+begin
+  insert into public.profiles (id, email, full_name, last_name, cedula_rif, phone)
+  values (
+    new.id, new.email,
+    coalesce(new.raw_user_meta_data ->> 'full_name', ''),
+    new.raw_user_meta_data ->> 'last_name',
+    new.raw_user_meta_data ->> 'cedula_rif',
+    new.raw_user_meta_data ->> 'phone'
+  );
+  return new;
+end;
+$$;
