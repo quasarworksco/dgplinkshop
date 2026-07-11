@@ -73,12 +73,13 @@ from public.payments pm
 join public.businesses b on b.id = pm.business_id
 join public.profiles p on p.id = b.owner_id;
 
+-- paid_until al FINAL para no romper el orden de columnas de la vista existente
 create or replace view public.admin_tiendas with (security_invoker = true) as
 select b.id, b.name, b.slug, b.is_published, b.whatsapp, b.created_at,
        p.email as owner_email, p.full_name as owner_name,
        coalesce(s.plan::text, 'free') as plan, coalesce(s.status::text, 'active') as sub_status,
-       s.paid_until,
-       (select count(*) from public.products pr where pr.business_id = b.id) as num_productos
+       (select count(*) from public.products pr where pr.business_id = b.id) as num_productos,
+       s.paid_until
 from public.businesses b
 join public.profiles p on p.id = b.owner_id
 left join public.subscriptions s on s.business_id = b.id;
