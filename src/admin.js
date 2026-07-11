@@ -43,9 +43,71 @@ const ESTILO_PLAN = {
   if (!esAdmin) return mostrar('denegado');
 
   await cargarPagos();
+  await cargarResenas();
   await cargarTiendas();
   mostrar('ok');
 })();
+
+function estrellasSVG(n) {
+  let o = '';
+  for (let i = 1; i <= 5; i++) {
+    o += `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="${i <= n ? '#f59e0b' : 'none'}" stroke="${i <= n ? '#f59e0b' : '#cbd5e1'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
+  }
+  return o;
+}
+
+// ------------------------------------------------------------
+// Reseñas por aprobar (moderación del landing)
+// ------------------------------------------------------------
+async function cargarResenas() {
+  const { data, error } = await supabase
+    .from('reviews')
+    .select('id, name, rating, comment, created_at')
+    .eq('approved', false)
+    .order('created_at', { ascending: true });
+  if (error) { registrarError('admin/cargar-resenas', error); return; }
+
+  const resenas = data ?? [];
+  $('admin-resenas-seccion').classList.toggle('hidden', resenas.length === 0);
+  $('admin-resenas-conteo').textContent = resenas.length;
+
+  const cont = $('admin-resenas');
+  cont.innerHTML = resenas
+    .map((r) => {
+      const fecha = new Date(r.created_at).toLocaleString('es', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
+      return `
+      <article class="tarjeta-solida p-5" data-resena="${r.id}">
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <p class="font-bold text-slate-900">${escapar(r.name)}</p>
+            <p class="text-xs text-slate-400">${fecha}</p>
+          </div>
+          <div class="flex gap-0.5">${estrellasSVG(r.rating)}</div>
+        </div>
+        ${r.comment ? `<p class="mt-2 text-sm text-slate-600 leading-relaxed">"${escapar(r.comment)}"</p>` : '<p class="mt-2 text-sm text-slate-400 italic">Sin comentario</p>'}
+        <div class="flex gap-2 mt-4">
+          <button data-accion="aprobar" class="btn btn-primario flex-1 text-sm">Aprobar</button>
+          <button data-accion="eliminar" class="btn btn-claro flex-1 text-sm text-rose-600">Eliminar</button>
+        </div>
+      </article>`;
+    })
+    .join('');
+
+  cont.querySelectorAll('[data-resena]').forEach((art) => {
+    const id = art.dataset.resena;
+    art.querySelector('[data-accion="aprobar"]').addEventListener('click', () => resolverResena(id, true));
+    art.querySelector('[data-accion="eliminar"]').addEventListener('click', () => resolverResena(id, false));
+  });
+}
+
+async function resolverResena(id, aprobar) {
+  const { error } = aprobar
+    ? await supabase.from('reviews').update({ approved: true }).eq('id', id)
+    : await supabase.from('reviews').delete().eq('id', id);
+  if (error) { registrarError('admin/resolver-resena', error); return notificar('No se pudo procesar la reseña.', 'error'); }
+  notificar(aprobar ? 'Reseña aprobada y publicada.' : 'Reseña eliminada.', 'exito');
+  await cargarResenas();
+}
 
 // ------------------------------------------------------------
 // Pagos por confirmar

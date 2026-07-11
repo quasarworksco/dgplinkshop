@@ -70,7 +70,7 @@ $('resena-enviar').addEventListener('click', async () => {
   boton.innerHTML = 'Enviar reseña';
   if (error) return msg('No se pudo enviar tu reseña. Intenta de nuevo.');
 
-  msg('¡Gracias por tu reseña!', true);
+  msg('¡Gracias! Tu reseña será revisada antes de publicarse.', true);
   $('resena-nombre').value = '';
   $('resena-comentario').value = '';
   calificacion = 0;
