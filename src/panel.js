@@ -43,6 +43,10 @@ const tarjetasCupon = new Map();
 let pedidosCargados = false;
 let cuponesCargados = false;
 let estadisticasCargadas = false;
+let suscripcionCargada = false;
+let planElegido = null;
+let metodoPago = 'pagomovil';
+let comprobanteUrl = null;
 
 const ESTADOS_PEDIDO = {
   pendiente: { texto: 'Pendiente', clase: 'text-amber-600' },
@@ -127,6 +131,7 @@ function irASeccion(tab) {
   if (tab === 'pedidos' && !pedidosCargados) cargarPedidos();
   if (tab === 'cupones' && !cuponesCargados) cargarCupones();
   if (tab === 'estadisticas' && !estadisticasCargadas) cargarEstadisticas();
+  if (tab === 'suscripcion' && !suscripcionCargada) cargarSuscripcion();
   cerrarSidebar();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -714,5 +719,103 @@ async function cargarEstadisticas() {
       </div>`)
     .join('');
 }
+
+// ============================================================
+// SECCIÓN: SUSCRIPCIÓN Y PAGOS
+// ============================================================
+async function cargarSuscripcion() {
+  suscripcionCargada = true;
+  const plan = suscripcion?.plan ?? 'free';
+  $('sus-plan-actual').textContent = PLANES[plan].nombre;
+  $('sus-limite-txt').textContent = `Hasta ${PLANES[plan].limiteProductos}`;
+
+  let estado;
+  if (plan === 'free') estado = 'Plan gratuito';
+  else if (suscripcion?.paid_until) estado = `Pagado hasta el ${new Date(suscripcion.paid_until).toLocaleDateString('es')}`;
+  else estado = 'Activo';
+  $('sus-estado').textContent = estado;
+
+  const { data: pagos } = await supabase
+    .from('payments').select('status').eq('business_id', negocio.id).eq('status', 'pendiente').limit(1);
+  const pendiente = (pagos ?? []).length > 0;
+  $('sus-pendiente').classList.toggle('hidden', !pendiente);
+  $('sus-planes').classList.toggle('hidden', pendiente);
+  if (pendiente) $('sus-pago').classList.add('hidden');
+}
+
+function elegirMetodo(m) {
+  metodoPago = m;
+  document.querySelectorAll('.sus-metodo').forEach((b) => {
+    const activa = b.dataset.metodo === m;
+    b.style.background = activa ? '#2563eb' : '#fff';
+    b.style.color = activa ? '#fff' : '#334155';
+    b.style.borderColor = activa ? '#2563eb' : '#e2e8f0';
+  });
+  $('sus-datos-pagomovil').classList.toggle('hidden', m !== 'pagomovil');
+  $('sus-datos-binance').classList.toggle('hidden', m !== 'binance');
+  $('sus-ref-wrap').classList.toggle('hidden', m !== 'pagomovil');
+}
+
+function errorSus(t) { const e = $('sus-error'); e.textContent = t; e.classList.remove('hidden'); }
+
+document.querySelectorAll('#sus-planes [data-plan]').forEach((btn) =>
+  btn.addEventListener('click', () => {
+    planElegido = btn.dataset.plan;
+    comprobanteUrl = null;
+    $('sus-pago-plan').textContent = PLANES[planElegido].nombre;
+    $('sus-pago-monto').textContent = btn.dataset.monto;
+    $('sus-comprobante').value = '';
+    $('sus-referencia').value = '';
+    $('sus-comprobante-barra').classList.add('hidden');
+    $('sus-error').classList.add('hidden');
+    $('sus-pago').classList.remove('hidden');
+    elegirMetodo('pagomovil');
+    $('sus-pago').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  })
+);
+$('sus-pago-cancelar').addEventListener('click', () => $('sus-pago').classList.add('hidden'));
+document.querySelectorAll('.sus-metodo').forEach((b) => b.addEventListener('click', () => elegirMetodo(b.dataset.metodo)));
+
+$('sus-comprobante').addEventListener('change', async (e) => {
+  const archivo = e.target.files[0];
+  if (!archivo) return;
+  const barra = $('sus-comprobante-barra');
+  barra.classList.remove('hidden');
+  $('sus-error').classList.add('hidden');
+  try {
+    comprobanteUrl = await subirImagen(archivo, 'comprobantes', (pct) => { barra.firstElementChild.style.width = pct + '%'; });
+  } catch (err) {
+    registrarError('panel/comprobante', err);
+    errorSus(err.message);
+    e.target.value = '';
+  }
+});
+
+$('sus-enviar').addEventListener('click', async () => {
+  if (!comprobanteUrl) return errorSus('Sube la captura de tu comprobante de pago.');
+  const boton = $('sus-enviar');
+  boton.disabled = true;
+  boton.innerHTML = '<span class="spinner"></span> Enviando…';
+  const { error } = await supabase.from('payments').insert({
+    business_id: negocio.id,
+    plan: planElegido,
+    method: metodoPago,
+    reference: metodoPago === 'pagomovil' ? ($('sus-referencia').value.trim() || null) : null,
+    amount: Number(PLANES[planElegido].mensualidad),
+    receipt_url: comprobanteUrl,
+    status: 'pendiente',
+  });
+  boton.disabled = false;
+  boton.innerHTML = 'Enviar comprobante';
+  if (error) {
+    registrarError('panel/enviar-pago', error);
+    return errorSus('No se pudo enviar. Intenta de nuevo.');
+  }
+  comprobanteUrl = null;
+  $('sus-pago').classList.add('hidden');
+  notificar('¡Comprobante enviado! Revisaremos tu pago y activaremos tu plan.', 'exito');
+  suscripcionCargada = false;
+  cargarSuscripcion();
+});
 
 $('btn-logout').addEventListener('click', cerrarSesion);

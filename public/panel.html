@@ -178,10 +178,85 @@
         <!-- SECCIÓN: Suscripción -->
         <section data-seccion="suscripcion" class="mt-6 hidden">
           <h2 class="text-xl font-bold text-slate-900 mb-5">Suscripción</h2>
-          <div class="tarjeta-solida p-10 text-center">
-            <div class="icono-circulo mx-auto mb-3"><span data-icono="tarjeta" data-clases="w-5 h-5"></span></div>
-            <p class="font-semibold text-slate-700">Tu plan y pagos</p>
-            <p class="text-sm text-slate-500 mt-1">Muy pronto podrás elegir tu plan y pagar por PagoMóvil o Binance subiendo tu comprobante.</p>
+
+          <!-- Plan actual -->
+          <div class="tarjeta-solida p-6 flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <p class="text-xs text-slate-400 uppercase tracking-wide">Tu plan actual</p>
+              <p id="sus-plan-actual" class="text-2xl font-extrabold text-slate-900">—</p>
+              <p id="sus-estado" class="text-sm text-slate-500 mt-0.5"></p>
+            </div>
+            <div id="sus-limite" class="rounded-xl bg-slate-50 border border-slate-200 px-5 py-3 text-center">
+              <p class="text-[10px] text-slate-400 uppercase tracking-wide">Productos</p>
+              <p class="font-bold text-slate-900" id="sus-limite-txt">—</p>
+            </div>
+          </div>
+
+          <!-- Pago en revisión -->
+          <div id="sus-pendiente" class="tarjeta-solida p-4 mt-4 hidden" style="border-color:#bfdbfe;background:#eff6ff">
+            <p class="text-sm text-blue-800">⏳ Tienes un pago <strong>en revisión</strong>. En cuanto lo confirmemos, tu plan se activará automáticamente. ¡Gracias!</p>
+          </div>
+
+          <!-- Elegir plan -->
+          <div id="sus-planes" class="mt-6">
+            <h3 class="text-lg font-bold text-slate-900 mb-3">Mejora tu plan</h3>
+            <div class="grid sm:grid-cols-2 gap-4">
+              <div class="tarjeta-solida p-6">
+                <h4 class="font-bold text-blue-700">PRO</h4>
+                <p class="text-3xl font-extrabold text-slate-900 mt-2">$15<span class="text-sm font-medium text-slate-400">/mes</span></p>
+                <p class="text-sm text-slate-500 mt-1">Hasta 100 productos + inventario, cupones, estadísticas.</p>
+                <button data-plan="pro" data-monto="15" class="btn btn-primario w-full mt-4 text-sm">Elegir PRO</button>
+              </div>
+              <div class="tarjeta-solida p-6">
+                <h4 class="font-bold text-slate-700">Premium</h4>
+                <p class="text-3xl font-extrabold text-slate-900 mt-2">$25<span class="text-sm font-medium text-slate-400">/mes</span></p>
+                <p class="text-sm text-slate-500 mt-1">Más de 400 productos + catálogo mayorista y todo lo de PRO.</p>
+                <button data-plan="premium" data-monto="25" class="btn btn-claro w-full mt-4 text-sm">Elegir Premium</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Formulario de pago -->
+          <div id="sus-pago" class="tarjeta-solida p-6 mt-6 hidden">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-lg font-bold text-slate-900">Pagar plan <span id="sus-pago-plan" class="text-blue-700"></span> — $<span id="sus-pago-monto"></span>/mes</h3>
+              <button id="sus-pago-cancelar" class="text-sm text-slate-400 hover:text-slate-600">Cancelar</button>
+            </div>
+
+            <!-- Método -->
+            <div class="grid grid-cols-2 gap-2 mb-4">
+              <button type="button" data-metodo="pagomovil" class="sus-metodo py-2 rounded-lg border text-sm font-semibold transition">Pago Móvil</button>
+              <button type="button" data-metodo="binance" class="sus-metodo py-2 rounded-lg border text-sm font-semibold transition">Binance</button>
+            </div>
+
+            <!-- Datos PagoMóvil -->
+            <div id="sus-datos-pagomovil" class="rounded-xl bg-slate-50 border border-slate-200 p-4 text-sm space-y-1 mb-4">
+              <p class="font-semibold text-slate-700 mb-1">Datos para Pago Móvil</p>
+              <p><span class="text-slate-400">Titular:</span> Paul Espina</p>
+              <p><span class="text-slate-400">C.I:</span> 27.610.902</p>
+              <p><span class="text-slate-400">Teléfono:</span> 0412-1002090</p>
+              <p><span class="text-slate-400">Banco:</span> BNC</p>
+            </div>
+            <!-- Datos Binance -->
+            <div id="sus-datos-binance" class="rounded-xl bg-slate-50 border border-slate-200 p-4 text-sm space-y-1 mb-4 hidden">
+              <p class="font-semibold text-slate-700 mb-1">Datos para Binance</p>
+              <p><span class="text-slate-400">Correo / Pay ID:</span> Paulalejo123@gmail.com</p>
+            </div>
+
+            <div id="sus-ref-wrap" class="mb-3">
+              <label for="sus-referencia" class="block text-sm font-medium text-slate-700 mb-1.5">Número de referencia</label>
+              <input id="sus-referencia" class="campo" placeholder="Ej: 004321" maxlength="40" />
+            </div>
+
+            <div class="mb-3">
+              <label for="sus-comprobante" class="block text-sm font-medium text-slate-700 mb-1.5">Comprobante de pago (captura) *</label>
+              <input id="sus-comprobante" type="file" accept="image/jpeg,image/png,image/webp" class="campo text-sm" />
+              <div id="sus-comprobante-barra" class="mt-2 h-2 rounded-full bg-slate-100 overflow-hidden hidden"><div class="h-full bg-blue-500" style="width:0%"></div></div>
+            </div>
+
+            <p id="sus-error" class="text-rose-600 text-sm mb-3 hidden"></p>
+            <button id="sus-enviar" class="btn btn-primario w-full text-sm">Enviar comprobante</button>
+            <p class="text-xs text-slate-400 text-center mt-2">Revisaremos tu pago y activaremos tu plan. El cobro es el día 5 de cada mes.</p>
           </div>
         </section>
 
