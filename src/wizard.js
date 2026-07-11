@@ -304,6 +304,18 @@ async function publicarTienda() {
     window.location.href = '/public/panel.html';
     return;
   }
+
+  // Prefill del nombre de tienda si se indicó en el registro
+  const tienda = usuario.user_metadata?.store_name;
+  if (tienda) {
+    estado.nombre = tienda;
+    $('negocio-nombre').value = tienda;
+    estado.slug = normalizarSlug(tienda);
+    $('negocio-slug').value = estado.slug;
+    estado.slugDisponible = null;
+    programarVerificacionSlug();
+  }
+
   renderPaso();
   renderPreview();
 })();

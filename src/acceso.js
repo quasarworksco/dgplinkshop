@@ -99,10 +99,19 @@ formRegistro.addEventListener('submit', async (e) => {
   const boton = formRegistro.querySelector('button[type="submit"]');
   iniciarCarga(boton, 'Creando tu cuenta…');
   try {
+    if (!document.getElementById('reg-terminos').checked) {
+      avisar('Debes aceptar los Términos y la Política de Privacidad.');
+      terminarCarga(boton);
+      return;
+    }
     const { session } = await registrar({
       email: document.getElementById('reg-email').value.trim(),
       password: document.getElementById('reg-password').value,
-      nombreCompleto: document.getElementById('reg-nombre').value.trim(),
+      nombre: document.getElementById('reg-nombre').value.trim(),
+      apellido: document.getElementById('reg-apellido').value.trim(),
+      tienda: document.getElementById('reg-tienda').value.trim(),
+      cedulaRif: document.getElementById('reg-cedula').value.trim(),
+      telefono: document.getElementById('reg-telefono').value.trim(),
     });
     if (session) {
       await redirigirSegunEstado(); // confirmación de email desactivada

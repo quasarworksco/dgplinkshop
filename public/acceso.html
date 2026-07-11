@@ -73,19 +73,41 @@
           </form>
 
           <!-- Registro -->
-          <form id="form-registro" class="space-y-4 hidden">
-            <div>
-              <label for="reg-nombre" class="block text-sm font-medium text-slate-700 mb-1.5">Nombre completo</label>
-              <input type="text" id="reg-nombre" class="campo" placeholder="Tu nombre" required autocomplete="name" />
+          <form id="form-registro" class="space-y-3 hidden">
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label for="reg-nombre" class="block text-sm font-medium text-slate-700 mb-1.5">Nombre *</label>
+                <input type="text" id="reg-nombre" class="campo" placeholder="Tu nombre" required autocomplete="given-name" />
+              </div>
+              <div>
+                <label for="reg-apellido" class="block text-sm font-medium text-slate-700 mb-1.5">Apellido</label>
+                <input type="text" id="reg-apellido" class="campo" placeholder="Tu apellido" autocomplete="family-name" />
+              </div>
             </div>
             <div>
-              <label for="reg-email" class="block text-sm font-medium text-slate-700 mb-1.5">Correo electrónico</label>
+              <label for="reg-tienda" class="block text-sm font-medium text-slate-700 mb-1.5">Nombre de tu tienda *</label>
+              <input type="text" id="reg-tienda" class="campo" placeholder="Ej: Nova Store" required maxlength="60" />
+            </div>
+            <div>
+              <label for="reg-cedula" class="block text-sm font-medium text-slate-700 mb-1.5">Cédula / RIF *</label>
+              <input type="text" id="reg-cedula" class="campo" placeholder="Ej: V-12.345.678 / J-12345678-9" required maxlength="30" />
+            </div>
+            <div>
+              <label for="reg-email" class="block text-sm font-medium text-slate-700 mb-1.5">Correo electrónico *</label>
               <input type="email" id="reg-email" class="campo" placeholder="tucorreo@ejemplo.com" required autocomplete="email" />
             </div>
             <div>
-              <label for="reg-password" class="block text-sm font-medium text-slate-700 mb-1.5">Contraseña</label>
+              <label for="reg-password" class="block text-sm font-medium text-slate-700 mb-1.5">Contraseña *</label>
               <input type="password" id="reg-password" class="campo" placeholder="Mínimo 6 caracteres" required minlength="6" autocomplete="new-password" />
             </div>
+            <div>
+              <label for="reg-telefono" class="block text-sm font-medium text-slate-700 mb-1.5">Teléfono</label>
+              <input type="tel" id="reg-telefono" class="campo" placeholder="0414-1234567" autocomplete="tel" />
+            </div>
+            <label class="flex items-start gap-2 text-xs text-slate-500 leading-snug cursor-pointer">
+              <input type="checkbox" id="reg-terminos" class="mt-0.5 w-4 h-4 accent-blue-600 shrink-0" required />
+              <span>He leído y acepto los <a href="/public/terminos.html" target="_blank" class="text-blue-600 hover:underline">Términos y Condiciones</a> y la <a href="/public/privacidad.html" target="_blank" class="text-blue-600 hover:underline">Política de Privacidad</a> de la plataforma.</span>
+            </label>
             <button type="submit" class="btn btn-primario w-full">Crear mi cuenta gratis</button>
             <p class="text-xs text-slate-400 text-center">Empiezas en el plan Gratuito (5 productos). Mejora a PRO cuando quieras.</p>
           </form>

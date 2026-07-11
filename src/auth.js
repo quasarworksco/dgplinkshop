@@ -4,12 +4,21 @@
 import { supabase } from './supabase-client.js';
 import { invalidarCache } from './cache-local.js';
 
-/** Registro con email + contraseña. El trigger handle_new_user crea el perfil. */
-export async function registrar({ email, password, nombreCompleto }) {
+/** Registro con email + contraseña. Los datos extra van a los metadatos
+ *  de la cuenta; el trigger handle_new_user crea el perfil. */
+export async function registrar({ email, password, nombre, apellido, tienda, cedulaRif, telefono }) {
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
-    options: { data: { full_name: nombreCompleto } },
+    options: {
+      data: {
+        full_name: nombre,
+        last_name: apellido || null,
+        store_name: tienda || null,
+        cedula_rif: cedulaRif || null,
+        phone: telefono || null,
+      },
+    },
   });
   if (error) throw traducirError(error);
   return data;
