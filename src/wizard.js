@@ -76,14 +76,24 @@ async function validarPasoActual() {
   return null;
 }
 
+let navegando = false; // candado anti doble-clic
 $('btn-siguiente').addEventListener('click', async () => {
-  const error = await validarPasoActual();
-  if (error) return mostrarError(error);
-  if (estado.paso < TOTAL_PASOS) {
-    estado.paso += 1;
-    renderPaso();
-  } else {
-    await publicarTienda();
+  if (navegando) return; // ignora clics repetidos mientras se procesa
+  navegando = true;
+  $('btn-siguiente').disabled = true;
+  try {
+    const error = await validarPasoActual();
+    if (error) return mostrarError(error);
+    if (estado.paso < TOTAL_PASOS) {
+      estado.paso += 1;
+      renderPaso();
+    } else {
+      await publicarTienda();
+    }
+  } finally {
+    navegando = false;
+    // publicarTienda deja el botón deshabilitado a propósito al redirigir
+    if (estado.paso <= TOTAL_PASOS) $('btn-siguiente').disabled = false;
   }
 });
 
@@ -186,14 +196,29 @@ $('input-logo').addEventListener('change', async (e) => {
 // ------------------------------------------------------------
 // Paso 3: personalización
 // ------------------------------------------------------------
-document.querySelectorAll('#paleta-colores button').forEach((btn) => {
+function marcarColorSeleccionado(elemento) {
+  document.querySelectorAll('.paleta-swatch').forEach((b) => (b.style.outline = 'none'));
+  if (elemento) {
+    elemento.style.outline = '3px solid rgba(255,255,255,0.75)';
+    elemento.style.outlineOffset = '2px';
+  }
+}
+
+// Colores predefinidos
+document.querySelectorAll('.paleta-swatch').forEach((btn) => {
   btn.addEventListener('click', () => {
     estado.colorPrimario = btn.dataset.color;
-    document.querySelectorAll('#paleta-colores button').forEach((b) => (b.style.outline = 'none'));
-    btn.style.outline = '3px solid rgba(255,255,255,0.6)';
-    btn.style.outlineOffset = '2px';
+    $('color-personalizado').value = btn.dataset.color;
+    marcarColorSeleccionado(btn);
     renderPreview();
   });
+});
+
+// Selector de color personalizado (cualquier tono)
+$('color-personalizado').addEventListener('input', (e) => {
+  estado.colorPrimario = e.target.value;
+  marcarColorSeleccionado(null); // ninguno de los predefinidos queda marcado
+  renderPreview();
 });
 
 $('negocio-whatsapp').addEventListener('input', (e) => {
