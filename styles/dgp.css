@@ -204,5 +204,13 @@ h1, h2, h3, h4 { color: var(--tinta); letter-spacing: -0.02em; }
   transition: width .2s ease;
 }
 
+/* ---------- Spinner de carga (dentro de botones) ---------- */
+.spinner {
+  width: 1.05rem; height: 1.05rem; border-radius: 9999px;
+  border: 2px solid rgba(255, 255, 255, 0.45); border-top-color: #fff;
+  animation: girar .6s linear infinite; display: inline-block; flex-shrink: 0;
+}
+@keyframes girar { to { transform: rotate(360deg); } }
+
 /* Utilidades de scroll suave */
 html { scroll-behavior: smooth; }

@@ -28,6 +28,18 @@ function avisar(texto, esError = true) {
   mensaje.className = `mt-4 text-sm text-center ${esError ? 'text-rose-600' : 'text-emerald-600'}`;
 }
 
+/** Pone un spinner + texto en un botón y lo deshabilita */
+function iniciarCarga(boton, texto) {
+  boton.dataset.original = boton.innerHTML;
+  boton.disabled = true;
+  boton.innerHTML = `<span class="spinner"></span> ${texto}`;
+}
+/** Restaura el botón a su estado original (tras un error) */
+function terminarCarga(boton) {
+  boton.disabled = false;
+  if (boton.dataset.original) boton.innerHTML = boton.dataset.original;
+}
+
 /** Tras iniciar sesión: si ya tiene negocio → panel; si no → wizard */
 async function redirigirSegunEstado() {
   const user = await usuarioActual();
@@ -41,19 +53,25 @@ async function redirigirSegunEstado() {
 
 formLogin.addEventListener('submit', async (e) => {
   e.preventDefault();
+  const boton = formLogin.querySelector('button[type="submit"]');
+  iniciarCarga(boton, 'Entrando…');
   try {
     await iniciarSesion({
       email: document.getElementById('login-email').value.trim(),
       password: document.getElementById('login-password').value,
     });
+    // redirige (la página se recarga; el spinner sigue hasta salir)
     await redirigirSegunEstado();
   } catch (err) {
     avisar(err.message);
+    terminarCarga(boton);
   }
 });
 
 formRegistro.addEventListener('submit', async (e) => {
   e.preventDefault();
+  const boton = formRegistro.querySelector('button[type="submit"]');
+  iniciarCarga(boton, 'Creando tu cuenta…');
   try {
     const { session } = await registrar({
       email: document.getElementById('reg-email').value.trim(),
@@ -65,8 +83,10 @@ formRegistro.addEventListener('submit', async (e) => {
     } else {
       avisar('¡Cuenta creada! Revisa tu correo para confirmarla y luego inicia sesión.', false);
       mostrarTab('login');
+      terminarCarga(boton);
     }
   } catch (err) {
     avisar(err.message);
+    terminarCarga(boton);
   }
 });
