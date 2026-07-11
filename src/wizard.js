@@ -8,7 +8,7 @@
 import { supabase } from './supabase-client.js';
 import { requerirSesion } from './auth.js';
 import { subirImagen, optimizada } from './cloudinary.js';
-import { normalizarSlug, urlDeTienda } from './subdominio.js';
+import { normalizarSlug, urlDeTienda, esSlugReservado } from './subdominio.js';
 import { hidratarIconos } from './iconos.js';
 
 const TOTAL_PASOS = 4;
@@ -142,12 +142,21 @@ function programarVerificacionSlug() {
 
 async function verificarSlug() {
   if (!estado.slug) return;
+  const el = $('slug-estado');
+
+  // Reservados (sistema + subdominios ya usados): bloqueo inmediato
+  if (esSlugReservado(estado.slug)) {
+    estado.slugDisponible = false;
+    el.textContent = '✗ Esa dirección está reservada. Elige otra.';
+    el.className = 'text-xs mt-1 h-4 text-rose-400';
+    return;
+  }
+
   const { data, error } = await supabase
     .from('businesses')
     .select('id')
     .eq('slug', estado.slug)
     .maybeSingle();
-  const el = $('slug-estado');
   if (error) {
     el.textContent = 'No se pudo comprobar. Se validará al publicar.';
     el.className = 'text-xs mt-1 h-4 text-amber-400';

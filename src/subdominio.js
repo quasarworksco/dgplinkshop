@@ -5,8 +5,23 @@
 // ============================================================
 import { ROOT_DOMAIN } from './config.js';
 
-// Subdominios del sistema que nunca son tiendas
-const RESERVADOS = ['www', 'app', 'api', 'admin', 'panel', 'dashboard', 'mail', 'soporte', 'dgp'];
+// Subdominios reservados que ningún cliente puede tomar como tienda.
+// Incluye subdominios del sistema y los que ya usas en GoDaddy para
+// otras páginas (su CNAME propio le gana al comodín, así que esos
+// hosts nunca llegan a esta app; los reservamos para que nadie los
+// registre como slug de tienda). La base de datos también los bloquea
+// (tabla reserved_slugs, migración 005) como fuente de verdad.
+const RESERVADOS = [
+  // sistema
+  'www', 'app', 'api', 'admin', 'panel', 'dashboard', 'mail', 'soporte', 'dgp',
+  // subdominios ya usados en GoDaddy
+  'novastore', 'orangeultrasound', 'bossafashion', 'cleaningroup', 'leidyluniow', 'pezdorado',
+];
+
+/** ¿El slug está reservado y no puede usarse como tienda? */
+export function esSlugReservado(slug) {
+  return RESERVADOS.includes((slug || '').toLowerCase());
+}
 
 /**
  * Devuelve el slug de la tienda según el hostname actual,
