@@ -42,9 +42,65 @@ const ESTILO_PLAN = {
   }
   if (!esAdmin) return mostrar('denegado');
 
+  await cargarPagos();
   await cargarTiendas();
   mostrar('ok');
 })();
+
+// ------------------------------------------------------------
+// Pagos por confirmar
+// ------------------------------------------------------------
+async function cargarPagos() {
+  const { data, error } = await supabase
+    .from('admin_pagos')
+    .select('*')
+    .eq('status', 'pendiente')
+    .order('created_at', { ascending: true });
+  if (error) { registrarError('admin/cargar-pagos', error); return; }
+
+  const pagos = data ?? [];
+  $('admin-pagos-seccion').classList.toggle('hidden', pagos.length === 0);
+  $('admin-pagos-conteo').textContent = pagos.length;
+
+  const cont = $('admin-pagos');
+  cont.innerHTML = pagos
+    .map((p) => {
+      const fecha = new Date(p.created_at).toLocaleString('es', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
+      return `
+      <article class="tarjeta-solida p-5" data-pago="${p.id}">
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <p class="font-bold text-slate-900">${escapar(p.negocio)} · <span class="uppercase text-blue-700">${escapar(p.plan)}</span></p>
+            <p class="text-xs text-slate-400">${escapar(p.owner_email)} · ${fecha}</p>
+          </div>
+          <p class="font-extrabold text-slate-900">$${Number(p.amount || 0).toFixed(2)}</p>
+        </div>
+        <div class="mt-2 text-sm text-slate-600">
+          <p>Método: <strong>${p.method === 'pagomovil' ? 'Pago Móvil' : 'Binance'}</strong>${p.reference ? ` · Ref: ${escapar(p.reference)}` : ''}</p>
+        </div>
+        ${p.receipt_url ? `<a href="${p.receipt_url}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-blue-600 text-xs font-semibold mt-2">${icono('imagen', 'w-3.5 h-3.5')} Ver comprobante</a>` : ''}
+        <div class="flex gap-2 mt-4">
+          <button data-accion="confirmar" class="btn btn-primario flex-1 text-sm">Confirmar</button>
+          <button data-accion="rechazar" class="btn btn-claro flex-1 text-sm text-rose-600">Rechazar</button>
+        </div>
+      </article>`;
+    })
+    .join('');
+
+  cont.querySelectorAll('[data-pago]').forEach((art) => {
+    const id = art.dataset.pago;
+    art.querySelector('[data-accion="confirmar"]').addEventListener('click', () => resolverPago(id, 'confirmar_pago', 'Pago confirmado, plan activado.'));
+    art.querySelector('[data-accion="rechazar"]').addEventListener('click', () => resolverPago(id, 'rechazar_pago', 'Pago rechazado.'));
+  });
+}
+
+async function resolverPago(id, rpc, mensaje) {
+  const { error } = await supabase.rpc(rpc, { p_payment_id: id });
+  if (error) { registrarError('admin/' + rpc, error); return notificar('No se pudo procesar el pago.', 'error'); }
+  notificar(mensaje, 'exito');
+  await cargarPagos();
+  await cargarTiendas();
+}
 
 async function cargarTiendas() {
   const { data, error } = await supabase
@@ -68,17 +124,22 @@ async function cargarTiendas() {
 
   $('admin-vacio').classList.toggle('hidden', tiendas.length > 0);
 
+  const hoy = new Date().toISOString().slice(0, 10);
   const cuerpo = $('tabla-tiendas');
   cuerpo.innerHTML = tiendas
     .map((t) => {
       const url = urlDeTienda(t.slug);
-      const fecha = new Date(t.created_at).toLocaleDateString('es', { day: '2-digit', month: 'short', year: '2-digit' });
       const planClase = ESTILO_PLAN[t.plan] ?? ESTILO_PLAN.free;
+      const dePago = t.plan === 'pro' || t.plan === 'premium';
+      const vencido = dePago && t.paid_until && t.paid_until < hoy;
+      const vence = dePago
+        ? (t.paid_until ? `<span class="${vencido ? 'text-rose-600 font-semibold' : 'text-slate-500'}">${new Date(t.paid_until).toLocaleDateString('es', { day: '2-digit', month: 'short' })}</span>` : '<span class="text-slate-400">—</span>')
+        : '<span class="text-slate-300">Gratis</span>';
       const estado = t.is_published
         ? '<span class="inline-flex items-center gap-1 text-emerald-600"><span class="w-2 h-2 rounded-full bg-emerald-500"></span>Publicada</span>'
         : '<span class="inline-flex items-center gap-1 text-slate-400"><span class="w-2 h-2 rounded-full bg-slate-300"></span>Borrador</span>';
       return `
-        <tr class="border-b border-slate-50 hover:bg-slate-50/60">
+        <tr class="border-b border-slate-50 hover:bg-slate-50/60" data-tienda="${t.id}">
           <td class="px-5 py-3">
             <p class="font-semibold text-slate-900">${escapar(t.name)}</p>
             <p class="text-xs text-slate-400">${escapar(t.slug)}.dgpgroupusa.com</p>
@@ -89,9 +150,10 @@ async function cargarTiendas() {
           </td>
           <td class="px-5 py-3"><span class="px-2.5 py-1 rounded-full text-xs font-bold uppercase ${planClase}">${escapar(t.plan)}</span></td>
           <td class="px-5 py-3 text-center font-semibold text-slate-700">${t.num_productos}</td>
+          <td class="px-5 py-3 text-xs">${vence}</td>
           <td class="px-5 py-3 text-xs font-medium">${estado}</td>
-          <td class="px-5 py-3 text-slate-500">${fecha}</td>
-          <td class="px-5 py-3 text-right">
+          <td class="px-5 py-3 text-right whitespace-nowrap">
+            ${dePago ? `<button data-accion="renovar" class="text-emerald-600 hover:text-emerald-700 text-xs font-semibold mr-3">Renovar</button>` : ''}
             <a href="${url}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-xs font-semibold">
               ${icono('externo', 'w-3.5 h-3.5')} Ver
             </a>
@@ -99,6 +161,17 @@ async function cargarTiendas() {
         </tr>`;
     })
     .join('');
+
+  cuerpo.querySelectorAll('[data-accion="renovar"]').forEach((btn) => {
+    const id = btn.closest('[data-tienda]').dataset.tienda;
+    btn.addEventListener('click', async () => {
+      if (!confirm('¿Renovar la suscripción de esta tienda hasta el próximo día 5?')) return;
+      const { error } = await supabase.rpc('renovar_suscripcion', { p_business_id: id });
+      if (error) { registrarError('admin/renovar', error); return notificar('No se pudo renovar.', 'error'); }
+      notificar('Suscripción renovada.', 'exito');
+      await cargarTiendas();
+    });
+  });
 }
 
 $('btn-logout').addEventListener('click', cerrarSesion);
