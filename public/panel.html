@@ -56,15 +56,18 @@
     </div>
 
     <!-- Pestañas -->
-    <nav class="seg mt-8 max-w-lg" style="grid-template-columns:repeat(3,1fr)" aria-label="Secciones">
+    <nav class="seg mt-8 max-w-2xl" style="grid-template-columns:repeat(4,1fr)" aria-label="Secciones">
       <button data-tab="catalogo" class="seg-tab flex items-center justify-center gap-2">
-        <span data-icono="paquete" data-clases="w-4 h-4"></span> Catálogo
+        <span data-icono="paquete" data-clases="w-4 h-4"></span> <span class="hidden sm:inline">Catálogo</span>
       </button>
       <button data-tab="pedidos" class="seg-tab flex items-center justify-center gap-2">
-        <span data-icono="pedidos" data-clases="w-4 h-4"></span> Pedidos
+        <span data-icono="pedidos" data-clases="w-4 h-4"></span> <span class="hidden sm:inline">Pedidos</span>
       </button>
       <button data-tab="cupones" class="seg-tab flex items-center justify-center gap-2">
-        <span data-icono="cupon" data-clases="w-4 h-4"></span> Cupones
+        <span data-icono="cupon" data-clases="w-4 h-4"></span> <span class="hidden sm:inline">Cupones</span>
+      </button>
+      <button data-tab="ajustes" class="seg-tab flex items-center justify-center gap-2">
+        <span data-icono="destello" data-clases="w-4 h-4"></span> <span class="hidden sm:inline">Ajustes</span>
       </button>
     </nav>
 
@@ -107,6 +110,37 @@
         Sin cupones todavía. Crea uno para premiar a tus clientes.
       </p>
     </section>
+
+    <!-- SECCIÓN: Ajustes -->
+    <section data-seccion="ajustes" class="mt-6 hidden">
+      <div class="grid md:grid-cols-2 gap-6">
+
+        <!-- Tasa del dólar -->
+        <div class="tarjeta-solida p-6">
+          <h2 class="text-lg font-bold text-slate-900">Tasa del dólar (Bs)</h2>
+          <p class="text-sm text-slate-500 mt-1 mb-4">Si la configuras, tus clientes verán los precios también en bolívares. Actualízala cuando cambie.</p>
+          <label for="ajuste-tasa" class="block text-sm font-medium text-slate-700 mb-1.5">Bolívares por 1 USD</label>
+          <div class="flex gap-2">
+            <input id="ajuste-tasa" class="campo flex-1" type="number" min="0" step="0.01" placeholder="Ej: 40.50" />
+            <button id="btn-guardar-tasa" class="btn btn-primario text-sm">Guardar</button>
+          </div>
+          <p class="text-xs text-slate-400 mt-2">Déjala vacía y guarda para ocultar los precios en Bs.</p>
+        </div>
+
+        <!-- Categorías -->
+        <div class="tarjeta-solida p-6">
+          <h2 class="text-lg font-bold text-slate-900">Categorías</h2>
+          <p class="text-sm text-slate-500 mt-1 mb-4">Organiza tu catálogo. Luego asígnalas a cada producto.</p>
+          <form id="form-categoria" class="flex gap-2">
+            <input id="cat-nombre" class="campo flex-1" maxlength="40" placeholder="Ej: Ofertas, Nuevos, Bebidas…" required />
+            <button type="submit" class="btn btn-primario text-sm">Añadir</button>
+          </form>
+          <p id="cat-error" class="text-rose-600 text-xs mt-2 hidden"></p>
+          <div id="lista-categorias" class="flex flex-wrap gap-2 mt-4"></div>
+          <p id="categorias-vacio" class="text-sm text-slate-400 mt-3 hidden">Aún no tienes categorías.</p>
+        </div>
+      </div>
+    </section>
   </main>
 
   <!-- Modal producto -->
@@ -128,6 +162,12 @@
             <label for="prod-descuento" class="block text-sm font-medium text-slate-700 mb-1.5">Descuento %</label>
             <input id="prod-descuento" class="campo" type="number" min="0" max="90" step="1" value="0" />
           </div>
+        </div>
+        <div>
+          <label for="prod-categoria" class="block text-sm font-medium text-slate-700 mb-1.5">Categoría</label>
+          <select id="prod-categoria" class="campo">
+            <option value="">Sin categoría</option>
+          </select>
         </div>
         <div>
           <label for="prod-descripcion" class="block text-sm font-medium text-slate-700 mb-1.5">Descripción</label>

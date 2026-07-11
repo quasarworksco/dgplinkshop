@@ -23,6 +23,7 @@ const dinero = (n) => `$${Number(n).toFixed(2)}`;
 let negocio = null;
 let suscripcion = null;
 let imagenSubidaUrl = null;
+let categorias = [];
 
 // Estado por sección: datos + su nodo en el DOM
 const productos = new Map();
@@ -80,6 +81,8 @@ const ESTADOS_PEDIDO = {
     if (data) $('enlace-admin').classList.remove('hidden');
   });
 
+  $('ajuste-tasa').value = negocio.tasa_bs ?? '';
+  await cargarCategorias();
   await cargarCatalogo();
 })();
 
@@ -211,6 +214,7 @@ function abrirModalProducto(producto = null) {
   $('prod-precio').value = producto?.price ?? '';
   $('prod-descuento').value = producto?.discount_percent ?? 0;
   $('prod-destacado').checked = producto?.is_featured ?? false;
+  $('prod-categoria').value = producto?.category_id ?? '';
   $('prod-descripcion').value = producto?.description ?? '';
   $('prod-imagen').value = '';
   $('modal-error').classList.add('hidden');
@@ -261,6 +265,7 @@ $('form-producto').addEventListener('submit', async (e) => {
     price: Number($('prod-precio').value),
     discount_percent: Math.min(90, Math.max(0, Number($('prod-descuento').value) || 0)),
     is_featured: $('prod-destacado').checked,
+    category_id: $('prod-categoria').value || null,
     description: $('prod-descripcion').value.trim() || null,
     image_url: imagenSubidaUrl,
   };
@@ -537,6 +542,102 @@ $('btn-upgrade').addEventListener('click', () => {
       'Escríbenos por WhatsApp para activar tu plan; en cuanto confirmemos el pago, ' +
       'tu límite sube a 50 productos automáticamente.'
   );
+});
+
+// ============================================================
+// SECCIÓN 4: AJUSTES (tasa Bs + categorías)
+// ============================================================
+async function cargarCategorias() {
+  const { data, error } = await supabase
+    .from('categories')
+    .select('*')
+    .eq('business_id', negocio.id)
+    .order('position', { ascending: true })
+    .order('name', { ascending: true });
+  if (error) { registrarError('panel/cargar-categorias', error); return; }
+  categorias = data ?? [];
+  renderCategorias();
+  renderOpcionesCategoria();
+}
+
+function renderCategorias() {
+  const cont = $('lista-categorias');
+  $('categorias-vacio').classList.toggle('hidden', categorias.length > 0);
+  cont.innerHTML = categorias
+    .map(
+      (c) => `
+      <span class="inline-flex items-center gap-2 pl-3 pr-2 py-1.5 rounded-full bg-slate-100 text-slate-700 text-sm">
+        ${escapar(c.name)}
+        <button data-eliminar-cat="${c.id}" aria-label="Eliminar ${escapar(c.name)}" class="text-slate-400 hover:text-rose-500 transition">
+          ${icono('cerrar', 'w-3.5 h-3.5')}
+        </button>
+      </span>`
+    )
+    .join('');
+  cont.querySelectorAll('[data-eliminar-cat]').forEach((b) =>
+    b.addEventListener('click', () => eliminarCategoria(b.dataset.eliminarCat))
+  );
+}
+
+/** Rellena el <select> de categoría del modal de producto */
+function renderOpcionesCategoria() {
+  const sel = $('prod-categoria');
+  const actual = sel.value;
+  sel.innerHTML =
+    '<option value="">Sin categoría</option>' +
+    categorias.map((c) => `<option value="${c.id}">${escapar(c.name)}</option>`).join('');
+  sel.value = actual;
+}
+
+$('form-categoria').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const nombre = $('cat-nombre').value.trim();
+  if (!nombre) return;
+  const err = $('cat-error');
+  err.classList.add('hidden');
+
+  const { data: fila, error } = await supabase
+    .from('categories')
+    .insert({ business_id: negocio.id, name: nombre, position: categorias.length })
+    .select()
+    .single();
+  if (error) {
+    registrarError('panel/crear-categoria', error);
+    err.textContent = error.code === '23505' ? 'Ya tienes una categoría con ese nombre.' : 'No se pudo crear la categoría.';
+    err.classList.remove('hidden');
+    return;
+  }
+  categorias.push(fila);
+  $('cat-nombre').value = '';
+  renderCategorias();
+  renderOpcionesCategoria();
+});
+
+async function eliminarCategoria(id) {
+  const cat = categorias.find((c) => c.id === id);
+  if (!confirm(`¿Eliminar la categoría "${cat?.name}"? Los productos quedarán sin categoría.`)) return;
+  const { error } = await supabase.from('categories').delete().eq('id', id);
+  if (error) { registrarError('panel/eliminar-categoria', error); return notificar('No se pudo eliminar.', 'error'); }
+  categorias = categorias.filter((c) => c.id !== id);
+  renderCategorias();
+  renderOpcionesCategoria();
+  notificar('Categoría eliminada.', 'exito');
+}
+
+$('btn-guardar-tasa').addEventListener('click', async () => {
+  const boton = $('btn-guardar-tasa');
+  boton.disabled = true;
+  const valor = $('ajuste-tasa').value.trim();
+  const tasa = valor === '' ? null : Number(valor);
+  if (tasa !== null && (!isFinite(tasa) || tasa <= 0)) {
+    boton.disabled = false;
+    return notificar('Escribe una tasa válida (mayor a 0) o déjala vacía.', 'error');
+  }
+  const { error } = await supabase.from('businesses').update({ tasa_bs: tasa }).eq('id', negocio.id);
+  boton.disabled = false;
+  if (error) { registrarError('panel/guardar-tasa', error); return notificar('No se pudo guardar la tasa.', 'error'); }
+  negocio.tasa_bs = tasa;
+  notificar(tasa === null ? 'Precios en Bs desactivados.' : `Tasa guardada: ${tasa} Bs/$`, 'exito');
 });
 
 $('btn-logout').addEventListener('click', cerrarSesion);
