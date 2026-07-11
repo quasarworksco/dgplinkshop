@@ -4,147 +4,199 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Mi panel — DGP LinkShop</title>
+  <script>try{if(localStorage.getItem('dgp-tema')==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}</script>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="/styles/dgp.css" />
 </head>
 <body class="dgp-lienzo">
 
-  <header class="nav-glass sticky top-0 z-40">
-    <div class="contenedor flex items-center justify-between h-16">
-      <img src="/assets/logo.svg" alt="DGP LinkShop" class="h-8" />
-      <div class="flex items-center gap-2 sm:gap-3">
-        <a id="enlace-admin" href="/public/admin.html" class="btn btn-primario text-sm hidden">
-          <span data-icono="usuario" data-clases="w-4 h-4"></span> <span class="hidden sm:inline">Súper-admin</span>
-        </a>
-        <a id="ver-tienda" href="#" target="_blank" rel="noopener" class="btn btn-claro text-sm">
-          <span data-icono="ojo" data-clases="w-4 h-4"></span> <span class="hidden sm:inline">Ver mi tienda</span>
-        </a>
-        <button id="btn-logout" class="btn btn-fantasma text-sm">
-          <span data-icono="salir" data-clases="w-4 h-4"></span> <span class="hidden sm:inline">Salir</span>
-        </button>
+  <div class="lg:flex min-h-screen">
+
+    <!-- Overlay móvil -->
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden"></div>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="fixed lg:sticky top-0 left-0 z-40 h-screen w-64 shrink-0 flex flex-col nav-glass border-r border-slate-200/70 -translate-x-full lg:translate-x-0 transition-transform duration-300">
+      <div class="p-5"><img src="/assets/logo.svg" alt="DGP LinkShop" class="h-8" /></div>
+      <nav class="flex-1 overflow-y-auto px-3 space-y-1">
+        <button data-tab="dashboard" class="nav-item"><span data-icono="cuadricula" data-clases="w-5 h-5"></span> Dashboard</button>
+        <button data-tab="catalogo" class="nav-item"><span data-icono="paquete" data-clases="w-5 h-5"></span> Productos</button>
+        <button data-tab="pedidos" class="nav-item"><span data-icono="pedidos" data-clases="w-5 h-5"></span> Pedidos</button>
+        <button data-tab="mensajes" class="nav-item"><span data-icono="mensaje" data-clases="w-5 h-5"></span> Mensajes</button>
+        <button data-tab="categorias" class="nav-item"><span data-icono="etiqueta" data-clases="w-5 h-5"></span> Categorías</button>
+        <button data-tab="cupones" class="nav-item"><span data-icono="cupon" data-clases="w-5 h-5"></span> Cupones</button>
+        <button data-tab="estadisticas" class="nav-item"><span data-icono="grafico" data-clases="w-5 h-5"></span> Estadísticas</button>
+        <button data-tab="suscripcion" class="nav-item"><span data-icono="tarjeta" data-clases="w-5 h-5"></span> Suscripción</button>
+        <button data-tab="configuracion" class="nav-item"><span data-icono="engranaje" data-clases="w-5 h-5"></span> Configuración</button>
+      </nav>
+      <div class="p-3 border-t border-slate-200/70 space-y-1">
+        <button id="btn-tema" class="nav-item"><span id="ico-tema" data-icono="luna" data-clases="w-5 h-5"></span> <span id="txt-tema">Modo oscuro</span></button>
+        <a id="ver-tienda" href="#" target="_blank" rel="noopener" class="nav-item"><span data-icono="ojo" data-clases="w-5 h-5"></span> Ver catálogo</a>
+        <a id="enlace-admin" href="/public/admin.html" class="nav-item hidden"><span data-icono="usuario" data-clases="w-5 h-5"></span> Súper-admin</a>
+        <button id="btn-logout" class="nav-item"><span data-icono="salir" data-clases="w-5 h-5"></span> Salir</button>
       </div>
-    </div>
-  </header>
+    </aside>
 
-  <main class="contenedor py-8">
+    <!-- Contenido -->
+    <div class="flex-1 min-w-0">
 
-    <!-- Encabezado del negocio -->
-    <section class="tarjeta-solida p-6 flex flex-col md:flex-row md:items-center gap-5">
-      <div id="panel-logo" class="w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center overflow-hidden shrink-0 text-slate-400 ring-1 ring-black/5">
-        <span data-icono="tienda" data-clases="w-7 h-7"></span>
-      </div>
-      <div class="flex-1 min-w-0">
-        <h1 id="panel-nombre" class="text-2xl font-extrabold text-slate-900 truncate">Cargando…</h1>
-        <a id="panel-url" href="#" target="_blank" rel="noopener" class="text-sm text-blue-600 hover:underline break-all"></a>
-      </div>
-      <div class="flex gap-3">
-        <div class="rounded-xl bg-slate-50 border border-slate-200 px-5 py-3 text-center">
-          <p class="text-xs text-slate-400 uppercase tracking-wide">Plan</p>
-          <p id="panel-plan" class="font-bold text-blue-600">—</p>
-        </div>
-        <div class="rounded-xl bg-slate-50 border border-slate-200 px-5 py-3 text-center">
-          <p class="text-xs text-slate-400 uppercase tracking-wide">Productos</p>
-          <p class="font-bold text-slate-900"><span id="panel-conteo">0</span><span class="text-slate-400">/<span id="panel-limite">5</span></span></p>
-        </div>
-      </div>
-    </section>
+      <!-- Barra superior móvil -->
+      <header class="lg:hidden nav-glass sticky top-0 z-20 flex items-center gap-3 h-14 px-4">
+        <button id="btn-menu" aria-label="Menú" class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-slate-100"><span data-icono="menu" data-clases="w-5 h-5"></span></button>
+        <img src="/assets/logo.svg" alt="DGP LinkShop" class="h-7" />
+      </header>
 
-    <!-- Aviso de límite / upgrade -->
-    <div id="aviso-limite" class="tarjeta-solida p-4 mt-4 hidden items-center justify-between gap-4 flex-wrap" style="border-color:#fde68a;background:#fffbeb">
-      <p class="text-sm text-amber-700">Alcanzaste el límite de tu plan. Mejora a <strong>PRO</strong> ($15/mes) y vende más de 100 productos.</p>
-      <button id="btn-upgrade" class="btn btn-primario text-sm">Quiero el plan PRO</button>
-    </div>
+      <main class="max-w-5xl mx-auto px-5 py-6 md:px-8">
 
-    <!-- Pestañas -->
-    <nav class="seg mt-8 max-w-2xl" style="grid-template-columns:repeat(4,1fr)" aria-label="Secciones">
-      <button data-tab="catalogo" class="seg-tab flex items-center justify-center gap-2">
-        <span data-icono="paquete" data-clases="w-4 h-4"></span> <span class="hidden sm:inline">Catálogo</span>
-      </button>
-      <button data-tab="pedidos" class="seg-tab flex items-center justify-center gap-2">
-        <span data-icono="pedidos" data-clases="w-4 h-4"></span> <span class="hidden sm:inline">Pedidos</span>
-      </button>
-      <button data-tab="cupones" class="seg-tab flex items-center justify-center gap-2">
-        <span data-icono="cupon" data-clases="w-4 h-4"></span> <span class="hidden sm:inline">Cupones</span>
-      </button>
-      <button data-tab="ajustes" class="seg-tab flex items-center justify-center gap-2">
-        <span data-icono="destello" data-clases="w-4 h-4"></span> <span class="hidden sm:inline">Ajustes</span>
-      </button>
-    </nav>
-
-    <!-- SECCIÓN: Catálogo -->
-    <section data-seccion="catalogo" class="mt-6">
-      <div class="flex items-center justify-between mb-5">
-        <h2 class="text-xl font-bold text-slate-900">Mi catálogo</h2>
-        <button id="btn-nuevo-producto" class="btn btn-primario text-sm">
-          <span data-icono="mas" data-clases="w-4 h-4"></span> Añadir producto
-        </button>
-      </div>
-      <div id="lista-productos" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
-      <p id="catalogo-vacio" class="tarjeta-solida p-10 text-center text-slate-500 hidden">
-        Aún no tienes productos. ¡Añade el primero y empieza a vender!
-      </p>
-    </section>
-
-    <!-- SECCIÓN: Pedidos -->
-    <section data-seccion="pedidos" class="mt-6 hidden">
-      <div class="flex items-center justify-between mb-5">
-        <h2 class="text-xl font-bold text-slate-900">Pedidos recibidos</h2>
-        <p class="text-xs text-slate-400 hidden sm:block">Entran cuando un cliente confirma su carrito por WhatsApp.</p>
-      </div>
-      <div id="lista-pedidos" class="space-y-4"></div>
-      <p id="pedidos-vacio" class="tarjeta-solida p-10 text-center text-slate-500 hidden">
-        Todavía no has recibido pedidos. Comparte tu tienda para empezar a vender.
-      </p>
-    </section>
-
-    <!-- SECCIÓN: Cupones -->
-    <section data-seccion="cupones" class="mt-6 hidden">
-      <div class="flex items-center justify-between mb-5">
-        <h2 class="text-xl font-bold text-slate-900">Mis cupones</h2>
-        <button id="btn-nuevo-cupon" class="btn btn-primario text-sm">
-          <span data-icono="mas" data-clases="w-4 h-4"></span> Crear cupón
-        </button>
-      </div>
-      <div id="lista-cupones" class="grid sm:grid-cols-2 gap-4"></div>
-      <p id="cupones-vacio" class="tarjeta-solida p-10 text-center text-slate-500 hidden">
-        Sin cupones todavía. Crea uno para premiar a tus clientes.
-      </p>
-    </section>
-
-    <!-- SECCIÓN: Ajustes -->
-    <section data-seccion="ajustes" class="mt-6 hidden">
-      <div class="grid md:grid-cols-2 gap-6">
-
-        <!-- Tasa del dólar -->
-        <div class="tarjeta-solida p-6">
-          <h2 class="text-lg font-bold text-slate-900">Tasa del dólar (Bs)</h2>
-          <p class="text-sm text-slate-500 mt-1 mb-4">Si la configuras, tus clientes verán los precios también en bolívares. Actualízala cuando cambie.</p>
-          <label for="ajuste-tasa" class="block text-sm font-medium text-slate-700 mb-1.5">Bolívares por 1 USD</label>
-          <div class="flex gap-2">
-            <input id="ajuste-tasa" class="campo flex-1" type="number" min="0" step="0.01" placeholder="Ej: 40.50" />
-            <button id="btn-guardar-tasa" class="btn btn-primario text-sm">Guardar</button>
+        <!-- Encabezado del negocio -->
+        <section class="tarjeta-solida p-5 flex flex-col sm:flex-row sm:items-center gap-4">
+          <div id="panel-logo" class="w-14 h-14 rounded-2xl bg-slate-100 flex items-center justify-center overflow-hidden shrink-0 text-slate-400 ring-1 ring-black/5">
+            <span data-icono="tienda" data-clases="w-6 h-6"></span>
           </div>
-          <p class="text-xs text-slate-400 mt-2">Déjala vacía y guarda para ocultar los precios en Bs.</p>
+          <div class="flex-1 min-w-0">
+            <h1 id="panel-nombre" class="text-xl font-extrabold text-slate-900 truncate">Cargando…</h1>
+            <a id="panel-url" href="#" target="_blank" rel="noopener" class="text-sm text-blue-600 hover:underline break-all"></a>
+          </div>
+          <div class="flex gap-3">
+            <div class="rounded-xl bg-slate-50 border border-slate-200 px-4 py-2 text-center">
+              <p class="text-[10px] text-slate-400 uppercase tracking-wide">Plan</p>
+              <p id="panel-plan" class="font-bold text-blue-600 text-sm">—</p>
+            </div>
+            <div class="rounded-xl bg-slate-50 border border-slate-200 px-4 py-2 text-center">
+              <p class="text-[10px] text-slate-400 uppercase tracking-wide">Productos</p>
+              <p class="font-bold text-slate-900 text-sm"><span id="panel-conteo">0</span><span class="text-slate-400">/<span id="panel-limite">5</span></span></p>
+            </div>
+          </div>
+        </section>
+
+        <div id="aviso-limite" class="tarjeta-solida p-4 mt-4 hidden items-center justify-between gap-4 flex-wrap" style="border-color:#fde68a;background:#fffbeb">
+          <p class="text-sm text-amber-700">Alcanzaste el límite de tu plan. Mejora a <strong>PRO</strong> ($15/mes) y vende más de 100 productos.</p>
+          <button id="btn-upgrade" class="btn btn-primario text-sm">Quiero el plan PRO</button>
         </div>
 
-        <!-- Categorías -->
-        <div class="tarjeta-solida p-6">
-          <h2 class="text-lg font-bold text-slate-900">Categorías</h2>
-          <p class="text-sm text-slate-500 mt-1 mb-4">Organiza tu catálogo. Luego asígnalas a cada producto.</p>
-          <form id="form-categoria" class="flex gap-2">
-            <input id="cat-nombre" class="campo flex-1" maxlength="40" placeholder="Ej: Ofertas, Nuevos, Bebidas…" required />
-            <button type="submit" class="btn btn-primario text-sm">Añadir</button>
-          </form>
-          <p id="cat-error" class="text-rose-600 text-xs mt-2 hidden"></p>
-          <div id="lista-categorias" class="flex flex-wrap gap-2 mt-4"></div>
-          <p id="categorias-vacio" class="text-sm text-slate-400 mt-3 hidden">Aún no tienes categorías.</p>
+        <!-- SECCIÓN: Dashboard -->
+        <section data-seccion="dashboard" class="mt-6">
+          <h2 class="text-xl font-bold text-slate-900 mb-1">Hola de nuevo 👋</h2>
+          <p class="text-slate-500 text-sm mb-6">Gestiona tu tienda desde el menú lateral.</p>
+          <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <button data-ir="catalogo" class="tarjeta-solida tarjeta-hover p-5 text-left flex items-center gap-4">
+              <div class="icono-circulo"><span data-icono="paquete" data-clases="w-5 h-5"></span></div>
+              <div><p class="font-bold text-slate-900">Productos</p><p class="text-xs text-slate-500">Gestiona tu catálogo</p></div>
+            </button>
+            <button data-ir="pedidos" class="tarjeta-solida tarjeta-hover p-5 text-left flex items-center gap-4">
+              <div class="icono-circulo"><span data-icono="pedidos" data-clases="w-5 h-5"></span></div>
+              <div><p class="font-bold text-slate-900">Pedidos</p><p class="text-xs text-slate-500">Revisa tus ventas</p></div>
+            </button>
+            <button data-ir="configuracion" class="tarjeta-solida tarjeta-hover p-5 text-left flex items-center gap-4">
+              <div class="icono-circulo"><span data-icono="engranaje" data-clases="w-5 h-5"></span></div>
+              <div><p class="font-bold text-slate-900">Configuración</p><p class="text-xs text-slate-500">Tasa Bs y ajustes</p></div>
+            </button>
+          </div>
+        </section>
+
+        <!-- SECCIÓN: Catálogo / Productos -->
+        <section data-seccion="catalogo" class="mt-6 hidden">
+          <div class="flex items-center justify-between mb-5">
+            <h2 class="text-xl font-bold text-slate-900">Mi catálogo</h2>
+            <button id="btn-nuevo-producto" class="btn btn-primario text-sm"><span data-icono="mas" data-clases="w-4 h-4"></span> Añadir producto</button>
+          </div>
+          <div id="lista-productos" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+          <p id="catalogo-vacio" class="tarjeta-solida p-10 text-center text-slate-500 hidden">Aún no tienes productos. ¡Añade el primero y empieza a vender!</p>
+        </section>
+
+        <!-- SECCIÓN: Pedidos -->
+        <section data-seccion="pedidos" class="mt-6 hidden">
+          <div class="flex items-center justify-between mb-5">
+            <h2 class="text-xl font-bold text-slate-900">Pedidos recibidos</h2>
+            <p class="text-xs text-slate-400 hidden sm:block">Entran cuando un cliente confirma su carrito por WhatsApp.</p>
+          </div>
+          <div id="lista-pedidos" class="space-y-4"></div>
+          <p id="pedidos-vacio" class="tarjeta-solida p-10 text-center text-slate-500 hidden">Todavía no has recibido pedidos. Comparte tu tienda para empezar a vender.</p>
+        </section>
+
+        <!-- SECCIÓN: Mensajes -->
+        <section data-seccion="mensajes" class="mt-6 hidden">
+          <h2 class="text-xl font-bold text-slate-900 mb-5">Mensajes</h2>
+          <div class="tarjeta-solida p-10 text-center">
+            <div class="icono-circulo mx-auto mb-3"><span data-icono="mensaje" data-clases="w-5 h-5"></span></div>
+            <p class="font-semibold text-slate-700">Bandeja de mensajes</p>
+            <p class="text-sm text-slate-500 mt-1">Muy pronto podrás recibir y responder mensajes de tus clientes aquí.</p>
+          </div>
+        </section>
+
+        <!-- SECCIÓN: Categorías -->
+        <section data-seccion="categorias" class="mt-6 hidden">
+          <h2 class="text-xl font-bold text-slate-900 mb-1">Categorías</h2>
+          <p class="text-sm text-slate-500 mb-5">Organiza tu catálogo. Luego asígnalas a cada producto.</p>
+          <div class="tarjeta-solida p-6 max-w-xl">
+            <form id="form-categoria" class="flex gap-2">
+              <input id="cat-nombre" class="campo flex-1" maxlength="40" placeholder="Ej: Ofertas, Nuevos, Bebidas…" required />
+              <button type="submit" class="btn btn-primario text-sm">Añadir</button>
+            </form>
+            <p id="cat-error" class="text-rose-600 text-xs mt-2 hidden"></p>
+            <div id="lista-categorias" class="flex flex-wrap gap-2 mt-4"></div>
+            <p id="categorias-vacio" class="text-sm text-slate-400 mt-3 hidden">Aún no tienes categorías.</p>
+          </div>
+        </section>
+
+        <!-- SECCIÓN: Cupones -->
+        <section data-seccion="cupones" class="mt-6 hidden">
+          <div class="flex items-center justify-between mb-5">
+            <h2 class="text-xl font-bold text-slate-900">Mis cupones</h2>
+            <button id="btn-nuevo-cupon" class="btn btn-primario text-sm"><span data-icono="mas" data-clases="w-4 h-4"></span> Crear cupón</button>
+          </div>
+          <div id="lista-cupones" class="grid sm:grid-cols-2 gap-4"></div>
+          <p id="cupones-vacio" class="tarjeta-solida p-10 text-center text-slate-500 hidden">Sin cupones todavía. Crea uno para premiar a tus clientes.</p>
+        </section>
+
+        <!-- SECCIÓN: Estadísticas -->
+        <section data-seccion="estadisticas" class="mt-6 hidden">
+          <h2 class="text-xl font-bold text-slate-900 mb-5">Estadísticas</h2>
+          <div class="tarjeta-solida p-10 text-center">
+            <div class="icono-circulo mx-auto mb-3"><span data-icono="grafico" data-clases="w-5 h-5"></span></div>
+            <p class="font-semibold text-slate-700">Visitas, clics de WhatsApp y ventas</p>
+            <p class="text-sm text-slate-500 mt-1">Se activa muy pronto: verás las visitas a tu tienda, los clics a WhatsApp y tus productos más vendidos.</p>
+          </div>
+        </section>
+
+        <!-- SECCIÓN: Suscripción -->
+        <section data-seccion="suscripcion" class="mt-6 hidden">
+          <h2 class="text-xl font-bold text-slate-900 mb-5">Suscripción</h2>
+          <div class="tarjeta-solida p-10 text-center">
+            <div class="icono-circulo mx-auto mb-3"><span data-icono="tarjeta" data-clases="w-5 h-5"></span></div>
+            <p class="font-semibold text-slate-700">Tu plan y pagos</p>
+            <p class="text-sm text-slate-500 mt-1">Muy pronto podrás elegir tu plan y pagar por PagoMóvil o Binance subiendo tu comprobante.</p>
+          </div>
+        </section>
+
+        <!-- SECCIÓN: Configuración -->
+        <section data-seccion="configuracion" class="mt-6 hidden">
+          <h2 class="text-xl font-bold text-slate-900 mb-5">Configuración</h2>
+          <div class="tarjeta-solida p-6 max-w-xl">
+            <h3 class="text-lg font-bold text-slate-900">Tasa del dólar (Bs)</h3>
+            <p class="text-sm text-slate-500 mt-1 mb-4">Si la configuras, tus clientes verán los precios también en bolívares. Actualízala cuando cambie.</p>
+            <label for="ajuste-tasa" class="block text-sm font-medium text-slate-700 mb-1.5">Bolívares por 1 USD</label>
+            <div class="flex gap-2">
+              <input id="ajuste-tasa" class="campo flex-1" type="number" min="0" step="0.01" placeholder="Ej: 40.50" />
+              <button id="btn-guardar-tasa" class="btn btn-primario text-sm">Guardar</button>
+            </div>
+            <p class="text-xs text-slate-400 mt-2">Déjala vacía y guarda para ocultar los precios en Bs.</p>
+          </div>
+        </section>
+
+      </main>
+
+      <footer class="border-t border-slate-200 bg-white/70">
+        <div class="max-w-5xl mx-auto px-5 md:px-8 py-6 text-center text-xs text-slate-500 space-y-1">
+          <p>© 2026 DGP LinkShop · dgpgroupusa.com</p>
+          <p>Desarrollado por <a href="https://dgpglobalgroup.com" target="_blank" rel="noopener" class="text-blue-600 hover:text-blue-700 font-semibold">DGP Global Group</a></p>
         </div>
-      </div>
-    </section>
-  </main>
+      </footer>
+    </div>
+  </div>
 
   <!-- Modal producto -->
-  <div id="modal-producto" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm">
+  <div id="modal-producto" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
     <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md max-h-[90vh] overflow-y-auto">
       <h3 id="modal-titulo" class="text-xl font-bold text-slate-900 mb-6">Nuevo producto</h3>
       <form id="form-producto" class="space-y-4">
@@ -165,9 +217,7 @@
         </div>
         <div>
           <label for="prod-categoria" class="block text-sm font-medium text-slate-700 mb-1.5">Categoría</label>
-          <select id="prod-categoria" class="campo">
-            <option value="">Sin categoría</option>
-          </select>
+          <select id="prod-categoria" class="campo"><option value="">Sin categoría</option></select>
         </div>
         <div>
           <label for="prod-descripcion" class="block text-sm font-medium text-slate-700 mb-1.5">Descripción</label>
@@ -192,7 +242,7 @@
   </div>
 
   <!-- Modal cupón -->
-  <div id="modal-cupon" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm">
+  <div id="modal-cupon" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
     <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md max-h-[90vh] overflow-y-auto">
       <h3 class="text-xl font-bold text-slate-900 mb-6">Crear cupón</h3>
       <form id="form-cupon" class="space-y-4">
@@ -234,13 +284,6 @@
       </form>
     </div>
   </div>
-
-  <footer class="border-t border-slate-200 bg-white/70">
-    <div class="contenedor py-6 text-center text-xs text-slate-500 space-y-1">
-      <p>© 2026 DGP LinkShop · dgpgroupusa.com</p>
-      <p>Desarrollado por <a href="https://dgpglobalgroup.com" target="_blank" rel="noopener" class="text-blue-600 hover:text-blue-700 font-semibold">DGP Global Group</a></p>
-    </div>
-  </footer>
 
   <script type="module" src="/src/panel.js"></script>
 </body>

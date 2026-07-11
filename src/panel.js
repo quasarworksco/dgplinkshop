@@ -107,20 +107,47 @@ function renderEncabezado() {
 // ------------------------------------------------------------
 // Pestañas (Catálogo / Pedidos / Cupones) con carga perezosa
 // ------------------------------------------------------------
-function activarPestanas() {
-  const botones = document.querySelectorAll('[data-tab]');
-  botones.forEach((btn) =>
-    btn.addEventListener('click', async () => {
-      botones.forEach((b) => b.classList.toggle('activa', b === btn));
-      document.querySelectorAll('[data-seccion]').forEach((sec) =>
-        sec.classList.toggle('hidden', sec.dataset.seccion !== btn.dataset.tab)
-      );
-      if (btn.dataset.tab === 'pedidos' && !pedidosCargados) await cargarPedidos();
-      if (btn.dataset.tab === 'cupones' && !cuponesCargados) await cargarCupones();
-    })
-  );
-  document.querySelector('[data-tab="catalogo"]').classList.add('activa');
+function irASeccion(tab) {
+  document.querySelectorAll('[data-tab]').forEach((b) => b.classList.toggle('activa', b.dataset.tab === tab));
+  document.querySelectorAll('[data-seccion]').forEach((sec) => sec.classList.toggle('hidden', sec.dataset.seccion !== tab));
+  if (tab === 'pedidos' && !pedidosCargados) cargarPedidos();
+  if (tab === 'cupones' && !cuponesCargados) cargarCupones();
+  cerrarSidebar();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
+
+function activarPestanas() {
+  document.querySelectorAll('[data-tab]').forEach((btn) => btn.addEventListener('click', () => irASeccion(btn.dataset.tab)));
+  document.querySelectorAll('[data-ir]').forEach((btn) => btn.addEventListener('click', () => irASeccion(btn.dataset.ir)));
+  irASeccion('dashboard');
+}
+
+// --- Sidebar móvil (drawer) ---
+function abrirSidebar() {
+  $('sidebar').classList.remove('-translate-x-full');
+  $('sidebar-overlay').classList.remove('hidden');
+}
+function cerrarSidebar() {
+  if (window.innerWidth < 1024) $('sidebar').classList.add('-translate-x-full');
+  $('sidebar-overlay').classList.add('hidden');
+}
+$('btn-menu').addEventListener('click', abrirSidebar);
+$('sidebar-overlay').addEventListener('click', cerrarSidebar);
+
+// --- Modo oscuro ---
+function aplicarTema(tema) {
+  const oscuro = tema === 'dark';
+  document.documentElement.setAttribute('data-theme', oscuro ? 'dark' : 'light');
+  try { localStorage.setItem('dgp-tema', oscuro ? 'dark' : 'light'); } catch {}
+  $('ico-tema').innerHTML = icono(oscuro ? 'sol' : 'luna', 'w-5 h-5');
+  $('txt-tema').textContent = oscuro ? 'Modo claro' : 'Modo oscuro';
+}
+$('btn-tema').addEventListener('click', () => {
+  const actual = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+  aplicarTema(actual === 'dark' ? 'light' : 'dark');
+});
+// Sincroniza el estado del toggle con el tema ya aplicado por el <head>
+aplicarTema(document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light');
 
 function escapar(texto) {
   const div = document.createElement('div');
