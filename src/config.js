@@ -7,8 +7,10 @@
 // ============================================================
 
 // Supabase → Dashboard > Settings > API
-export const SUPABASE_URL = 'https://TU-PROYECTO.supabase.co';
-export const SUPABASE_ANON_KEY = 'TU_SUPABASE_ANON_KEY';
+// (Estas claves son PÚBLICAS: se envían a cada navegador. La
+//  seguridad la dan las políticas RLS, no el secreto de la clave.)
+export const SUPABASE_URL = 'https://oubyfnzvtbfhduiynqia.supabase.co';
+export const SUPABASE_ANON_KEY = 'sb_publishable_uEdzJpKC1p55rT4MkWlPwQ_d5R8J5E1';
 
 // Cloudinary → Dashboard (cloud name) + preset unsigned "dgp-linkshop"
 export const CLOUDINARY_CLOUD_NAME = 'TU_CLOUD_NAME';
