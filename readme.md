@@ -1,8 +1,8 @@
 # DGP LinkShop
 
-Plataforma SaaS multi-tenant bajo **dgp-link.com**: los dueños de negocio se
+Plataforma SaaS multi-tenant bajo **dgpgroupusa.com**: los dueños de negocio se
 registran, configuran su tienda en un wizard de 4 pasos y obtienen su tienda
-online en `sunegocio.dgp-link.com`.
+online en `sunegocio.dgpgroupusa.com`.
 
 | Plan | Precio | Límite de productos |
 |------|--------|---------------------|
@@ -45,7 +45,7 @@ dgplinkshop/
 │   ├── 002-politicas-rls.sql     # Row Level Security
 │   └── 003-pedidos-cupones.sql   # Pedidos, cupones, destacados y descuentos
 ├── docs/
-│   └── subdominios.md       # Cómo funciona negocio1.dgp-link.com
+│   └── subdominios.md       # Cómo funciona negocio1.dgpgroupusa.com
 ├── scripts/
 │   └── build.js             # Minificación JS/CSS → /dist
 └── package.json
@@ -77,8 +77,8 @@ aplicarse (los cambios van en una migración nueva: `003-...sql`).
    La tienda pública en local se prueba con `?tienda=<slug>`:
    `http://localhost:3000/public/tienda.html?tienda=mi-negocio`.
 6. **Producción**: `npm run build` genera `/dist` minificado; despliega esa
-   carpeta en Vercel/Netlify con los dominios `dgp-link.com` y
-   `*.dgp-link.com` (ver `docs/subdominios.md`).
+   carpeta en Vercel/Netlify con los dominios `dgpgroupusa.com` y
+   `*.dgpgroupusa.com` (ver `docs/subdominios.md`).
 
 ## Arquitectura de datos (resumen)
 

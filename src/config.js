@@ -17,7 +17,7 @@ export const CLOUDINARY_CLOUD_NAME = 'gingt9vy';
 export const CLOUDINARY_UPLOAD_PRESET = 'dgp-linkshop';
 
 // Dominio raíz de la plataforma
-export const ROOT_DOMAIN = 'dgp-link.com';
+export const ROOT_DOMAIN = 'dgpgroupusa.com';
 
 // Planes de DGP LinkShop (los límites reales los hace cumplir la
 // base de datos — trigger enforce_product_limit; esto es solo UI)

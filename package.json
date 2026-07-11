@@ -1,7 +1,7 @@
 {
   "name": "dgp-linkshop",
   "version": "0.1.0",
-  "description": "DGP LinkShop — Plataforma SaaS multi-tenant de tiendas online bajo dgp-link.com",
+  "description": "DGP LinkShop — Plataforma SaaS multi-tenant de tiendas online bajo dgpgroupusa.com",
   "private": true,
   "type": "module",
   "scripts": {

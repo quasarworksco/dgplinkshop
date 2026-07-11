@@ -164,7 +164,7 @@ async function verificarSlug() {
   }
   estado.slugDisponible = !data;
   el.textContent = estado.slugDisponible
-    ? `✓ ${estado.slug}.dgp-link.com está disponible`
+    ? `✓ ${estado.slug}.dgpgroupusa.com está disponible`
     : '✗ Esa dirección ya está ocupada';
   el.className = `text-xs mt-1 h-4 ${estado.slugDisponible ? 'text-emerald-400' : 'text-rose-400'}`;
 }
@@ -241,7 +241,7 @@ $('negocio-whatsapp').addEventListener('input', (e) => {
 function renderPreview() {
   $('preview-nombre').textContent = estado.nombre || 'Tu negocio';
   $('preview-descripcion').textContent = estado.descripcion || 'Tu descripción aparecerá aquí';
-  $('preview-url').textContent = `${estado.slug || 'tunegocio'}.dgp-link.com`;
+  $('preview-url').textContent = `${estado.slug || 'tunegocio'}.dgpgroupusa.com`;
   $('preview-boton').style.background = estado.colorPrimario;
   $('preview-precio-1').style.color = estado.colorPrimario;
   $('preview-precio-2').style.color = estado.colorPrimario;

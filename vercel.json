@@ -4,17 +4,17 @@
   "rewrites": [
     {
       "source": "/",
-      "has": [{ "type": "host", "value": "www.dgp-link.com" }],
+      "has": [{ "type": "host", "value": "www.dgpgroupusa.com" }],
       "destination": "/public/index.html"
     },
     {
       "source": "/",
-      "has": [{ "type": "host", "value": "app.dgp-link.com" }],
+      "has": [{ "type": "host", "value": "app.dgpgroupusa.com" }],
       "destination": "/public/index.html"
     },
     {
       "source": "/",
-      "has": [{ "type": "host", "value": "([a-z0-9-]+)\\.dgp-link\\.com" }],
+      "has": [{ "type": "host", "value": "([a-z0-9-]+)\\.dgpgroupusa\\.com" }],
       "destination": "/public/tienda.html"
     },
     {

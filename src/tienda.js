@@ -1,6 +1,6 @@
 // ============================================================
 // DGP LinkShop — Tienda pública (storefront multi-tenant)
-// Se sirve en <slug>.dgp-link.com. En local: tienda.html?tienda=<slug>
+// Se sirve en <slug>.dgpgroupusa.com. En local: tienda.html?tienda=<slug>
 //
 // · Productos destacados primero, con insignia (estrella SVG).
 // · Descuentos por producto: precio original tachado + precio final.

@@ -1,4 +1,4 @@
-# Enrutamiento por subdominios — `negocio1.dgp-link.com`
+# Enrutamiento por subdominios — `negocio1.dgpgroupusa.com`
 
 ## Cómo funciona
 
@@ -6,9 +6,9 @@ Cada negocio tiene un `slug` único en la tabla `businesses` (migración 001).
 Ese slug **es** su subdominio. El flujo completo:
 
 ```
-Visitante → negocio1.dgp-link.com
+Visitante → negocio1.dgpgroupusa.com
               │
-              ▼  (1) DNS wildcard: *.dgp-link.com apunta al mismo hosting
+              ▼  (1) DNS wildcard: *.dgpgroupusa.com apunta al mismo hosting
         Hosting estático (Vercel / Netlify / Cloudflare Pages)
               │
               ▼  (2) Todas las peticiones de subdominios sirven public/tienda.html
@@ -27,14 +27,14 @@ y RLS garantiza que solo se exponen tiendas publicadas (`is_published = true`).
 
 ## Paso 1 — DNS (una sola vez)
 
-En el panel DNS de `dgp-link.com`:
+En el panel DNS de `dgpgroupusa.com`:
 
 | Tipo  | Nombre | Valor                     |
 |-------|--------|---------------------------|
 | A / CNAME | `@`    | Hosting (app principal)   |
 | CNAME | `*`    | Hosting (mismo proyecto)  |
 
-- En **Vercel**: añadir los dominios `dgp-link.com` y `*.dgp-link.com` al
+- En **Vercel**: añadir los dominios `dgpgroupusa.com` y `*.dgpgroupusa.com` al
   proyecto. Vercel emite certificados SSL wildcard automáticamente.
 - En **Netlify / Cloudflare Pages** el proceso es equivalente (dominio
   wildcard + SSL automático).
@@ -43,9 +43,9 @@ En el panel DNS de `dgp-link.com`:
 
 `src/subdominio.js` centraliza la lógica:
 
-- `app.dgp-link.com`, `www.dgp-link.com` o `dgp-link.com` → aplicación
+- `app.dgpgroupusa.com`, `www.dgpgroupusa.com` o `dgpgroupusa.com` → aplicación
   principal (landing, panel, wizard).
-- `<cualquier-otro>.dgp-link.com` → es una tienda; el slug es la primera
+- `<cualquier-otro>.dgpgroupusa.com` → es una tienda; el slug es la primera
   etiqueta del hostname.
 - En desarrollo local (`localhost`) no hay subdominios, así que se acepta el
   fallback `tienda.html?tienda=negocio1`.
@@ -54,7 +54,7 @@ En el panel DNS de `dgp-link.com`:
 
 `src/tienda.js` consulta la vista `storefront` (solo tiendas publicadas) con la
 clave `anon`. Si el slug no existe o la tienda no está publicada, se muestra la
-pantalla "Tienda no encontrada" con enlace a dgp-link.com.
+pantalla "Tienda no encontrada" con enlace a dgpgroupusa.com.
 
 ## Slugs reservados
 
@@ -65,5 +65,5 @@ ningún negocio pueda ocupar subdominios del sistema.
 ## URL generada para el usuario
 
 Al terminar el wizard, el negocio ve y puede copiar su URL con la identidad de
-marca: `https://<slug>.dgp-link.com` — generada por `urlDeTienda()` en
+marca: `https://<slug>.dgpgroupusa.com` — generada por `urlDeTienda()` en
 `src/subdominio.js`.

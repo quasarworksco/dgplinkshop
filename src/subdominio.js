@@ -1,22 +1,15 @@
 // ============================================================
 // DGP LinkShop — Resolución de tenant por subdominio
-// negocio1.dgp-link.com → slug "negocio1"
+// negocio1.dgpgroupusa.com → slug "negocio1"
 // Ver docs/subdominios.md para el diagrama completo.
 // ============================================================
 import { ROOT_DOMAIN } from './config.js';
 
-// Subdominios reservados que ningún cliente puede tomar como tienda.
-// Incluye subdominios del sistema y los que ya usas en GoDaddy para
-// otras páginas (su CNAME propio le gana al comodín, así que esos
-// hosts nunca llegan a esta app; los reservamos para que nadie los
-// registre como slug de tienda). La base de datos también los bloquea
-// (tabla reserved_slugs, migración 005) como fuente de verdad.
-const RESERVADOS = [
-  // sistema
-  'www', 'app', 'api', 'admin', 'panel', 'dashboard', 'mail', 'soporte', 'dgp',
-  // subdominios ya usados en GoDaddy
-  'novastore', 'orangeultrasound', 'bossafashion', 'cleaningroup', 'leidyluniow', 'pezdorado',
-];
+// Subdominios del sistema que ningún cliente puede tomar como tienda.
+// La base de datos también los bloquea (CHECK en businesses.slug) como
+// fuente de verdad. Como la plataforma vive en un dominio dedicado y
+// vacío, no hay subdominios de terceros que reservar.
+const RESERVADOS = ['www', 'app', 'api', 'admin', 'panel', 'dashboard', 'mail', 'soporte', 'dgp'];
 
 /** ¿El slug está reservado y no puede usarse como tienda? */
 export function esSlugReservado(slug) {
@@ -36,7 +29,7 @@ export function obtenerSlugDeTienda() {
     return new URLSearchParams(window.location.search).get('tienda');
   }
 
-  // ¿Es un subdominio de dgp-link.com?
+  // ¿Es un subdominio de dgpgroupusa.com?
   if (host.endsWith('.' + ROOT_DOMAIN)) {
     const slug = host.slice(0, -(ROOT_DOMAIN.length + 1));
     if (slug && !slug.includes('.') && !RESERVADOS.includes(slug)) {

@@ -37,7 +37,7 @@ create table public.businesses (
   id           uuid primary key default gen_random_uuid(),
   owner_id     uuid not null references public.profiles (id) on delete cascade,
   name         text not null,
-  -- slug = subdominio: negocio1.dgp-link.com  →  slug 'negocio1'
+  -- slug = subdominio: negocio1.dgpgroupusa.com  →  slug 'negocio1'
   slug         text not null unique
                check (slug ~ '^[a-z0-9]([a-z0-9-]{1,48}[a-z0-9])$')
                check (slug not in ('www','app','api','admin','panel','dashboard','mail','soporte','dgp')),
@@ -56,7 +56,7 @@ create table public.businesses (
 create unique index businesses_one_per_owner on public.businesses (owner_id);
 create index businesses_slug_idx on public.businesses (slug);
 
-comment on column public.businesses.slug is 'Subdominio único de la tienda: <slug>.dgp-link.com';
+comment on column public.businesses.slug is 'Subdominio único de la tienda: <slug>.dgpgroupusa.com';
 
 -- ------------------------------------------------------------
 -- 3. SUBSCRIPTIONS — plan y facturación del negocio
