@@ -152,11 +152,27 @@
         <!-- SECCIÓN: Estadísticas -->
         <section data-seccion="estadisticas" class="mt-6 hidden">
           <h2 class="text-xl font-bold text-slate-900 mb-5">Estadísticas</h2>
-          <div class="tarjeta-solida p-10 text-center">
-            <div class="icono-circulo mx-auto mb-3"><span data-icono="grafico" data-clases="w-5 h-5"></span></div>
-            <p class="font-semibold text-slate-700">Visitas, clics de WhatsApp y ventas</p>
-            <p class="text-sm text-slate-500 mt-1">Se activa muy pronto: verás las visitas a tu tienda, los clics a WhatsApp y tus productos más vendidos.</p>
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="tarjeta-solida p-5">
+              <div class="flex items-center gap-2 text-slate-400"><span data-icono="ojo" data-clases="w-4 h-4"></span><p class="text-xs uppercase tracking-wide">Visitas</p></div>
+              <p id="est-visitas" class="text-3xl font-extrabold text-slate-900 mt-1">—</p>
+            </div>
+            <div class="tarjeta-solida p-5">
+              <div class="flex items-center gap-2 text-slate-400"><span data-icono="mensaje" data-clases="w-4 h-4"></span><p class="text-xs uppercase tracking-wide">Clics WhatsApp</p></div>
+              <p id="est-whatsapp" class="text-3xl font-extrabold text-emerald-600 mt-1">—</p>
+            </div>
+            <div class="tarjeta-solida p-5">
+              <div class="flex items-center gap-2 text-slate-400"><span data-icono="pedidos" data-clases="w-4 h-4"></span><p class="text-xs uppercase tracking-wide">Pedidos</p></div>
+              <p id="est-pedidos" class="text-3xl font-extrabold text-slate-900 mt-1">—</p>
+            </div>
+            <div class="tarjeta-solida p-5">
+              <div class="flex items-center gap-2 text-slate-400"><span data-icono="tarjeta" data-clases="w-4 h-4"></span><p class="text-xs uppercase tracking-wide">Ventas</p></div>
+              <p id="est-ventas" class="text-3xl font-extrabold text-blue-600 mt-1">—</p>
+            </div>
           </div>
+          <h3 class="text-lg font-bold text-slate-900 mt-8 mb-3">Productos más vendidos</h3>
+          <div id="est-top" class="tarjeta-solida divide-y divide-slate-100"></div>
+          <p id="est-top-vacio" class="tarjeta-solida p-8 text-center text-slate-500 hidden">Aún no hay ventas registradas.</p>
         </section>
 
         <!-- SECCIÓN: Suscripción -->
@@ -215,9 +231,15 @@
             <input id="prod-descuento" class="campo" type="number" min="0" max="90" step="1" value="0" />
           </div>
         </div>
-        <div>
-          <label for="prod-categoria" class="block text-sm font-medium text-slate-700 mb-1.5">Categoría</label>
-          <select id="prod-categoria" class="campo"><option value="">Sin categoría</option></select>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label for="prod-categoria" class="block text-sm font-medium text-slate-700 mb-1.5">Categoría</label>
+            <select id="prod-categoria" class="campo"><option value="">Sin categoría</option></select>
+          </div>
+          <div>
+            <label for="prod-stock" class="block text-sm font-medium text-slate-700 mb-1.5">Inventario</label>
+            <input id="prod-stock" class="campo" type="number" min="0" step="1" placeholder="Sin control" />
+          </div>
         </div>
         <div>
           <label for="prod-descripcion" class="block text-sm font-medium text-slate-700 mb-1.5">Descripción</label>

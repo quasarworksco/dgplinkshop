@@ -42,6 +42,7 @@ const tarjetasPedido = new Map();
 const tarjetasCupon = new Map();
 let pedidosCargados = false;
 let cuponesCargados = false;
+let estadisticasCargadas = false;
 
 const ESTADOS_PEDIDO = {
   pendiente: { texto: 'Pendiente', clase: 'text-amber-600' },
@@ -125,6 +126,7 @@ function irASeccion(tab) {
   document.querySelectorAll('[data-seccion]').forEach((sec) => sec.classList.toggle('hidden', sec.dataset.seccion !== tab));
   if (tab === 'pedidos' && !pedidosCargados) cargarPedidos();
   if (tab === 'cupones' && !cuponesCargados) cargarCupones();
+  if (tab === 'estadisticas' && !estadisticasCargadas) cargarEstadisticas();
   cerrarSidebar();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -224,6 +226,7 @@ function pintarTarjetaProducto(tarjeta, p) {
       ${conDescuento ? `<span class="text-slate-400 line-through text-sm font-normal mr-1">${dinero(p.price)}</span>` : ''}
       ${dinero(p.price * (1 - (p.discount_percent ?? 0) / 100))}
     </p>
+    ${p.stock != null ? `<p class="text-xs mt-0.5 ${p.stock === 0 ? 'text-rose-600 font-semibold' : 'text-slate-400'}">${p.stock === 0 ? 'Agotado' : 'Stock: ' + p.stock}</p>` : ''}
     <div class="flex gap-2 mt-3">
       <button data-accion="editar" class="btn btn-claro flex-1 py-1.5 text-xs">${icono('lapiz', 'w-3.5 h-3.5')} Editar</button>
       <button data-accion="eliminar" class="btn btn-claro flex-1 py-1.5 text-xs text-rose-600">${icono('basura', 'w-3.5 h-3.5')} Eliminar</button>
@@ -255,6 +258,7 @@ function abrirModalProducto(producto = null) {
   $('prod-descuento').value = producto?.discount_percent ?? 0;
   $('prod-destacado').checked = producto?.is_featured ?? false;
   $('prod-categoria').value = producto?.category_id ?? '';
+  $('prod-stock').value = producto?.stock ?? '';
   $('prod-descripcion').value = producto?.description ?? '';
   $('prod-imagen').value = '';
   $('modal-error').classList.add('hidden');
@@ -306,6 +310,7 @@ $('form-producto').addEventListener('submit', async (e) => {
     discount_percent: Math.min(90, Math.max(0, Number($('prod-descuento').value) || 0)),
     is_featured: $('prod-destacado').checked,
     category_id: $('prod-categoria').value || null,
+    stock: $('prod-stock').value === '' ? null : Math.max(0, parseInt($('prod-stock').value, 10) || 0),
     description: $('prod-descripcion').value.trim() || null,
     image_url: imagenSubidaUrl,
   };
@@ -679,5 +684,35 @@ $('btn-guardar-tasa').addEventListener('click', async () => {
   negocio.tasa_bs = tasa;
   notificar(tasa === null ? 'Precios en Bs desactivados.' : `Tasa guardada: ${tasa} Bs/$`, 'exito');
 });
+
+// ============================================================
+// SECCIÓN: ESTADÍSTICAS
+// ============================================================
+async function cargarEstadisticas() {
+  estadisticasCargadas = true;
+  $('est-visitas').textContent = negocio.view_count ?? 0;
+  $('est-whatsapp').textContent = negocio.whatsapp_count ?? 0;
+
+  const { data: pedidos } = await supabase
+    .from('orders').select('total').eq('business_id', negocio.id);
+  const lista = pedidos ?? [];
+  $('est-pedidos').textContent = lista.length;
+  $('est-ventas').textContent = '$' + lista.reduce((s, o) => s + Number(o.total || 0), 0).toFixed(2);
+
+  const top = [...productos.values()]
+    .filter((p) => (p.sold_count ?? 0) > 0)
+    .sort((a, b) => b.sold_count - a.sold_count)
+    .slice(0, 5);
+  $('est-top-vacio').classList.toggle('hidden', top.length > 0);
+  $('est-top').classList.toggle('hidden', top.length === 0);
+  $('est-top').innerHTML = top
+    .map((p, i) => `
+      <div class="flex items-center gap-3 p-4">
+        <span class="w-6 text-center font-bold text-slate-400">${i + 1}</span>
+        <div class="flex-1 min-w-0"><p class="font-semibold text-slate-900 truncate">${escapar(p.name)}</p></div>
+        <span class="text-sm font-bold text-slate-700">${p.sold_count} vendidos</span>
+      </div>`)
+    .join('');
+}
 
 $('btn-logout').addEventListener('click', cerrarSesion);

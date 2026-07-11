@@ -34,4 +34,10 @@ export const PLANES = {
     inscripcion: 0,
     mensualidad: 15,
   },
+  premium: {
+    nombre: 'Premium',
+    limiteProductos: 400,
+    inscripcion: 0,
+    mensualidad: 25,
+  },
 };

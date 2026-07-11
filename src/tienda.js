@@ -66,7 +66,7 @@ function crearTarjeta(p, { compacta = false } = {}) {
   const final = precioFinal(p);
   const conDesc = (p.discount_percent ?? 0) > 0;
   const esTop = topVendidos.has(p.id);
-  const bs = tasaBs ? ` · Bs ${fmtBs.format(final * tasaBs)}` : '';
+  const agotado = p.stock === 0;
 
   const art = document.createElement('article');
   art.className = compacta
@@ -76,8 +76,9 @@ function crearTarjeta(p, { compacta = false } = {}) {
     ${esTop ? `<span class="absolute top-2 left-2 z-10 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-600 shadow-sm flex items-center gap-1">${icono('estrella', 'w-3 h-3')} Más vendido</span>`
       : (p.is_featured ? `<span class="absolute top-2 left-2 z-10 px-2 py-0.5 rounded-full text-[10px] font-bold bg-white/95 shadow-sm flex items-center gap-1" style="color:${colorPrimario}">${icono('destello', 'w-3 h-3')} Destacado</span>` : '')}
     ${conDesc ? `<span class="absolute top-2 right-2 z-10 px-2 py-0.5 rounded-full text-[10px] font-bold text-white" style="background:${colorPrimario}">-${p.discount_percent}%</span>` : ''}
-    <div class="aspect-square rounded-xl overflow-hidden bg-slate-100 flex items-center justify-center text-slate-300">
+    <div class="aspect-square rounded-xl overflow-hidden bg-slate-100 flex items-center justify-center text-slate-300 relative">
       ${p.image_url ? imgLazy(p.image_url, 'w_500,h_500,c_fill,q_auto,f_auto', escapar(p.name)) : icono('paquete', 'w-9 h-9')}
+      ${agotado ? '<span class="absolute inset-0 bg-white/60 flex items-center justify-center text-xs font-bold text-slate-700">Agotado</span>' : ''}
     </div>
     <h3 class="font-semibold text-slate-900 mt-3 text-sm leading-snug line-clamp-2">${escapar(p.name)}</h3>
     ${p.description ? `<p class="text-xs text-slate-500 mt-1 line-clamp-2">${escapar(p.description)}</p>` : ''}
@@ -87,11 +88,13 @@ function crearTarjeta(p, { compacta = false } = {}) {
         <p class="font-extrabold leading-tight" style="color:${colorPrimario}">${usd(final)}</p>
         ${tasaBs ? `<p class="text-[11px] text-slate-500 leading-tight">Bs ${fmtBs.format(final * tasaBs)}</p>` : ''}
       </div>
-      <button data-add aria-label="Agregar ${escapar(p.name)}" class="w-9 h-9 rounded-full flex items-center justify-center text-white shadow-sm transition hover:brightness-110 active:scale-95" style="background:${colorPrimario}">${icono('mas', 'w-4 h-4')}</button>
+      <button data-add aria-label="Agregar ${escapar(p.name)}" ${agotado ? 'disabled' : ''} class="w-9 h-9 rounded-full flex items-center justify-center text-white shadow-sm transition hover:brightness-110 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed" style="background:${colorPrimario}">${icono('mas', 'w-4 h-4')}</button>
     </div>`;
-  art.querySelector('[data-add]').addEventListener('click', () =>
-    agregarAlCarrito({ id: p.id, nombre: p.name, precio: final })
-  );
+  if (!agotado) {
+    art.querySelector('[data-add]').addEventListener('click', () =>
+      agregarAlCarrito({ id: p.id, nombre: p.name, precio: final })
+    );
+  }
   return art;
 }
 
@@ -205,7 +208,7 @@ function pintarTabActiva() {
   // Todos los productos activos (una sola consulta)
   const { data: prods, error } = await supabase
     .from('products')
-    .select('id, name, description, price, image_url, is_featured, discount_percent, category_id, sold_count')
+    .select('id, name, description, price, image_url, is_featured, discount_percent, category_id, sold_count, stock')
     .eq('business_id', negocio.id)
     .eq('is_active', true)
     .order('is_featured', { ascending: false })
@@ -243,6 +246,8 @@ function pintarTabActiva() {
   $('pag-next').addEventListener('click', () => { pagina++; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
 
   inicializarCarrito(negocio);
+  // Cuenta la visita (contador de la tienda), sin bloquear el render
+  supabase.rpc('sumar_vista', { p_business_id: negocio.id }).then(() => {}, () => {});
   render();
   mostrarEstado('tienda');
 })();

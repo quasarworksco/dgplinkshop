@@ -324,6 +324,9 @@ async function confirmarPedido() {
     });
     if (error) throw error;
 
+    // Cuenta el clic a WhatsApp (contador de la tienda) antes de redirigir
+    await supabase.rpc('sumar_whatsapp', { p_business_id: negocio.id }).catch(() => {});
+
     window.location.href = `https://wa.me/${negocio.whatsapp}?text=${encodeURIComponent(construirMensaje(pedido))}`;
 
     items.clear(); filas.forEach((f) => f.remove()); filas.clear();
