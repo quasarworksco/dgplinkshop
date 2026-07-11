@@ -91,6 +91,7 @@ const ESTADOS_PEDIDO = {
   renderEncabezado();
   renderCatalogoQR();
   activarPestanas();
+  verificarAcceso();
 
   // Enlace al panel súper-admin, solo si esta cuenta lo es
   supabase.rpc('es_superadmin').then(({ data }) => {
@@ -141,6 +142,55 @@ function activarPestanas() {
   document.querySelectorAll('[data-tab]').forEach((btn) => btn.addEventListener('click', () => irASeccion(btn.dataset.tab)));
   document.querySelectorAll('[data-ir]').forEach((btn) => btn.addEventListener('click', () => irASeccion(btn.dataset.ir)));
   irASeccion('dashboard');
+}
+
+// ------------------------------------------------------------
+// Plan gratuito temporal: al vencer la prueba, se bloquea el
+// panel (excepto Suscripción) hasta elegir un plan. La tienda
+// se pausa del lado del servidor (vista storefront exige
+// suscripcion_vigente). Aquí solo mostramos el bloqueo visual.
+// ------------------------------------------------------------
+async function verificarAcceso() {
+  const plan = suscripcion?.plan ?? 'free';
+  if (plan !== 'free') return; // planes pagos nunca se bloquean aquí
+  const vence = suscripcion?.trial_ends_at ? new Date(suscripcion.trial_ends_at) : null;
+  if (!vence || vence.getTime() > Date.now()) return; // aún dentro de la prueba
+
+  // Si ya envió un comprobante y está en revisión, no lo bloqueamos:
+  // dejamos que espere la aprobación sin fricción.
+  const { data: pagos } = await supabase
+    .from('payments').select('id').eq('business_id', negocio.id).eq('status', 'pendiente').limit(1);
+  if ((pagos ?? []).length > 0) return;
+
+  mostrarBloqueo();
+}
+
+function mostrarBloqueo() {
+  if ($('bloqueo-prueba')) return;
+  const cont = document.createElement('div');
+  cont.id = 'bloqueo-prueba';
+  cont.className = 'fixed inset-0 z-[100] flex items-center justify-center p-6';
+  cont.style.background = 'rgba(15, 23, 42, 0.55)';
+  cont.style.backdropFilter = 'blur(6px)';
+  cont.innerHTML = `
+    <div class="tarjeta-solida max-w-md w-full p-8 text-center">
+      <div class="w-14 h-14 mx-auto mb-4 rounded-2xl flex items-center justify-center" style="background:#eff6ff;color:#2563eb">
+        ${icono('candado', 'w-7 h-7')}
+      </div>
+      <h2 class="text-xl font-bold text-slate-900 mb-2">Tu prueba gratis terminó</h2>
+      <p class="text-slate-600 text-sm leading-relaxed mb-6">
+        Tu tienda quedó en pausa. Para reactivarla y seguir vendiendo, elige un plan y
+        realiza tu pago. La activamos apenas confirmemos tu comprobante.
+      </p>
+      <button id="bloqueo-elegir" class="btn btn-primario w-full justify-center">Elegir mi plan</button>
+      <button id="bloqueo-salir" class="btn btn-claro w-full justify-center mt-3">Cerrar sesión</button>
+    </div>`;
+  document.body.appendChild(cont);
+  $('bloqueo-elegir').addEventListener('click', () => {
+    cont.remove();
+    irASeccion('suscripcion');
+  });
+  $('bloqueo-salir').addEventListener('click', cerrarSesion);
 }
 
 // --- Sidebar móvil (drawer) ---
