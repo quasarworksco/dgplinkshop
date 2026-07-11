@@ -10,10 +10,10 @@
 // (Estas claves son PÚBLICAS: se envían a cada navegador. La
 //  seguridad la dan las políticas RLS, no el secreto de la clave.)
 export const SUPABASE_URL = 'https://oubyfnzvtbfhduiynqia.supabase.co';
-export const SUPABASE_ANON_KEY = 'sb_publishable_uEdzJpKC1p55rT4MkWlPwQ_d5R8J5E1';
+export const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im91Ynlmbnp2dGJmaGR1aXlucWlhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM3Mjg4NTEsImV4cCI6MjA5OTMwNDg1MX0.omAC0qUjePtQCVtTerz2bL_vh5-xX9MKJXigEIyCe7k';
 
 // Cloudinary → Dashboard (cloud name) + preset unsigned "dgp-linkshop"
-export const CLOUDINARY_CLOUD_NAME = 'TU_CLOUD_NAME';
+export const CLOUDINARY_CLOUD_NAME = 'gingt9vy';
 export const CLOUDINARY_UPLOAD_PRESET = 'dgp-linkshop';
 
 // Dominio raíz de la plataforma
