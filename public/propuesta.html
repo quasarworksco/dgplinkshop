@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DGP LinkShop — Tu tienda online lista para vender</title>
+  <meta name="description" content="Convierte tu negocio en una tienda online profesional: catálogo con carrito, pedidos por WhatsApp, tu propio link y cero comisiones por venta. Descubre qué hace el sistema, sus beneficios y planes." />
+  <meta property="og:title" content="DGP LinkShop — Tu tienda online lista para vender" />
+  <meta property="og:description" content="Catálogo con carrito, pedidos por WhatsApp y tu propio link. Sin comisiones por venta. Planes desde $0." />
+  <meta property="og:type" content="website" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/styles/dgp.css" />
+  <style>
+    .revelar { opacity: 0; transform: translateY(16px); transition: opacity .6s ease, transform .6s ease; }
+    .revelar.visible { opacity: 1; transform: none; }
+    .eyebrow { letter-spacing: .12em; }
+    details.faq { border-bottom: 1px solid var(--linea); }
+    details.faq summary { list-style: none; cursor: pointer; }
+    details.faq summary::-webkit-details-marker { display: none; }
+    details.faq[open] .faq-mas { transform: rotate(45deg); }
+  </style>
+</head>
+<body class="dgp-lienzo text-slate-700">
+
+  <!-- ===================== NAV ===================== -->
+  <header class="nav-glass sticky top-0 z-50">
+    <div class="contenedor flex items-center justify-between h-16">
+      <img src="/assets/logo.svg" alt="DGP LinkShop" class="h-9" />
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
+        <a href="#como" class="hover:text-slate-900 transition">Cómo funciona</a>
+        <a href="#incluye" class="hover:text-slate-900 transition">Qué incluye</a>
+        <a href="#planes" class="hover:text-slate-900 transition">Planes</a>
+        <a href="#faq" class="hover:text-slate-900 transition">Preguntas</a>
+      </nav>
+      <div class="flex items-center gap-2 sm:gap-3">
+        <a href="#contacto" class="hidden sm:inline-flex btn btn-fantasma text-sm">Contáctanos</a>
+        <a href="https://dgpgroupusa.com/public/acceso.html#registro" class="btn btn-primario text-sm">Crear mi tienda</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===================== HERO ===================== -->
+  <section class="contenedor pt-16 pb-14 md:pt-24 md:pb-20 text-center">
+    <p class="eyebrow mb-5 inline-flex items-center gap-2 text-xs font-bold uppercase text-blue-600">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M12 2 14 9l7 3-7 3-2 7-2-7-7-3 7-3Z"/></svg>
+      Una propuesta para tu negocio
+    </p>
+    <h1 class="text-4xl md:text-6xl font-extrabold leading-[1.05] text-slate-900 max-w-4xl mx-auto">
+      Convierte tu WhatsApp en una<br class="hidden md:block" />
+      <span class="titulo-degradado">tienda online profesional</span>
+    </h1>
+    <p class="mt-6 text-lg text-slate-600 max-w-2xl mx-auto">
+      Tus clientes ven tu catálogo con fotos y precios, arman su carrito solos y te
+      envían el pedido listo por WhatsApp. Tú solo confirmas y vendes. Sin comisiones
+      por venta y con tu propio link: <strong class="text-slate-800">tunegocio.dgpgroupusa.com</strong>
+    </p>
+    <div class="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
+      <a href="https://dgpgroupusa.com/public/acceso.html#registro" class="btn btn-primario text-base px-7 py-3.5">Empezar gratis</a>
+      <a href="#contacto" class="btn btn-claro text-base px-7 py-3.5">Hablar con un asesor</a>
+    </div>
+    <div class="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-slate-500">
+      <span class="inline-flex items-center gap-1.5"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M20 6 9 17l-5-5"/></svg> Sin comisiones por venta</span>
+      <span class="inline-flex items-center gap-1.5"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M20 6 9 17l-5-5"/></svg> Listo en 5 minutos</span>
+      <span class="inline-flex items-center gap-1.5"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M20 6 9 17l-5-5"/></svg> Sin conocimientos técnicos</span>
+    </div>
+  </section>
+
+  <!-- ===================== VALOR / 3 tiles ===================== -->
+  <section class="contenedor pb-6">
+    <div class="grid sm:grid-cols-3 gap-5">
+      <div class="tarjeta-solida p-6 text-center revelar">
+        <div class="w-12 h-12 mx-auto mb-3 rounded-2xl flex items-center justify-center" style="background:#eff6ff;color:#2563eb">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
+        </div>
+        <h3 class="font-bold text-slate-900">Vende por WhatsApp</h3>
+        <p class="text-sm text-slate-500 mt-1">El pedido llega ordenado, con productos, cantidades y total. Cero enredos.</p>
+      </div>
+      <div class="tarjeta-solida p-6 text-center revelar">
+        <div class="w-12 h-12 mx-auto mb-3 rounded-2xl flex items-center justify-center" style="background:#eff6ff;color:#2563eb">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+        </div>
+        <h3 class="font-bold text-slate-900">Catálogo con carrito</h3>
+        <p class="text-sm text-slate-500 mt-1">Fotos, precios, descuentos y buscador. Tu tienda se ve profesional en el celular.</p>
+      </div>
+      <div class="tarjeta-solida p-6 text-center revelar">
+        <div class="w-12 h-12 mx-auto mb-3 rounded-2xl flex items-center justify-center" style="background:#eff6ff;color:#2563eb">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+        </div>
+        <h3 class="font-bold text-slate-900">Tu propio link</h3>
+        <p class="text-sm text-slate-500 mt-1">Comparte <strong>tunegocio.dgpgroupusa.com</strong> por redes, historias o QR.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CÓMO FUNCIONA ===================== -->
+  <section id="como" class="contenedor py-16 md:py-24">
+    <div class="text-center mb-12">
+      <p class="eyebrow text-xs font-bold uppercase text-blue-600 mb-2">Así de fácil</p>
+      <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900">En 3 pasos ya estás vendiendo</h2>
+    </div>
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="tarjeta-solida p-7 revelar">
+        <span class="text-5xl font-extrabold titulo-degradado">1</span>
+        <h3 class="text-xl font-bold text-slate-900 mt-3">Crea tu catálogo</h3>
+        <p class="text-slate-600 mt-2">Regístrate, sube tus productos con foto y precio, y pon los colores y el logo de tu marca. Sin programar nada.</p>
+      </div>
+      <div class="tarjeta-solida p-7 revelar">
+        <span class="text-5xl font-extrabold titulo-degradado">2</span>
+        <h3 class="text-xl font-bold text-slate-900 mt-3">Comparte tu link</h3>
+        <p class="text-slate-600 mt-2">Recibes tu dirección web y un código QR. Los pones en tu Instagram, WhatsApp, tarjetas o vidriera.</p>
+      </div>
+      <div class="tarjeta-solida p-7 revelar">
+        <span class="text-5xl font-extrabold titulo-degradado">3</span>
+        <h3 class="text-xl font-bold text-slate-900 mt-3">Recibe pedidos</h3>
+        <p class="text-slate-600 mt-2">El cliente arma su carrito y confirma. Te llega el pedido por WhatsApp, listo para coordinar pago y entrega.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== QUÉ INCLUYE ===================== -->
+  <section id="incluye" class="bg-white/60 border-y border-slate-200/70">
+    <div class="contenedor py-16 md:py-24">
+      <div class="text-center mb-12">
+        <p class="eyebrow text-xs font-bold uppercase text-blue-600 mb-2">Todo en un solo lugar</p>
+        <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900">Qué hace el sistema por ti</h2>
+        <p class="text-slate-600 mt-3 max-w-2xl mx-auto">Mucho más que un catálogo: una herramienta completa para administrar y hacer crecer tu negocio.</p>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+
+        <div class="tarjeta-solida p-6 revelar">
+          <span class="inline-flex items-center justify-center w-10 h-10 rounded-xl mb-3" style="background:#eff6ff;color:#2563eb"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg></span>
+          <h3 class="font-bold text-slate-900">Carrito de compras</h3>
+          <p class="text-sm text-slate-500 mt-1">Tus clientes agregan varios productos y ven el total al instante, en dólares y en bolívares.</p>
+        </div>
+
+        <div class="tarjeta-solida p-6 revelar">
+          <span class="inline-flex items-center justify-center w-10 h-10 rounded-xl mb-3" style="background:#eff6ff;color:#2563eb"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg></span>
+          <h3 class="font-bold text-slate-900">Pedidos por WhatsApp</h3>
+          <p class="text-sm text-slate-500 mt-1">El mensaje llega redactado con el detalle del pedido. Tú confirmas pago y entrega.</p>
+        </div>
+
+        <div class="tarjeta-solida p-6 revelar">
+          <span class="inline-flex items-center justify-center w-10 h-10 rounded-xl mb-3" style="background:#eff6ff;color:#2563eb"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg></span>
+          <h3 class="font-bold text-slate-900">Control de inventario</h3>
+          <p class="text-sm text-slate-500 mt-1">Lleva el stock de cada producto y muestra "Agotado" automáticamente cuando se acaba.</p>
+        </div>
+
+        <div class="tarjeta-solida p-6 revelar">
+          <span class="inline-flex items-center justify-center w-10 h-10 rounded-xl mb-3" style="background:#eff6ff;color:#2563eb"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 11v2"/><path d="M13 17v2"/></svg></span>
+          <h3 class="font-bold text-slate-900">Cupones y descuentos</h3>
+          <p class="text-sm text-slate-500 mt-1">Crea promociones, códigos de descuento y ofertas para atraer y fidelizar clientes.</p>
+        </div>
+
+        <div class="tarjeta-solida p-6 revelar">
+          <span class="inline-flex items-center justify-center w-10 h-10 rounded-xl mb-3" style="background:#eff6ff;color:#2563eb"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M3 3v18h18"/><rect width="4" height="7" x="7" y="10" rx="1"/><rect width="4" height="11" x="15" y="6" rx="1"/></svg></span>
+          <h3 class="font-bold text-slate-900">Estadísticas</h3>
+          <p class="text-sm text-slate-500 mt-1">Ve cuántas visitas y clics a WhatsApp recibe tu tienda, y cuáles son tus más vendidos.</p>
+        </div>
+
+        <div class="tarjeta-solida p-6 revelar">
+          <span class="inline-flex items-center justify-center w-10 h-10 rounded-xl mb-3" style="background:#eff6ff;color:#2563eb"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><rect width="5" height="5" x="3" y="3" rx="1"/><rect width="5" height="5" x="16" y="3" rx="1"/><rect width="5" height="5" x="3" y="16" rx="1"/><path d="M21 16h-3a2 2 0 0 0-2 2v3"/><path d="M21 21v.01"/><path d="M12 7v3a2 2 0 0 1-2 2H7"/><path d="M3 12h.01"/><path d="M12 3h.01"/><path d="M12 16v.01"/><path d="M16 12h1"/><path d="M21 12v.01"/><path d="M12 21v-1"/></svg></span>
+          <h3 class="font-bold text-slate-900">Código QR y catálogo mayorista</h3>
+          <p class="text-sm text-slate-500 mt-1">Descarga el QR de tu tienda y activa un catálogo con precios al por mayor aparte.</p>
+        </div>
+
+        <div class="tarjeta-solida p-6 revelar">
+          <span class="inline-flex items-center justify-center w-10 h-10 rounded-xl mb-3" style="background:#eff6ff;color:#2563eb"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg></span>
+          <h3 class="font-bold text-slate-900">Panel de administración</h3>
+          <p class="text-sm text-slate-500 mt-1">Todo desde tu celular: productos, pedidos, categorías, cupones, estadísticas y ajustes.</p>
+        </div>
+
+        <div class="tarjeta-solida p-6 revelar">
+          <span class="inline-flex items-center justify-center w-10 h-10 rounded-xl mb-3" style="background:#eff6ff;color:#2563eb"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M3 9 5 3h14l2 6"/><path d="M3 9h18v3a3 3 0 0 1-6 0 3 3 0 0 1-6 0 3 3 0 0 1-6 0Z"/><path d="M5 14v7h14v-7"/></svg></span>
+          <h3 class="font-bold text-slate-900">Tu marca, tu estilo</h3>
+          <p class="text-sm text-slate-500 mt-1">Logo, color principal y descripción personalizables. Tu tienda se ve como tú quieres.</p>
+        </div>
+
+        <div class="tarjeta-solida p-6 revelar">
+          <span class="inline-flex items-center justify-center w-10 h-10 rounded-xl mb-3" style="background:#eff6ff;color:#2563eb"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></span>
+          <h3 class="font-bold text-slate-900">Precios en Bs y opciones de entrega</h3>
+          <p class="text-sm text-slate-500 mt-1">Muestra precios en bolívares con tu tasa y ofrece retiro, delivery local o envío nacional.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== POR QUÉ / diferenciadores ===================== -->
+  <section class="contenedor py-16 md:py-24">
+    <div class="grid lg:grid-cols-2 gap-10 items-center">
+      <div>
+        <p class="eyebrow text-xs font-bold uppercase text-blue-600 mb-2">Por qué DGP LinkShop</p>
+        <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900">Pensado para el comercio de aquí</h2>
+        <p class="text-slate-600 mt-3">No es una plataforma extranjera complicada. Es una herramienta simple, en español y adaptada a cómo se vende en la calle.</p>
+      </div>
+      <div class="space-y-4">
+        <div class="flex gap-4 revelar">
+          <span class="shrink-0 w-10 h-10 rounded-xl flex items-center justify-center" style="background:#ecfdf5;color:#059669"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M20 6 9 17l-5-5"/></svg></span>
+          <div><h3 class="font-bold text-slate-900">Cero comisiones por venta</h3><p class="text-sm text-slate-500 mt-0.5">Lo que vendes es tuyo. No te descontamos ni un centavo de cada pedido.</p></div>
+        </div>
+        <div class="flex gap-4 revelar">
+          <span class="shrink-0 w-10 h-10 rounded-xl flex items-center justify-center" style="background:#ecfdf5;color:#059669"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M20 6 9 17l-5-5"/></svg></span>
+          <div><h3 class="font-bold text-slate-900">Pagos locales</h3><p class="text-sm text-slate-500 mt-0.5">La suscripción se paga por Pago Móvil o Binance, subiendo tu comprobante. Fácil.</p></div>
+        </div>
+        <div class="flex gap-4 revelar">
+          <span class="shrink-0 w-10 h-10 rounded-xl flex items-center justify-center" style="background:#ecfdf5;color:#059669"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M20 6 9 17l-5-5"/></svg></span>
+          <div><h3 class="font-bold text-slate-900">Sin conocimientos técnicos</h3><p class="text-sm text-slate-500 mt-0.5">Si sabes usar WhatsApp, sabes usar tu tienda. Te guiamos paso a paso la primera vez.</p></div>
+        </div>
+        <div class="flex gap-4 revelar">
+          <span class="shrink-0 w-10 h-10 rounded-xl flex items-center justify-center" style="background:#ecfdf5;color:#059669"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M20 6 9 17l-5-5"/></svg></span>
+          <div><h3 class="font-bold text-slate-900">Empiezas gratis</h3><p class="text-sm text-slate-500 mt-0.5">Prueba el sistema sin pagar. Cuando veas resultados, subes de plan.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PARA QUIÉN ===================== -->
+  <section class="bg-white/60 border-y border-slate-200/70">
+    <div class="contenedor py-14 text-center">
+      <p class="eyebrow text-xs font-bold uppercase text-blue-600 mb-2">Ideal para</p>
+      <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 mb-6">Cualquier negocio que venda por WhatsApp</h2>
+      <div class="flex flex-wrap justify-center gap-3">
+        <span class="chip">Comida y postres</span>
+        <span class="chip">Moda y accesorios</span>
+        <span class="chip">Belleza y cuidado</span>
+        <span class="chip">Hogar y decoración</span>
+        <span class="chip">Tecnología</span>
+        <span class="chip">Servicios</span>
+        <span class="chip">Mayoristas y distribuidores</span>
+        <span class="chip">Emprendimientos</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLANES ===================== -->
+  <section id="planes" class="contenedor py-16 md:py-24">
+    <div class="text-center mb-12">
+      <p class="eyebrow text-xs font-bold uppercase text-blue-600 mb-2">Planes</p>
+      <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900">Elige el que crece contigo</h2>
+      <p class="text-slate-600 mt-3">Sin contratos ni permanencia. Cambias de plan cuando quieras.</p>
+    </div>
+    <div class="grid md:grid-cols-3 gap-6 items-start">
+
+      <!-- Gratuito -->
+      <div class="tarjeta-solida p-8 revelar">
+        <h3 class="text-lg font-semibold text-slate-500">Gratuito</h3>
+        <p class="mt-3 text-5xl font-extrabold text-slate-900">$0<span class="text-base font-medium text-slate-400">/mes</span></p>
+        <p class="text-sm text-slate-500 mt-2">Para probar y arrancar.</p>
+        <ul class="mt-6 space-y-3 text-sm text-slate-600">
+          <li class="flex gap-2"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 shrink-0 mt-0.5"><path d="M20 6 9 17l-5-5"/></svg> Hasta <strong class="text-slate-800">5 productos</strong></li>
+          <li class="flex gap-2"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 shrink-0 mt-0.5"><path d="M20 6 9 17l-5-5"/></svg> Catálogo con carrito</li>
+          <li class="flex gap-2"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 shrink-0 mt-0.5"><path d="M20 6 9 17l-5-5"/></svg> Pedidos por WhatsApp</li>
+          <li class="flex gap-2"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 shrink-0 mt-0.5"><path d="M20 6 9 17l-5-5"/></svg> Tu propio link</li>
+        </ul>
+        <a href="https://dgpgroupusa.com/public/acceso.html#registro" class="btn btn-claro w-full mt-8">Empezar gratis</a>
+      </div>
+
+      <!-- PRO -->
+      <div class="tarjeta-solida p-8 revelar relative ring-2 ring-blue-500" style="box-shadow: var(--sombra-azul)">
+        <span class="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-[11px] font-bold text-white" style="background:#2563eb">Más popular</span>
+        <h3 class="text-lg font-semibold text-blue-700">PRO</h3>
+        <p class="mt-3 text-5xl font-extrabold text-slate-900">$15<span class="text-base font-medium text-slate-400">/mes</span></p>
+        <p class="text-sm text-slate-500 mt-2">Para vender en serio.</p>
+        <ul class="mt-6 space-y-3 text-sm text-slate-600">
+          <li class="flex gap-2"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 shrink-0 mt-0.5"><path d="M20 6 9 17l-5-5"/></svg> Más de <strong class="text-slate-800">100 productos</strong></li>
+          <li class="flex gap-2"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 shrink-0 mt-0.5"><path d="M20 6 9 17l-5-5"/></svg> Inventario y stock</li>
+          <li class="flex gap-2"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 shrink-0 mt-0.5"><path d="M20 6 9 17l-5-5"/></svg> QR + catálogo mayorista</li>
+          <li class="flex gap-2"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 shrink-0 mt-0.5"><path d="M20 6 9 17l-5-5"/></svg> Contador de visitas y WhatsApp</li>
+          <li class="flex gap-2"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 shrink-0 mt-0.5"><path d="M20 6 9 17l-5-5"/></svg> Soporte técnico prioritario</li>
+        </ul>
+        <a href="https://dgpgroupusa.com/public/acceso.html#registro" class="btn btn-primario w-full mt-8">Quiero ser PRO</a>
+      </div>
+
+      <!-- Premium -->
+      <div class="tarjeta-solida p-8 revelar">
+        <h3 class="text-lg font-semibold text-slate-500">Premium</h3>
+        <p class="mt-3 text-5xl font-extrabold text-slate-900">$25<span class="text-base font-medium text-slate-400">/mes</span></p>
+        <p class="text-sm text-slate-500 mt-2">Para catálogos grandes.</p>
+        <ul class="mt-6 space-y-3 text-sm text-slate-600">
+          <li class="flex gap-2"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 shrink-0 mt-0.5"><path d="M20 6 9 17l-5-5"/></svg> Más de <strong class="text-slate-800">400 productos</strong></li>
+          <li class="flex gap-2"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 shrink-0 mt-0.5"><path d="M20 6 9 17l-5-5"/></svg> Todo lo del plan PRO</li>
+          <li class="flex gap-2"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 shrink-0 mt-0.5"><path d="M20 6 9 17l-5-5"/></svg> Ideal para mayoristas y tiendas grandes</li>
+        </ul>
+        <a href="https://dgpgroupusa.com/public/acceso.html#registro" class="btn btn-claro w-full mt-8">Quiero ser Premium</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===================== FAQ ===================== -->
+  <section id="faq" class="bg-white/60 border-y border-slate-200/70">
+    <div class="contenedor py-16 md:py-20 max-w-3xl">
+      <div class="text-center mb-10">
+        <p class="eyebrow text-xs font-bold uppercase text-blue-600 mb-2">Preguntas frecuentes</p>
+        <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900">Resolvemos tus dudas</h2>
+      </div>
+      <div class="tarjeta-solida px-6">
+        <details class="faq py-5" open>
+          <summary class="flex items-center justify-between gap-4"><span class="font-semibold text-slate-900">¿Necesito saber de tecnología o diseño?</span><span class="faq-mas shrink-0 text-blue-600 transition-transform"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="w-5 h-5"><path d="M5 12h14"/><path d="M12 5v14"/></svg></span></summary>
+          <p class="text-sm text-slate-600 mt-3">Para nada. Todo se hace desde el celular, en español y con un tutorial que te acompaña la primera vez. Si usas WhatsApp, puedes manejar tu tienda.</p>
+        </details>
+        <details class="faq py-5">
+          <summary class="flex items-center justify-between gap-4"><span class="font-semibold text-slate-900">¿Cobran comisión por cada venta?</span><span class="faq-mas shrink-0 text-blue-600 transition-transform"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="w-5 h-5"><path d="M5 12h14"/><path d="M12 5v14"/></svg></span></summary>
+          <p class="text-sm text-slate-600 mt-3">No. Solo pagas la suscripción mensual de tu plan. El dinero de cada pedido lo cobras tú directamente, como siempre.</p>
+        </details>
+        <details class="faq py-5">
+          <summary class="flex items-center justify-between gap-4"><span class="font-semibold text-slate-900">¿Cómo cobro a mis clientes?</span><span class="faq-mas shrink-0 text-blue-600 transition-transform"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="w-5 h-5"><path d="M5 12h14"/><path d="M12 5v14"/></svg></span></summary>
+          <p class="text-sm text-slate-600 mt-3">Como tú prefieras. El pedido te llega por WhatsApp y ahí coordinas el pago (Pago Móvil, efectivo, transferencia, etc.) y la entrega. El sistema organiza el pedido, tú manejas el cobro.</p>
+        </details>
+        <details class="faq py-5">
+          <summary class="flex items-center justify-between gap-4"><span class="font-semibold text-slate-900">¿Puedo empezar gratis?</span><span class="faq-mas shrink-0 text-blue-600 transition-transform"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="w-5 h-5"><path d="M5 12h14"/><path d="M12 5v14"/></svg></span></summary>
+          <p class="text-sm text-slate-600 mt-3">Sí. Puedes crear tu tienda gratis y probarla. Cuando quieras más productos y funciones, subes al plan PRO o Premium.</p>
+        </details>
+        <details class="faq py-5">
+          <summary class="flex items-center justify-between gap-4"><span class="font-semibold text-slate-900">¿Cómo pago la suscripción?</span><span class="faq-mas shrink-0 text-blue-600 transition-transform"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="w-5 h-5"><path d="M5 12h14"/><path d="M12 5v14"/></svg></span></summary>
+          <p class="text-sm text-slate-600 mt-3">Por Pago Móvil o Binance. Subes la captura de tu comprobante desde tu panel y activamos tu plan al confirmarlo.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CTA FINAL / CONTACTO ===================== -->
+  <section id="contacto" class="contenedor py-16 md:py-24">
+    <div class="tarjeta-solida p-10 md:p-14 text-center relative overflow-hidden">
+      <div class="relative z-10">
+        <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900">¿Listo para vender online?</h2>
+        <p class="text-slate-600 mt-3 max-w-xl mx-auto">Crea tu tienda hoy mismo o escríbenos y te ayudamos a montarla. Sin compromiso.</p>
+        <div class="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
+          <a href="https://dgpgroupusa.com/public/acceso.html#registro" class="btn btn-primario text-base px-7 py-3.5">Crear mi tienda gratis</a>
+          <a id="btn-whatsapp" href="#" target="_blank" rel="noopener" class="btn btn-claro text-base px-7 py-3.5 inline-flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
+            Escríbenos por WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer class="border-t border-slate-200 bg-white/70">
+    <div class="contenedor py-10 text-center text-sm text-slate-500 space-y-2">
+      <img src="/assets/logo.svg" alt="DGP LinkShop" class="h-8 mx-auto mb-3" />
+      <p>© 2026 DGP LinkShop · dgpgroupusa.com</p>
+      <p>Desarrollado por <a href="https://dgpglobalgroup.com" target="_blank" rel="noopener" class="font-semibold text-blue-600 hover:text-blue-700">DGP Global Group</a></p>
+    </div>
+  </footer>
+
+  <script>
+    // === CONFIGURA AQUÍ TU WHATSAPP DE CONTACTO ===
+    // Pon tu número con código de país, solo dígitos (sin +, espacios ni guiones).
+    // Ejemplo Venezuela: 584121234567
+    const WHATSAPP_CONTACTO = '584120000000';
+    const MENSAJE = 'Hola, vi la propuesta de DGP LinkShop y quiero más información.';
+    document.getElementById('btn-whatsapp').href =
+      'https://wa.me/' + WHATSAPP_CONTACTO + '?text=' + encodeURIComponent(MENSAJE);
+
+    // Animación de aparición al hacer scroll
+    const io = new IntersectionObserver((entradas) => {
+      entradas.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.revelar').forEach((el) => io.observe(el));
+  </script>
+</body>
+</html>
