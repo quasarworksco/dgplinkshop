@@ -49,6 +49,7 @@ let metodoPago = 'pagomovil';
 let comprobanteUrl = null;
 let colorTiendaElegido = '#2563eb';
 let logoTiendaUrl = null;
+let tagsProducto = [];
 
 const ESTADOS_PEDIDO = {
   pendiente: { texto: 'Pendiente', clase: 'text-amber-600' },
@@ -288,6 +289,7 @@ function pintarTarjetaProducto(tarjeta, p) {
     </p>
     ${p.stock != null ? `<p class="text-xs mt-0.5 ${p.stock === 0 ? 'text-rose-600 font-semibold' : 'text-slate-400'}">${p.stock === 0 ? 'Agotado' : 'Stock: ' + p.stock}</p>` : ''}
     ${p.wholesale_price != null ? `<p class="text-xs mt-0.5 text-slate-500">Al mayor: <span class="font-semibold text-slate-700">${dinero(p.wholesale_price)}</span>${(p.wholesale_min ?? 1) > 1 ? ` · mín. ${p.wholesale_min}` : ''}</p>` : ''}
+    ${(p.tags && p.tags.length) ? `<div class="flex flex-wrap gap-1 mt-2">${p.tags.map((t) => `<span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-slate-100 text-slate-500">${escapar(t)}</span>`).join('')}</div>` : ''}
     <div class="flex gap-2 mt-3">
       <button data-accion="editar" class="btn btn-claro btn-compacto flex-1 min-w-0 py-1.5 text-xs">${icono('lapiz', 'w-3.5 h-3.5')} Editar</button>
       <button data-accion="eliminar" class="btn btn-claro btn-compacto flex-1 min-w-0 py-1.5 text-xs text-rose-600">${icono('basura', 'w-3.5 h-3.5')} Eliminar</button>
@@ -321,6 +323,10 @@ function abrirModalProducto(producto = null) {
   $('prod-categoria').value = producto?.category_id ?? '';
   $('prod-stock').value = producto?.stock ?? '';
   $('prod-descripcion').value = producto?.description ?? '';
+  tagsProducto = Array.isArray(producto?.tags) ? [...producto.tags] : [];
+  $('prod-tags-input').value = '';
+  renderTagsChips();
+  renderSugerenciasTags();
   $('prod-precio-mayor').value = producto?.wholesale_price ?? '';
   $('prod-min-mayor').value = producto?.wholesale_min ?? '';
   $('prod-mayor-bloque').classList.toggle('hidden', !negocio.wholesale_enabled);
@@ -335,6 +341,79 @@ function cerrarModalProducto() {
   $('modal-producto').classList.add('hidden');
   $('modal-producto').classList.remove('flex');
 }
+
+// --- Etiquetas (tags) del producto -------------------------
+const TAGS_SUGERIDOS = {
+  belleza: ['floral', 'especiado', 'dulce', 'amaderado', 'cítrico', 'frutal', 'fresco', 'oriental', 'almizclado', 'vainilla', 'intenso', 'suave'],
+  comida: ['dulce', 'salado', 'picante', 'artesanal', 'vegano', 'sin gluten', 'saludable', 'casero'],
+  moda: ['casual', 'elegante', 'deportivo', 'unisex', 'verano', 'invierno', 'oferta', 'nuevo'],
+  hogar: ['decoración', 'minimalista', 'rústico', 'moderno', 'hecho a mano'],
+  servicios: ['a domicilio', 'express', 'premium', 'económico'],
+  otro: ['nuevo', 'oferta', 'popular', 'edición limitada'],
+};
+
+function normalizarTag(t) {
+  return (t || '').toLowerCase().replace(/\s+/g, ' ').trim().slice(0, 24);
+}
+
+// Tags que ya usa el negocio en su catálogo (para autocompletar)
+function tagsUsados() {
+  const set = new Set();
+  productos.forEach((p) => (p.tags || []).forEach((t) => set.add(t)));
+  return [...set];
+}
+
+function renderTagsChips() {
+  const cont = $('prod-tags-chips');
+  cont.innerHTML = tagsProducto
+    .map((t, i) => `
+      <span class="inline-flex items-center gap-1 pl-3 pr-1.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700">
+        ${escapar(t)}
+        <button type="button" data-quitar="${i}" aria-label="Quitar ${escapar(t)}" class="w-4 h-4 flex items-center justify-center rounded-full hover:bg-blue-200 transition">${icono('cerrar', 'w-3 h-3')}</button>
+      </span>`)
+    .join('');
+  cont.querySelectorAll('[data-quitar]').forEach((b) =>
+    b.addEventListener('click', () => { tagsProducto.splice(Number(b.dataset.quitar), 1); renderTagsChips(); renderSugerenciasTags(); })
+  );
+}
+
+function agregarTag(t) {
+  const tag = normalizarTag(t);
+  if (!tag) return;
+  if (tagsProducto.length >= 10) return notificar('Máximo 10 etiquetas por producto.', 'error');
+  if (!tagsProducto.includes(tag)) tagsProducto.push(tag);
+  $('prod-tags-input').value = '';
+  renderTagsChips();
+  renderSugerenciasTags();
+}
+
+function renderSugerenciasTags() {
+  const seeds = TAGS_SUGERIDOS[negocio.category] || TAGS_SUGERIDOS.otro;
+  const universo = [...new Set([...tagsUsados(), ...seeds])];
+  const texto = normalizarTag($('prod-tags-input').value);
+  const opciones = universo
+    .filter((t) => !tagsProducto.includes(t))
+    .filter((t) => !texto || t.includes(texto))
+    .slice(0, 8);
+  $('prod-tags-sugerencias').innerHTML = opciones
+    .map((t) => `<button type="button" data-sug="${escapar(t)}" class="chip text-xs hover:bg-blue-50 hover:text-blue-700 transition">+ ${escapar(t)}</button>`)
+    .join('');
+  $('prod-tags-sugerencias').querySelectorAll('[data-sug]').forEach((b) =>
+    b.addEventListener('click', () => agregarTag(b.dataset.sug))
+  );
+}
+
+$('prod-tags-input').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' || e.key === ',') {
+    e.preventDefault();
+    agregarTag($('prod-tags-input').value);
+  } else if (e.key === 'Backspace' && $('prod-tags-input').value === '' && tagsProducto.length) {
+    tagsProducto.pop();
+    renderTagsChips();
+    renderSugerenciasTags();
+  }
+});
+$('prod-tags-input').addEventListener('input', renderSugerenciasTags);
 
 $('btn-nuevo-producto').addEventListener('click', () => abrirModalProducto());
 $('btn-cancelar').addEventListener('click', cerrarModalProducto);
@@ -371,6 +450,9 @@ $('form-producto').addEventListener('submit', async (e) => {
   const boton = $('btn-guardar-producto');
   boton.disabled = true;
 
+  // Si quedó texto sin confirmar en el campo de etiquetas, lo agregamos.
+  if ($('prod-tags-input').value.trim()) agregarTag($('prod-tags-input').value);
+
   const datos = {
     name: $('prod-nombre').value.trim(),
     price: Number($('prod-precio').value),
@@ -379,6 +461,7 @@ $('form-producto').addEventListener('submit', async (e) => {
     category_id: $('prod-categoria').value || null,
     stock: $('prod-stock').value === '' ? null : Math.max(0, parseInt($('prod-stock').value, 10) || 0),
     description: $('prod-descripcion').value.trim() || null,
+    tags: tagsProducto,
     wholesale_price: $('prod-precio-mayor').value === '' ? null : Math.max(0, Number($('prod-precio-mayor').value) || 0),
     wholesale_min: Math.max(1, parseInt($('prod-min-mayor').value, 10) || 1),
     image_url: imagenSubidaUrl,

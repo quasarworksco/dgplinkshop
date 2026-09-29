@@ -87,6 +87,7 @@ function crearTarjeta(p, { compacta = false } = {}) {
     </div>
     <h3 class="font-semibold text-slate-900 mt-3 text-sm leading-snug line-clamp-2">${escapar(p.name)}</h3>
     ${p.description ? `<p class="text-xs text-slate-500 mt-1 line-clamp-2">${escapar(p.description)}</p>` : ''}
+    ${(!compacta && p.tags && p.tags.length) ? `<div class="flex flex-wrap gap-1 mt-2">${p.tags.slice(0, 4).map((t) => `<button type="button" data-tag="${escapar(t)}" class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-slate-100 text-slate-500 hover:bg-slate-200 transition">${escapar(t)}</button>`).join('')}</div>` : ''}
     <div class="mt-auto pt-3 flex items-end justify-between gap-2">
       <div class="min-w-0">
         ${conDesc ? `<p class="text-[11px] text-slate-400 line-through leading-none truncate">${usd(p.price)}</p>` : ''}
@@ -101,7 +102,20 @@ function crearTarjeta(p, { compacta = false } = {}) {
       agregarAlCarrito({ id: p.id, nombre: p.name, precio: final, minimo: minMayor })
     );
   }
+  art.querySelectorAll('[data-tag]').forEach((b) =>
+    b.addEventListener('click', () => filtrarPorTag(b.dataset.tag))
+  );
   return art;
+}
+
+// Buscar por una etiqueta al tocarla en una tarjeta
+function filtrarPorTag(tag) {
+  busqueda = tag;
+  pagina = 0;
+  const input = $('tienda-buscar');
+  if (input) input.value = tag;
+  render();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 // ------------------------------------------------------------
@@ -111,7 +125,11 @@ function filtrados() {
   let lista = todos;
   if (categoriaActual !== 'all') lista = lista.filter((p) => p.category_id === categoriaActual);
   const q = busqueda.trim().toLowerCase();
-  if (q) lista = lista.filter((p) => p.name.toLowerCase().includes(q) || (p.description || '').toLowerCase().includes(q));
+  if (q) lista = lista.filter((p) =>
+    p.name.toLowerCase().includes(q) ||
+    (p.description || '').toLowerCase().includes(q) ||
+    (p.tags || []).some((t) => t.toLowerCase().includes(q))
+  );
   return lista;
 }
 
@@ -218,7 +236,7 @@ function pintarTabActiva() {
   // Todos los productos activos (una sola consulta)
   const { data: prods, error } = await supabase
     .from('products')
-    .select('id, name, description, price, image_url, is_featured, discount_percent, category_id, sold_count, stock, wholesale_price, wholesale_min')
+    .select('id, name, description, price, image_url, is_featured, discount_percent, category_id, sold_count, stock, wholesale_price, wholesale_min, tags')
     .eq('business_id', negocio.id)
     .eq('is_active', true)
     .order('is_featured', { ascending: false })
