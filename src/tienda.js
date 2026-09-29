@@ -72,6 +72,9 @@ function crearTarjeta(p, { compacta = false } = {}) {
   const minMayor = modoMayorista ? Math.max(1, p.wholesale_min ?? 1) : 1;
   const esTop = !modoMayorista && topVendidos.has(p.id);
   const agotado = p.stock === 0;
+  const disponibles = (p.stock != null && p.stock > 0)
+    ? (p.stock <= 5 ? `¡Últimas ${p.stock}!` : `${p.stock} disponibles`)
+    : null;
 
   const art = document.createElement('article');
   art.className = compacta
@@ -94,12 +97,13 @@ function crearTarjeta(p, { compacta = false } = {}) {
         <p class="font-extrabold leading-tight truncate" style="color:${colorPrimario}">${usd(final)}</p>
         ${tasaBs ? `<p class="text-[11px] text-slate-500 leading-tight truncate">Bs ${fmtBs.format(final * tasaBs)}</p>` : ''}
         ${modoMayorista && minMayor > 1 ? `<p class="text-[11px] font-semibold text-slate-500 leading-tight mt-0.5">Mín. ${minMayor} uds</p>` : ''}
+        ${disponibles ? `<p class="text-[11px] font-semibold leading-tight mt-0.5 ${p.stock <= 5 ? 'text-amber-600' : 'text-slate-500'}">${disponibles}</p>` : ''}
       </div>
       <button data-add aria-label="Agregar ${escapar(p.name)}" ${agotado ? 'disabled' : ''} class="w-9 h-9 shrink-0 rounded-full flex items-center justify-center text-white shadow-sm transition hover:brightness-110 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed" style="background:${colorPrimario}">${icono('mas', 'w-4 h-4')}</button>
     </div>`;
   if (!agotado) {
     art.querySelector('[data-add]').addEventListener('click', () =>
-      agregarAlCarrito({ id: p.id, nombre: p.name, precio: final, minimo: minMayor })
+      agregarAlCarrito({ id: p.id, nombre: p.name, precio: final, minimo: minMayor, max: p.stock ?? null })
     );
   }
   art.querySelectorAll('[data-tag]').forEach((b) =>

@@ -48,11 +48,17 @@ export function inicializarCarrito(negocioActual, { mayorista = false } = {}) {
   actualizarBurbuja();
 }
 
-export function agregarAlCarrito({ id, nombre, precio, minimo = 1 }) {
+export function agregarAlCarrito({ id, nombre, precio, minimo = 1, max = null }) {
   const min = Math.max(1, minimo | 0);
+  const tope = Math.min(99, max == null ? 99 : Math.max(1, max | 0));
   const ex = items.get(id);
-  if (ex) ex.cantidad = Math.min(ex.cantidad + 1, 99);
-  else items.set(id, { id, nombre, precio, cantidad: min, minimo: min });
+  if (ex) {
+    const nueva = Math.min(ex.cantidad + 1, tope);
+    if (nueva === ex.cantidad) { notificar('No hay más unidades disponibles de este producto.', 'error'); return; }
+    ex.cantidad = nueva;
+  } else {
+    items.set(id, { id, nombre, precio, cantidad: Math.max(1, Math.min(min, tope)), minimo: min, max: (max == null ? null : tope) });
+  }
   persistir();
   actualizarBurbuja();
   sincronizarFila(id);
@@ -247,13 +253,17 @@ function cambiarCantidad(id, delta) {
   const item = items.get(id);
   if (!item) return;
   const min = Math.max(1, item.minimo ?? 1);
+  const tope = Math.min(99, item.max == null ? 99 : item.max);
   const nueva = item.cantidad + delta;
   if (nueva < min) {
     // Al mayor, bajar del mínimo quita el producto; al detal se queda en el tope.
     if (modoMayorista) { quitar(id); return; }
     item.cantidad = min;
+  } else if (nueva > tope) {
+    item.cantidad = tope;
+    notificar('No hay más unidades disponibles de este producto.', 'error');
   } else {
-    item.cantidad = Math.min(99, nueva);
+    item.cantidad = nueva;
   }
   persistir(); sincronizarFila(id); actualizarBurbuja(); actualizarTotales();
 }
@@ -349,6 +359,7 @@ async function confirmarPedido() {
     const msg = err.message ?? '';
     if (msg.includes('CUPON_INVALIDO')) { cupon = null; actualizarTotales(); notificar('El cupón dejó de ser válido.', 'error'); }
     else if (msg.includes('CANTIDAD_MINIMA')) notificar('No alcanzas la cantidad mínima al mayor de un producto.', 'error');
+    else if (msg.includes('STOCK_INSUFICIENTE')) notificar('Ya no hay suficiente stock de un producto. Ajusta las cantidades.', 'error');
     else if (msg.includes('MAYORISTA_NO_DISPONIBLE')) notificar('Esta tienda ya no ofrece catálogo mayorista.', 'error');
     else if (msg.includes('PRODUCTO_NO_DISPONIBLE')) notificar('Un producto ya no está disponible. Actualiza la página.', 'error');
     else notificar('No se pudo registrar el pedido. Revisa tu conexión.', 'error');
