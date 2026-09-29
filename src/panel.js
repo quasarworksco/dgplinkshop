@@ -15,6 +15,7 @@ import { imgLazy, observarImagenesLazy } from './lazy-imagenes.js';
 import { urlDeTienda } from './subdominio.js';
 import { PLANES } from './config.js';
 import { icono, hidratarIconos } from './iconos.js';
+import { estiloTag, chipTag } from './tags-estilo.js';
 import { notificar, registrarError } from './notificaciones.js';
 import { iniciarTutorial } from './tutorial.js';
 
@@ -29,6 +30,11 @@ const PASOS_TUTORIAL = [
 
 const $ = (id) => document.getElementById(id);
 const dinero = (n) => `$${Number(n).toFixed(2)}`;
+const tinteHex = (hex, a) => {
+  const h = hex.replace('#', '');
+  const n = parseInt(h.length === 3 ? h.replace(/(.)/g, '$1$1') : h, 16);
+  return `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${a})`;
+};
 
 let negocio = null;
 let suscripcion = null;
@@ -289,7 +295,7 @@ function pintarTarjetaProducto(tarjeta, p) {
     </p>
     ${p.stock != null ? `<p class="text-xs mt-0.5 ${p.stock === 0 ? 'text-rose-600 font-semibold' : 'text-slate-400'}">${p.stock === 0 ? 'Agotado' : 'Stock: ' + p.stock}</p>` : ''}
     ${p.wholesale_price != null ? `<p class="text-xs mt-0.5 text-slate-500">Al mayor: <span class="font-semibold text-slate-700">${dinero(p.wholesale_price)}</span>${(p.wholesale_min ?? 1) > 1 ? ` · mín. ${p.wholesale_min}` : ''}</p>` : ''}
-    ${(p.tags && p.tags.length) ? `<div class="flex flex-wrap gap-1 mt-2">${p.tags.map((t) => `<span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-slate-100 text-slate-500">${escapar(t)}</span>`).join('')}</div>` : ''}
+    ${(p.tags && p.tags.length) ? `<div class="flex flex-wrap gap-1 mt-2">${p.tags.map((t) => chipTag(t)).join('')}</div>` : ''}
     <div class="flex gap-2 mt-3">
       <button data-accion="editar" class="btn btn-claro btn-compacto flex-1 min-w-0 py-1.5 text-xs">${icono('lapiz', 'w-3.5 h-3.5')} Editar</button>
       <button data-accion="eliminar" class="btn btn-claro btn-compacto flex-1 min-w-0 py-1.5 text-xs text-rose-600">${icono('basura', 'w-3.5 h-3.5')} Eliminar</button>
@@ -366,11 +372,14 @@ function tagsUsados() {
 function renderTagsChips() {
   const cont = $('prod-tags-chips');
   cont.innerHTML = tagsProducto
-    .map((t, i) => `
-      <span class="inline-flex items-center gap-1 pl-3 pr-1.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700">
-        ${escapar(t)}
-        <button type="button" data-quitar="${i}" aria-label="Quitar ${escapar(t)}" class="w-4 h-4 flex items-center justify-center rounded-full hover:bg-blue-200 transition">${icono('cerrar', 'w-3 h-3')}</button>
-      </span>`)
+    .map((t, i) => {
+      const { color, ic } = estiloTag(t);
+      return `
+      <span class="inline-flex items-center gap-1 pl-2.5 pr-1.5 py-1 rounded-full text-xs font-semibold" style="background:${tinteHex(color, 0.12)};color:${color}">
+        ${icono(ic, 'w-3 h-3')}${escapar(t)}
+        <button type="button" data-quitar="${i}" aria-label="Quitar ${escapar(t)}" class="w-4 h-4 flex items-center justify-center rounded-full hover:bg-black/10 transition">${icono('cerrar', 'w-3 h-3')}</button>
+      </span>`;
+    })
     .join('');
   cont.querySelectorAll('[data-quitar]').forEach((b) =>
     b.addEventListener('click', () => { tagsProducto.splice(Number(b.dataset.quitar), 1); renderTagsChips(); renderSugerenciasTags(); })
@@ -396,7 +405,10 @@ function renderSugerenciasTags() {
     .filter((t) => !texto || t.includes(texto))
     .slice(0, 8);
   $('prod-tags-sugerencias').innerHTML = opciones
-    .map((t) => `<button type="button" data-sug="${escapar(t)}" class="chip text-xs hover:bg-blue-50 hover:text-blue-700 transition">+ ${escapar(t)}</button>`)
+    .map((t) => {
+      const { color, ic } = estiloTag(t);
+      return `<button type="button" data-sug="${escapar(t)}" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold transition hover:brightness-95" style="background:${tinteHex(color, 0.1)};color:${color}">${icono(ic, 'w-3 h-3')}+ ${escapar(t)}</button>`;
+    })
     .join('');
   $('prod-tags-sugerencias').querySelectorAll('[data-sug]').forEach((b) =>
     b.addEventListener('click', () => agregarTag(b.dataset.sug))

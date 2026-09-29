@@ -13,6 +13,7 @@ import { imgLazy, observarImagenesLazy } from './lazy-imagenes.js';
 import { guardarEnCache, leerDeCache } from './cache-local.js';
 import { inicializarCarrito, agregarAlCarrito } from './carrito.js';
 import { icono } from './iconos.js';
+import { chipTag } from './tags-estilo.js';
 import { registrarError } from './notificaciones.js';
 
 const POR_PAGINA = 12;
@@ -90,7 +91,7 @@ function crearTarjeta(p, { compacta = false } = {}) {
     </div>
     <h3 class="font-semibold text-slate-900 mt-3 text-sm leading-snug line-clamp-2">${escapar(p.name)}</h3>
     ${p.description ? `<p class="text-xs text-slate-500 mt-1 line-clamp-2">${escapar(p.description)}</p>` : ''}
-    ${(!compacta && p.tags && p.tags.length) ? `<div class="flex flex-wrap gap-1 mt-2">${p.tags.slice(0, 4).map((t) => `<button type="button" data-tag="${escapar(t)}" class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-slate-100 text-slate-500 hover:bg-slate-200 transition">${escapar(t)}</button>`).join('')}</div>` : ''}
+    ${(!compacta && p.tags && p.tags.length) ? `<div class="flex flex-wrap gap-1 mt-2">${p.tags.slice(0, 4).map((t) => chipTag(t, { boton: true })).join('')}</div>` : ''}
     <div class="mt-auto pt-3 flex items-end justify-between gap-2">
       <div class="min-w-0">
         ${conDesc ? `<p class="text-[11px] text-slate-400 line-through leading-none truncate">${usd(p.price)}</p>` : ''}
