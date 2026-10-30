@@ -35,7 +35,7 @@
 
   <!-- ===================== HERO ===================== -->
   <section class="relative overflow-hidden">
-    <!-- blobs de color animados -->
+    <!-- blobs de color animados (deriva continua) -->
     <div class="blob blob-1" style="width:420px;height:420px;top:-120px;right:-60px;background:radial-gradient(circle,rgba(79,70,229,.32),transparent 70%)"></div>
     <div class="blob blob-2" style="width:360px;height:360px;top:120px;left:-120px;background:radial-gradient(circle,rgba(34,211,238,.28),transparent 70%)"></div>
     <div class="blob blob-1" style="width:300px;height:300px;bottom:-80px;left:40%;background:radial-gradient(circle,rgba(236,72,153,.18),transparent 70%);animation-delay:3s"></div>
@@ -43,8 +43,11 @@
     <div class="contenedor-ancho relative pt-16 pb-14 md:pt-24 md:pb-24 grid lg:grid-cols-[1.05fr_1fr] gap-14 lg:gap-10 items-center">
       <!-- Copy -->
       <div class="animar relative z-10">
-        <span class="inline-flex items-center gap-2 rounded-full border border-blue-100 bg-white/70 px-3.5 py-1.5 text-xs font-bold text-blue-700 shadow-sm">
-          <span class="w-1.5 h-1.5 rounded-full bg-blue-600 pulso"></span>
+        <span class="inline-flex items-center gap-2 rounded-full bg-white/85 py-1 pl-1 pr-3.5 text-xs font-bold text-slate-700 shadow-sm ring-1 ring-slate-200/80 backdrop-blur-sm">
+          <span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-white shadow-sm" style="background:linear-gradient(135deg,#4f46e5,#2563eb)">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-3 h-3"><path d="M12 2 14 9l7 3-7 3-2 7-2-7-7-3 7-3Z"/></svg>
+            DGP LinkShop
+          </span>
           Comercio digital para tu negocio
         </span>
         <h1 class="mt-6 text-5xl md:text-[4.2rem] font-extrabold text-slate-900 leading-[0.98]">
@@ -71,7 +74,7 @@
 
       <!-- Mockup compuesto -->
       <div class="relative animar-2 lg:pl-6 z-10">
-        <div class="marco-navegador max-w-md mx-auto">
+        <div class="marco-navegador max-w-md mx-auto parallax" data-depth="16">
           <div class="barra-navegador">
             <span class="punto" style="background:#f87171"></span>
             <span class="punto" style="background:#fbbf24"></span>
@@ -129,27 +132,28 @@
     </div>
   </section>
 
-  <!-- ===================== MARQUEE DE CATEGORÍAS ===================== -->
-  <div class="py-5 border-y border-slate-200/60 bg-white/40">
+  <!-- ===================== TIRA DE CATEGORÍAS ===================== -->
+  <div class="py-7 border-y border-slate-200/70 bg-white/55">
+    <p class="text-center text-xs font-bold uppercase tracking-[0.18em] text-slate-400 mb-5">Para todo tipo de negocio que quiera vender online</p>
     <div class="marquee">
-      <div class="marquee-track text-sm font-bold">
-        <span class="chip" style="background:#fff1f2;color:#e11d48;border-color:#fecdd3">Comida y postres</span>
-        <span class="chip" style="background:#f5f3ff;color:#7c3aed;border-color:#ddd6fe">Moda y accesorios</span>
-        <span class="chip" style="background:#fdf2f8;color:#db2777;border-color:#fbcfe8">Belleza y perfumería</span>
-        <span class="chip" style="background:#ecfeff;color:#0891b2;border-color:#a5f3fc">Tecnología</span>
-        <span class="chip" style="background:#fffbeb;color:#d97706;border-color:#fde68a">Hogar y decoración</span>
-        <span class="chip" style="background:#ecfdf5;color:#059669;border-color:#a7f3d0">Servicios</span>
-        <span class="chip" style="background:#eef2ff;color:#4f46e5;border-color:#c7d2fe">Mayoristas</span>
-        <span class="chip" style="background:#eff6ff;color:#2563eb;border-color:#bfdbfe">Emprendimientos</span>
+      <div class="marquee-track">
+        <span class="cat-chip"><svg viewBox="0 0 24 24" fill="none" stroke="#e11d48" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>Comida y postres</span>
+        <span class="cat-chip"><svg viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>Moda y accesorios</span>
+        <span class="cat-chip"><svg viewBox="0 0 24 24" fill="none" stroke="#db2777" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3z"/></svg>Belleza y perfumería</span>
+        <span class="cat-chip"><svg viewBox="0 0 24 24" fill="none" stroke="#0891b2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/><path d="M15 2v2M15 20v2M2 15h2M2 9h2M20 15h2M20 9h2M9 2v2M9 20v2"/></svg>Tecnología</span>
+        <span class="cat-chip"><svg viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>Hogar y decoración</span>
+        <span class="cat-chip"><svg viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.6 5.6L3 18v3h3l6.1-6.1a4 4 0 0 0 5.6-5.6l-2.5 2.5-2.8-.7-.7-2.8z"/></svg>Servicios</span>
+        <span class="cat-chip"><svg viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>Mayoristas</span>
+        <span class="cat-chip"><svg viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>Emprendimientos</span>
         <!-- duplicado para bucle continuo -->
-        <span class="chip" style="background:#fff1f2;color:#e11d48;border-color:#fecdd3">Comida y postres</span>
-        <span class="chip" style="background:#f5f3ff;color:#7c3aed;border-color:#ddd6fe">Moda y accesorios</span>
-        <span class="chip" style="background:#fdf2f8;color:#db2777;border-color:#fbcfe8">Belleza y perfumería</span>
-        <span class="chip" style="background:#ecfeff;color:#0891b2;border-color:#a5f3fc">Tecnología</span>
-        <span class="chip" style="background:#fffbeb;color:#d97706;border-color:#fde68a">Hogar y decoración</span>
-        <span class="chip" style="background:#ecfdf5;color:#059669;border-color:#a7f3d0">Servicios</span>
-        <span class="chip" style="background:#eef2ff;color:#4f46e5;border-color:#c7d2fe">Mayoristas</span>
-        <span class="chip" style="background:#eff6ff;color:#2563eb;border-color:#bfdbfe">Emprendimientos</span>
+        <span class="cat-chip"><svg viewBox="0 0 24 24" fill="none" stroke="#e11d48" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>Comida y postres</span>
+        <span class="cat-chip"><svg viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>Moda y accesorios</span>
+        <span class="cat-chip"><svg viewBox="0 0 24 24" fill="none" stroke="#db2777" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3z"/></svg>Belleza y perfumería</span>
+        <span class="cat-chip"><svg viewBox="0 0 24 24" fill="none" stroke="#0891b2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/><path d="M15 2v2M15 20v2M2 15h2M2 9h2M20 15h2M20 9h2M9 2v2M9 20v2"/></svg>Tecnología</span>
+        <span class="cat-chip"><svg viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>Hogar y decoración</span>
+        <span class="cat-chip"><svg viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.6 5.6L3 18v3h3l6.1-6.1a4 4 0 0 0 5.6-5.6l-2.5 2.5-2.8-.7-.7-2.8z"/></svg>Servicios</span>
+        <span class="cat-chip"><svg viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>Mayoristas</span>
+        <span class="cat-chip"><svg viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>Emprendimientos</span>
       </div>
     </div>
   </div>
@@ -421,15 +425,17 @@
 
   <script>
     (function () {
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
       // Año dinámico
       var anio = document.getElementById('anio'); if (anio) anio.textContent = new Date().getFullYear();
 
-      // Reveal al hacer scroll (soporta .revelar / .revelar-izq / .revelar-der)
-      var items = document.querySelectorAll('.revelar, .revelar-izq, .revelar-der');
+      // Reveal al hacer scroll (.revelar / .revelar-izq / .revelar-der / .stagger)
+      var items = document.querySelectorAll('.revelar, .revelar-izq, .revelar-der, .stagger');
       if ('IntersectionObserver' in window) {
         var io = new IntersectionObserver(function (entries) {
           entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
-        }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+        }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
         items.forEach(function (el) { io.observe(el); });
       } else { items.forEach(function (el) { el.classList.add('visible'); }); }
 
@@ -438,11 +444,31 @@
       var cta = document.getElementById('cta-flotante');
       function onScroll() {
         var y = window.scrollY || 0;
-        if (nav) nav.classList.toggle('shadow-lg', y > 20);
+        if (nav) nav.classList.toggle('shadow-lg', y > 14);
         if (cta) cta.classList.toggle('visible', y > 600);
       }
       window.addEventListener('scroll', onScroll, { passive: true });
       onScroll();
+
+      // Parallax con el mouse (sutil, solo en pantallas con puntero fino)
+      var finePointer = window.matchMedia && window.matchMedia('(pointer: fine)').matches;
+      if (!reduce && finePointer) {
+        var capas = Array.prototype.slice.call(document.querySelectorAll('.parallax'));
+        var tx = 0, ty = 0, cx = 0, cy = 0, raf = null;
+        window.addEventListener('mousemove', function (e) {
+          tx = (e.clientX / window.innerWidth - 0.5);
+          ty = (e.clientY / window.innerHeight - 0.5);
+          if (!raf) raf = requestAnimationFrame(tick);
+        }, { passive: true });
+        function tick() {
+          cx += (tx - cx) * 0.08; cy += (ty - cy) * 0.08;
+          capas.forEach(function (el) {
+            var d = parseFloat(el.getAttribute('data-depth')) || 12;
+            el.style.transform = 'translate3d(' + (-cx * d) + 'px,' + (-cy * d) + 'px,0)';
+          });
+          raf = (Math.abs(tx - cx) > 0.001 || Math.abs(ty - cy) > 0.001) ? requestAnimationFrame(tick) : null;
+        }
+      }
     })();
   </script>
 </body>

@@ -188,11 +188,21 @@ h1 { letter-spacing: -0.04em; line-height: 1.02; }
 
 /* ---------- Navegación ---------- */
 .nav-glass {
-  background: rgba(255, 255, 255, 0.72);
-  backdrop-filter: blur(18px) saturate(140%);
-  -webkit-backdrop-filter: blur(18px) saturate(140%);
-  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  border-bottom: 1px solid rgba(214, 224, 241, 0.9);
+  box-shadow: 0 1px 0 rgba(255,255,255,.6) inset, 0 6px 20px -12px rgba(11, 18, 32, 0.18);
 }
+
+/* Chip de categoría profesional (uniforme, elegante) */
+.cat-chip {
+  display: inline-flex; align-items: center; gap: .5rem;
+  padding: .5rem .95rem; border-radius: 9999px; white-space: nowrap;
+  background: #fff; border: 1px solid var(--linea); color: var(--tinta);
+  font-size: .82rem; font-weight: 600; box-shadow: var(--sombra-sm);
+}
+.cat-chip svg { width: 1rem; height: 1rem; }
 
 /* ---------- Secciones ---------- */
 .seccion { padding: 5rem 0; }
@@ -279,11 +289,23 @@ h1 { letter-spacing: -0.04em; line-height: 1.02; }
 .marquee-track { display: flex; width: max-content; gap: .75rem; animation: marquee 30s linear infinite; }
 .marquee:hover .marquee-track { animation-play-state: paused; }
 
-/* Reveal al hacer scroll (parte de un estado visible en reposo si no hay JS) */
-.revelar { opacity: 0; transform: translateY(22px); transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); }
-.revelar-izq { opacity: 0; transform: translateX(-30px); transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1); }
-.revelar-der { opacity: 0; transform: translateX(30px); transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1); }
-.revelar.visible, .revelar-izq.visible, .revelar-der.visible { opacity: 1; transform: none; }
+/* Reveal al hacer scroll — desenfoque a nítido (sensación premium) */
+.revelar { opacity: 0; transform: translateY(28px); filter: blur(8px); transition: opacity .85s cubic-bezier(.22,.61,.36,1), transform .85s cubic-bezier(.22,.61,.36,1), filter .85s ease; }
+.revelar-izq { opacity: 0; transform: translateX(-34px); filter: blur(8px); transition: opacity .9s cubic-bezier(.22,.61,.36,1), transform .9s cubic-bezier(.22,.61,.36,1), filter .9s ease; }
+.revelar-der { opacity: 0; transform: translateX(34px); filter: blur(8px); transition: opacity .9s cubic-bezier(.22,.61,.36,1), transform .9s cubic-bezier(.22,.61,.36,1), filter .9s ease; }
+.revelar.visible, .revelar-izq.visible, .revelar-der.visible { opacity: 1; transform: none; filter: none; }
+
+/* Hijos escalonados: el padre .stagger revela a sus hijos en cascada */
+.stagger > * { opacity: 0; transform: translateY(26px); filter: blur(6px); transition: opacity .7s cubic-bezier(.22,.61,.36,1), transform .7s cubic-bezier(.22,.61,.36,1), filter .7s ease; }
+.stagger.visible > * { opacity: 1; transform: none; filter: none; }
+.stagger.visible > *:nth-child(2) { transition-delay: .09s; }
+.stagger.visible > *:nth-child(3) { transition-delay: .18s; }
+.stagger.visible > *:nth-child(4) { transition-delay: .27s; }
+.stagger.visible > *:nth-child(5) { transition-delay: .36s; }
+.stagger.visible > *:nth-child(6) { transition-delay: .45s; }
+
+/* Parallax suave con el mouse (el suavizado lo hace el rAF en JS) */
+.parallax { will-change: transform; }
 
 /* Botón flotante que aparece al hacer scroll (móvil) */
 .flotante-cta {
@@ -296,7 +318,8 @@ h1 { letter-spacing: -0.04em; line-height: 1.02; }
   .animar, .animar-2, .animar-3, .animar-4, .flotar, .flotar-lento, .pulso,
   .blob-1, .blob-2, .titulo-animado, .marquee-track { animation: none; }
   .btn-primario:hover::after { animation: none; }
-  .revelar, .revelar-izq, .revelar-der { opacity: 1; transform: none; transition: none; }
+  .revelar, .revelar-izq, .revelar-der, .stagger > * { opacity: 1; transform: none; filter: none; transition: none; }
+  .parallax { transform: none !important; }
   html { scroll-behavior: auto; }
 }
 

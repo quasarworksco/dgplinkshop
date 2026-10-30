@@ -1,13 +1,14 @@
-<svg width="200" height="48" viewBox="0 0 200 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="210" height="48" viewBox="0 0 210 48" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="dgp-grad" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#818CF8"/>
+    <linearGradient id="dgp-grad" x1="2" y1="2" x2="46" y2="46" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4F46E5"/>
+      <stop offset="0.55" stop-color="#2563EB"/>
       <stop offset="1" stop-color="#22D3EE"/>
     </linearGradient>
   </defs>
-  <rect x="2" y="2" width="44" height="44" rx="14" fill="url(#dgp-grad)" opacity="0.9"/>
-  <rect x="2" y="2" width="44" height="44" rx="14" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
-  <path d="M15 18h10a6 6 0 0 1 0 12h-4v-4h4a2 2 0 0 0 0-4H19v12h-4V18z" fill="#fff"/>
-  <circle cx="33" cy="31" r="3" fill="#fff" opacity="0.9"/>
-  <text x="56" y="31" font-family="ui-sans-serif, system-ui, sans-serif" font-size="17" font-weight="700" fill="#F1F5F9">DGP <tspan fill="#818CF8">LinkShop</tspan></text>
+  <rect x="2" y="3" width="42" height="42" rx="13" fill="url(#dgp-grad)"/>
+  <rect x="2.6" y="3.6" width="40.8" height="40.8" rx="12.4" stroke="#fff" stroke-opacity="0.35" stroke-width="1.2"/>
+  <path d="M14 15h10a7 7 0 0 1 0 14h-4.5v-4H24a3 3 0 0 0 0-6h-5.5v16H14V15z" fill="#fff"/>
+  <circle cx="32.5" cy="30.5" r="3" fill="#fff" fill-opacity="0.92"/>
+  <text x="54" y="31" font-family="'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif" font-size="19" font-weight="800" letter-spacing="-0.5" fill="#0B1220">DGP<tspan fill="#2563EB"> LinkShop</tspan></text>
 </svg>
