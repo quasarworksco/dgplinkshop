@@ -243,13 +243,60 @@ h1 { letter-spacing: -0.04em; line-height: 1.02; }
 .flotar-lento { animation: flotar-suave 8s ease-in-out infinite; }
 .pulso { animation: pulso-anillo 2.6s ease-out infinite; }
 
+/* Blobs de color que derivan lentamente (fondo con vida) */
+@keyframes deriva-1 { 0%,100% { transform: translate(0,0) scale(1); } 33% { transform: translate(34px,-22px) scale(1.08); } 66% { transform: translate(-22px,20px) scale(.95); } }
+@keyframes deriva-2 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(-30px,-26px) scale(1.12); } }
+.blob { position: absolute; border-radius: 50%; filter: blur(64px); will-change: transform; pointer-events: none; z-index: 0; }
+.blob-1 { animation: deriva-1 17s ease-in-out infinite; }
+.blob-2 { animation: deriva-2 21s ease-in-out infinite; }
+
+/* Texto con degradado animado (brillo que se mueve) */
+@keyframes brillo-texto { to { background-position: 220% center; } }
+.titulo-animado { background-size: 220% auto; animation: brillo-texto 6s linear infinite; }
+
+/* Barrido de luz en el botón primario al pasar el cursor */
+.btn-primario { position: relative; overflow: hidden; }
+.btn-primario::after {
+  content: ''; position: absolute; top: 0; left: -130%; width: 60%; height: 100%;
+  background: linear-gradient(100deg, transparent, rgba(255,255,255,0.38), transparent);
+  transform: skewX(-18deg); pointer-events: none;
+}
+.btn-primario:hover:not(:disabled)::after { animation: barrido .85s ease; }
+@keyframes barrido { to { left: 160%; } }
+
+/* Glow suave al pasar el cursor por tarjetas marcadas */
+.tarjeta-glow::before {
+  content: ''; position: absolute; inset: -1px; border-radius: inherit; z-index: -1;
+  background: radial-gradient(120px 80px at var(--mx,50%) var(--my,0%), rgba(79,70,229,.16), transparent 70%);
+  opacity: 0; transition: opacity .35s ease;
+}
+.tarjeta-glow { position: relative; }
+.tarjeta-glow:hover::before { opacity: 1; }
+
+/* Carrusel infinito (marquee) */
+@keyframes marquee { to { transform: translateX(-50%); } }
+.marquee { overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+.marquee-track { display: flex; width: max-content; gap: .75rem; animation: marquee 30s linear infinite; }
+.marquee:hover .marquee-track { animation-play-state: paused; }
+
 /* Reveal al hacer scroll (parte de un estado visible en reposo si no hay JS) */
 .revelar { opacity: 0; transform: translateY(22px); transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); }
-.revelar.visible { opacity: 1; transform: none; }
+.revelar-izq { opacity: 0; transform: translateX(-30px); transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1); }
+.revelar-der { opacity: 0; transform: translateX(30px); transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1); }
+.revelar.visible, .revelar-izq.visible, .revelar-der.visible { opacity: 1; transform: none; }
+
+/* Botón flotante que aparece al hacer scroll (móvil) */
+.flotante-cta {
+  position: fixed; left: 1rem; right: 1rem; bottom: 1rem; z-index: 60;
+  opacity: 0; transform: translateY(120%); transition: opacity .35s ease, transform .35s ease;
+}
+.flotante-cta.visible { opacity: 1; transform: none; }
 
 @media (prefers-reduced-motion: reduce) {
-  .animar, .animar-2, .animar-3, .animar-4, .flotar, .flotar-lento, .pulso { animation: none; }
-  .revelar { opacity: 1; transform: none; transition: none; }
+  .animar, .animar-2, .animar-3, .animar-4, .flotar, .flotar-lento, .pulso,
+  .blob-1, .blob-2, .titulo-animado, .marquee-track { animation: none; }
+  .btn-primario:hover::after { animation: none; }
+  .revelar, .revelar-izq, .revelar-der { opacity: 1; transform: none; transition: none; }
   html { scroll-behavior: auto; }
 }
 

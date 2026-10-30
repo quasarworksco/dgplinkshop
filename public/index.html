@@ -17,14 +17,14 @@
 <body class="dgp-lienzo text-slate-700">
 
   <!-- ===================== NAV ===================== -->
-  <header class="nav-glass sticky top-0 z-50">
+  <header id="nav" class="nav-glass sticky top-0 z-50 transition-shadow">
     <div class="contenedor-ancho flex items-center justify-between h-16">
       <a href="/" class="flex items-center"><img src="/assets/logo.svg" alt="DGP LinkShop" class="h-9" /></a>
       <nav class="hidden md:flex items-center gap-9 text-sm font-semibold text-slate-600">
         <a href="#como" class="hover:text-blue-600 transition">Cómo funciona</a>
         <a href="#caracteristicas" class="hover:text-blue-600 transition">Características</a>
         <a href="#planes" class="hover:text-blue-600 transition">Planes</a>
-        <a href="#resenas" class="hover:text-blue-600 transition">Reseñas</a>
+        <a href="/public/propuesta.html" class="hover:text-blue-600 transition">Propuesta</a>
       </nav>
       <div class="flex items-center gap-2 sm:gap-3">
         <a href="/public/acceso.html" class="hidden sm:inline-flex btn btn-fantasma text-sm">Iniciar sesión</a>
@@ -35,7 +35,12 @@
 
   <!-- ===================== HERO ===================== -->
   <section class="relative overflow-hidden">
-    <div class="contenedor-ancho pt-16 pb-14 md:pt-24 md:pb-24 grid lg:grid-cols-[1.05fr_1fr] gap-14 lg:gap-10 items-center">
+    <!-- blobs de color animados -->
+    <div class="blob blob-1" style="width:420px;height:420px;top:-120px;right:-60px;background:radial-gradient(circle,rgba(79,70,229,.32),transparent 70%)"></div>
+    <div class="blob blob-2" style="width:360px;height:360px;top:120px;left:-120px;background:radial-gradient(circle,rgba(34,211,238,.28),transparent 70%)"></div>
+    <div class="blob blob-1" style="width:300px;height:300px;bottom:-80px;left:40%;background:radial-gradient(circle,rgba(236,72,153,.18),transparent 70%);animation-delay:3s"></div>
+
+    <div class="contenedor-ancho relative pt-16 pb-14 md:pt-24 md:pb-24 grid lg:grid-cols-[1.05fr_1fr] gap-14 lg:gap-10 items-center">
       <!-- Copy -->
       <div class="animar relative z-10">
         <span class="inline-flex items-center gap-2 rounded-full border border-blue-100 bg-white/70 px-3.5 py-1.5 text-xs font-bold text-blue-700 shadow-sm">
@@ -44,7 +49,7 @@
         </span>
         <h1 class="mt-6 text-5xl md:text-[4.2rem] font-extrabold text-slate-900 leading-[0.98]">
           Vende como una<br />
-          <span class="titulo-degradado">marca premium</span>
+          <span class="titulo-degradado titulo-animado">marca premium</span>
         </h1>
         <p class="mt-6 text-lg md:text-xl text-slate-600 max-w-xl leading-relaxed">
           Tu catálogo con carrito, tu propio link y pedidos directos por WhatsApp.
@@ -65,11 +70,7 @@
       </div>
 
       <!-- Mockup compuesto -->
-      <div class="relative animar-2 lg:pl-6">
-        <!-- resplandor -->
-        <div class="absolute -inset-6 -z-10 rounded-[3rem] blur-3xl opacity-70" style="background:radial-gradient(60% 60% at 70% 30%, rgba(79,70,229,.22), transparent 70%), radial-gradient(50% 50% at 20% 80%, rgba(34,211,238,.18), transparent 70%)"></div>
-
-        <!-- Navegador con la tienda -->
+      <div class="relative animar-2 lg:pl-6 z-10">
         <div class="marco-navegador max-w-md mx-auto">
           <div class="barra-navegador">
             <span class="punto" style="background:#f87171"></span>
@@ -102,8 +103,8 @@
                 <p class="text-sm font-extrabold" style="color:#4f46e5">$38.00</p>
               </div>
             </div>
-            <button class="w-full mt-4 py-3 rounded-xl text-white text-sm font-bold flex items-center justify-center gap-2 shadow-lg" style="background:linear-gradient(135deg,#16a34a,#22c55e)">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
+            <button class="w-full mt-4 py-3 rounded-xl text-white text-sm font-bold flex items-center justify-center gap-2 shadow-lg" style="background:linear-gradient(135deg,#1faa53,#25d366)">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
               Finalizar por WhatsApp
             </button>
           </div>
@@ -111,27 +112,55 @@
 
         <!-- tarjetas flotantes -->
         <div class="hidden sm:flex absolute -left-5 top-20 tarjeta p-3 flotar items-center gap-2" style="animation-delay:.4s">
-          <div class="w-9 h-9 rounded-xl flex items-center justify-center text-white shrink-0" style="background:linear-gradient(135deg,#16a34a,#22c55e)">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M20 6 9 17l-5-5"/></svg>
+          <div class="w-9 h-9 rounded-xl flex items-center justify-center text-white shrink-0" style="background:linear-gradient(135deg,#1faa53,#25d366)">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
           </div>
           <div><p class="text-xs font-bold text-slate-800 leading-tight">Nuevo pedido</p><p class="text-[10px] text-slate-500">Camisa x2 · $56</p></div>
         </div>
         <div class="hidden sm:block absolute -right-3 bottom-10 tarjeta p-3.5 flotar-lento" style="animation-delay:1s">
           <p class="text-[10px] text-slate-500 font-semibold uppercase tracking-wide">Ventas hoy</p>
           <p class="text-2xl font-extrabold text-slate-900 display">$1,240</p>
-          <p class="text-[10px] text-emerald-600 font-bold">▲ 18% vs. ayer</p>
+          <p class="text-[10px] text-emerald-600 font-bold inline-flex items-center gap-1">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="w-3 h-3"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg>
+            18% vs. ayer
+          </p>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- ===================== MARQUEE DE CATEGORÍAS ===================== -->
+  <div class="py-5 border-y border-slate-200/60 bg-white/40">
+    <div class="marquee">
+      <div class="marquee-track text-sm font-bold">
+        <span class="chip" style="background:#fff1f2;color:#e11d48;border-color:#fecdd3">Comida y postres</span>
+        <span class="chip" style="background:#f5f3ff;color:#7c3aed;border-color:#ddd6fe">Moda y accesorios</span>
+        <span class="chip" style="background:#fdf2f8;color:#db2777;border-color:#fbcfe8">Belleza y perfumería</span>
+        <span class="chip" style="background:#ecfeff;color:#0891b2;border-color:#a5f3fc">Tecnología</span>
+        <span class="chip" style="background:#fffbeb;color:#d97706;border-color:#fde68a">Hogar y decoración</span>
+        <span class="chip" style="background:#ecfdf5;color:#059669;border-color:#a7f3d0">Servicios</span>
+        <span class="chip" style="background:#eef2ff;color:#4f46e5;border-color:#c7d2fe">Mayoristas</span>
+        <span class="chip" style="background:#eff6ff;color:#2563eb;border-color:#bfdbfe">Emprendimientos</span>
+        <!-- duplicado para bucle continuo -->
+        <span class="chip" style="background:#fff1f2;color:#e11d48;border-color:#fecdd3">Comida y postres</span>
+        <span class="chip" style="background:#f5f3ff;color:#7c3aed;border-color:#ddd6fe">Moda y accesorios</span>
+        <span class="chip" style="background:#fdf2f8;color:#db2777;border-color:#fbcfe8">Belleza y perfumería</span>
+        <span class="chip" style="background:#ecfeff;color:#0891b2;border-color:#a5f3fc">Tecnología</span>
+        <span class="chip" style="background:#fffbeb;color:#d97706;border-color:#fde68a">Hogar y decoración</span>
+        <span class="chip" style="background:#ecfdf5;color:#059669;border-color:#a7f3d0">Servicios</span>
+        <span class="chip" style="background:#eef2ff;color:#4f46e5;border-color:#c7d2fe">Mayoristas</span>
+        <span class="chip" style="background:#eff6ff;color:#2563eb;border-color:#bfdbfe">Emprendimientos</span>
+      </div>
+    </div>
+  </div>
+
   <!-- ===================== TIRA DE CONFIANZA ===================== -->
-  <div class="border-y border-slate-200/70 bg-white/55">
-    <div class="contenedor-ancho py-7 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-      <div><p class="text-3xl font-extrabold text-slate-900 display">5 min</p><p class="text-xs text-slate-500 mt-0.5">para lanzar tu tienda</p></div>
-      <div><p class="text-3xl font-extrabold text-slate-900 display">0%</p><p class="text-xs text-slate-500 mt-0.5">comisión por venta</p></div>
-      <div><p class="text-3xl font-extrabold text-slate-900 display">24/7</p><p class="text-xs text-slate-500 mt-0.5">tu tienda siempre abierta</p></div>
-      <div><p class="text-3xl font-extrabold text-slate-900 display">100%</p><p class="text-xs text-slate-500 mt-0.5">tu propia marca</p></div>
+  <div class="bg-white/55 border-b border-slate-200/70">
+    <div class="contenedor-ancho py-8 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+      <div class="revelar"><p class="text-3xl md:text-4xl font-extrabold text-slate-900 display">5 min</p><p class="text-xs text-slate-500 mt-0.5">para lanzar tu tienda</p></div>
+      <div class="revelar" style="transition-delay:.06s"><p class="text-3xl md:text-4xl font-extrabold text-slate-900 display">0%</p><p class="text-xs text-slate-500 mt-0.5">comisión por venta</p></div>
+      <div class="revelar" style="transition-delay:.12s"><p class="text-3xl md:text-4xl font-extrabold text-slate-900 display">24/7</p><p class="text-xs text-slate-500 mt-0.5">tu tienda siempre abierta</p></div>
+      <div class="revelar" style="transition-delay:.18s"><p class="text-3xl md:text-4xl font-extrabold text-slate-900 display">100%</p><p class="text-xs text-slate-500 mt-0.5">tu propia marca</p></div>
     </div>
   </div>
 
@@ -144,25 +173,25 @@
         <p class="mt-4 text-lg text-slate-600">Sin programar, sin complicaciones. Tú te enfocas en vender.</p>
       </div>
       <div class="grid md:grid-cols-3 gap-6">
-        <div class="tarjeta-solida tarjeta-hover p-8 revelar">
+        <div class="tarjeta-solida tarjeta-hover tarjeta-glow p-8 revelar">
           <div class="flex items-center justify-between mb-5">
-            <div class="icono-grad"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+            <div class="icono-grad" style="background:linear-gradient(135deg,#4f46e5,#2563eb 60%,#22d3ee)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
             <span class="text-6xl font-extrabold text-slate-100 display">1</span>
           </div>
           <h3 class="text-xl font-bold text-slate-900">Regístrate gratis</h3>
           <p class="mt-2 text-slate-600">Crea tu cuenta con tu correo en segundos. Sin tarjeta de crédito ni letra pequeña.</p>
         </div>
-        <div class="tarjeta-solida tarjeta-hover p-8 revelar" style="transition-delay:.08s">
+        <div class="tarjeta-solida tarjeta-hover tarjeta-glow p-8 revelar" style="transition-delay:.1s">
           <div class="flex items-center justify-between mb-5">
-            <div class="icono-grad"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="M3 9 5 3h14l2 6"/><path d="M3 9h18v3a3 3 0 0 1-6 0 3 3 0 0 1-6 0 3 3 0 0 1-6 0Z"/><path d="M5 14v7h14v-7"/></svg></div>
+            <div class="icono-grad" style="background:linear-gradient(135deg,#db2777,#f472b6)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="M3 9 5 3h14l2 6"/><path d="M3 9h18v3a3 3 0 0 1-6 0 3 3 0 0 1-6 0 3 3 0 0 1-6 0Z"/><path d="M5 14v7h14v-7"/></svg></div>
             <span class="text-6xl font-extrabold text-slate-100 display">2</span>
           </div>
           <h3 class="text-xl font-bold text-slate-900">Arma tu catálogo</h3>
           <p class="mt-2 text-slate-600">Sube tu logo, elige el color de tu marca y agrega productos con foto, precio y etiquetas.</p>
         </div>
-        <div class="tarjeta-solida tarjeta-hover p-8 revelar" style="transition-delay:.16s">
+        <div class="tarjeta-solida tarjeta-hover tarjeta-glow p-8 revelar" style="transition-delay:.2s">
           <div class="flex items-center justify-between mb-5">
-            <div class="icono-grad"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></div>
+            <div class="icono-grad" style="background:linear-gradient(135deg,#1faa53,#25d366)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg></div>
             <span class="text-6xl font-extrabold text-slate-100 display">3</span>
           </div>
           <h3 class="text-xl font-bold text-slate-900">Comparte y vende</h3>
@@ -183,8 +212,8 @@
 
       <div class="grid md:grid-cols-6 gap-5">
         <!-- destacada grande -->
-        <div class="md:col-span-3 tarjeta-borde tarjeta-hover p-8 revelar overflow-hidden relative">
-          <div class="icono-grad mb-5"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg></div>
+        <div class="md:col-span-3 tarjeta-borde tarjeta-hover p-8 revelar-izq overflow-hidden relative">
+          <div class="icono-grad mb-5" style="background:linear-gradient(135deg,#4f46e5,#2563eb 60%,#22d3ee)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg></div>
           <h3 class="text-xl font-bold text-slate-900">Catálogo con carrito real</h3>
           <p class="mt-2 text-slate-600 max-w-md">Tus clientes agregan varios productos, ven el total en dólares y bolívares, y te envían el pedido completo. Nada de listas sueltas por chat.</p>
           <div class="mt-6 flex gap-3">
@@ -193,8 +222,8 @@
           </div>
         </div>
         <!-- WhatsApp -->
-        <div class="md:col-span-3 tarjeta-solida tarjeta-hover p-8 revelar" style="transition-delay:.06s">
-          <div class="icono-grad mb-5" style="background:linear-gradient(135deg,#16a34a,#22c55e)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg></div>
+        <div class="md:col-span-3 tarjeta-solida tarjeta-hover tarjeta-glow p-8 revelar-der">
+          <div class="icono-grad mb-5" style="background:linear-gradient(135deg,#1faa53,#25d366)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg></div>
           <h3 class="text-xl font-bold text-slate-900">Pedidos por WhatsApp</h3>
           <p class="mt-2 text-slate-600">El mensaje llega redactado con productos, cantidades y total. Tú confirmas el pago y la entrega como siempre, sin comisiones.</p>
           <div class="mt-6 inline-flex items-center gap-2 rounded-xl bg-emerald-50 text-emerald-700 px-4 py-2.5 text-sm font-semibold ring-1 ring-emerald-100">
@@ -203,34 +232,34 @@
           </div>
         </div>
 
-        <!-- 4 pequeñas -->
-        <div class="md:col-span-2 tarjeta-solida tarjeta-hover p-7 revelar">
-          <div class="icono-circulo mb-4"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></div>
+        <!-- 4 pequeñas (colores variados) -->
+        <div class="md:col-span-2 tarjeta-solida tarjeta-hover tarjeta-glow p-7 revelar">
+          <div class="icono-grad mb-4" style="background:linear-gradient(135deg,#2563eb,#6366f1)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></div>
           <h3 class="font-bold text-slate-900">Tu propio subdominio</h3>
           <p class="mt-1.5 text-sm text-slate-600">Cada tienda vive en <em>tunegocio</em>.dgpgroupusa.com, con tu marca.</p>
         </div>
-        <div class="md:col-span-2 tarjeta-solida tarjeta-hover p-7 revelar" style="transition-delay:.06s">
-          <div class="icono-circulo mb-4"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg></div>
+        <div class="md:col-span-2 tarjeta-solida tarjeta-hover tarjeta-glow p-7 revelar" style="transition-delay:.08s">
+          <div class="icono-grad mb-4" style="background:linear-gradient(135deg,#d97706,#f59e0b)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg></div>
           <h3 class="font-bold text-slate-900">Inventario y stock</h3>
           <p class="mt-1.5 text-sm text-slate-600">Controla existencias; se marca "Agotado" solo cuando se acaba.</p>
         </div>
-        <div class="md:col-span-2 tarjeta-solida tarjeta-hover p-7 revelar" style="transition-delay:.12s">
-          <div class="icono-circulo mb-4"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M3 3v18h18"/><rect width="4" height="7" x="7" y="10" rx="1"/><rect width="4" height="11" x="15" y="6" rx="1"/></svg></div>
+        <div class="md:col-span-2 tarjeta-solida tarjeta-hover tarjeta-glow p-7 revelar" style="transition-delay:.16s">
+          <div class="icono-grad mb-4" style="background:linear-gradient(135deg,#0891b2,#22d3ee)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M3 3v18h18"/><rect width="4" height="7" x="7" y="10" rx="1"/><rect width="4" height="11" x="15" y="6" rx="1"/></svg></div>
           <h3 class="font-bold text-slate-900">Estadísticas y QR</h3>
           <p class="mt-1.5 text-sm text-slate-600">Vistas, clics a WhatsApp, más vendidos y el QR de tu catálogo.</p>
         </div>
-        <div class="md:col-span-2 tarjeta-solida tarjeta-hover p-7 revelar">
-          <div class="icono-circulo mb-4"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 11v2"/><path d="M13 17v2"/></svg></div>
+        <div class="md:col-span-2 tarjeta-solida tarjeta-hover tarjeta-glow p-7 revelar">
+          <div class="icono-grad mb-4" style="background:linear-gradient(135deg,#e11d48,#fb7185)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 11v2"/><path d="M13 17v2"/></svg></div>
           <h3 class="font-bold text-slate-900">Cupones y descuentos</h3>
           <p class="mt-1.5 text-sm text-slate-600">Crea promociones, destacados y catálogo mayorista aparte.</p>
         </div>
-        <div class="md:col-span-2 tarjeta-solida tarjeta-hover p-7 revelar" style="transition-delay:.06s">
-          <div class="icono-circulo mb-4"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="19" cy="17" r="2"/><circle cx="6" cy="12" r="3"/></svg></div>
+        <div class="md:col-span-2 tarjeta-solida tarjeta-hover tarjeta-glow p-7 revelar" style="transition-delay:.08s">
+          <div class="icono-grad mb-4" style="background:linear-gradient(135deg,#7c3aed,#c084fc)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="19" cy="17" r="2"/><circle cx="6" cy="12" r="3"/></svg></div>
           <h3 class="font-bold text-slate-900">Tu color, tu estilo</h3>
           <p class="mt-1.5 text-sm text-slate-600">Logo, color principal y descripción. Tu tienda se ve como tú quieres.</p>
         </div>
-        <div class="md:col-span-2 tarjeta-solida tarjeta-hover p-7 revelar" style="transition-delay:.12s">
-          <div class="icono-circulo mb-4"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.9 4.9 1.4 1.4"/><path d="m17.7 17.7 1.4 1.4"/><path d="M2 12h2"/><path d="M20 12h2"/></svg></div>
+        <div class="md:col-span-2 tarjeta-solida tarjeta-hover tarjeta-glow p-7 revelar" style="transition-delay:.16s">
+          <div class="icono-grad mb-4" style="background:linear-gradient(135deg,#334155,#64748b)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg></div>
           <h3 class="font-bold text-slate-900">Modo oscuro y móvil</h3>
           <p class="mt-1.5 text-sm text-slate-600">Rápida, ligera y hermosa en el celular — que es donde compran.</p>
         </div>
@@ -241,9 +270,9 @@
   <!-- ===================== SHOWCASE ===================== -->
   <section class="seccion">
     <div class="contenedor-ancho grid lg:grid-cols-2 gap-14 items-center">
-      <div class="relative revelar order-2 lg:order-1">
-        <div class="absolute -inset-6 -z-10 rounded-[3rem] blur-3xl opacity-60" style="background:radial-gradient(60% 60% at 30% 30%, rgba(79,70,229,.2), transparent 70%)"></div>
-        <div class="marco-telefono max-w-[270px] mx-auto">
+      <div class="relative revelar-izq order-2 lg:order-1">
+        <div class="blob blob-2" style="width:300px;height:300px;top:10%;left:10%;background:radial-gradient(circle,rgba(79,70,229,.22),transparent 70%)"></div>
+        <div class="marco-telefono max-w-[270px] mx-auto relative">
           <div class="pantalla">
             <div class="h-7 bg-slate-900 flex items-center justify-center"><span class="w-16 h-1.5 rounded-full bg-slate-700"></span></div>
             <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=560&h=900&fit=crop" alt="Tienda en el celular" class="w-full object-cover" style="height:360px" loading="lazy" referrerpolicy="no-referrer" />
@@ -256,7 +285,7 @@
           </div>
         </div>
       </div>
-      <div class="revelar order-1 lg:order-2">
+      <div class="revelar-der order-1 lg:order-2">
         <p class="eyebrow mb-3">Hecha para vender</p>
         <h2 class="text-3xl md:text-5xl font-extrabold text-slate-900">Rápida, bonita y pensada para el celular</h2>
         <p class="mt-4 text-lg text-slate-600">La mayoría de tus clientes compran desde el teléfono. Por eso tu tienda carga al instante, se ve impecable y hacer un pedido toma segundos.</p>
@@ -293,8 +322,11 @@
           </ul>
           <a href="/public/acceso.html#registro" class="btn btn-claro w-full mt-8">Empezar gratis</a>
         </div>
-        <div class="tarjeta-borde tarjeta-hover p-8 relative revelar" style="transition-delay:.08s; box-shadow: var(--sombra-lg)">
-          <span class="absolute -top-3.5 left-1/2 -translate-x-1/2 inline-flex items-center gap-1 rounded-full px-3.5 py-1 text-[11px] font-extrabold text-white shadow" style="background:linear-gradient(135deg,#4f46e5,#2563eb)">★ Más popular</span>
+        <div class="tarjeta-borde tarjeta-hover p-8 relative revelar" style="transition-delay:.1s; box-shadow: var(--sombra-lg)">
+          <span class="absolute -top-3.5 left-1/2 -translate-x-1/2 inline-flex items-center gap-1.5 rounded-full px-3.5 py-1 text-[11px] font-extrabold text-white shadow" style="background:linear-gradient(135deg,#4f46e5,#2563eb)">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-3 h-3"><path d="M12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            Más popular
+          </span>
           <h3 class="text-lg font-bold text-blue-700">PRO</h3>
           <p class="mt-3 text-5xl font-extrabold text-slate-900 display">$15<span class="text-base font-medium text-slate-400">/mes</span></p>
           <p class="mt-1 text-sm text-slate-500">Para negocios que quieren crecer.</p>
@@ -308,7 +340,7 @@
           </ul>
           <a href="/public/acceso.html#registro" class="btn btn-primario w-full mt-8">Quiero ser PRO</a>
         </div>
-        <div class="tarjeta-solida tarjeta-hover p-8 revelar" style="transition-delay:.16s">
+        <div class="tarjeta-solida tarjeta-hover p-8 revelar" style="transition-delay:.2s">
           <h3 class="text-lg font-bold text-slate-500">Premium</h3>
           <p class="mt-3 text-5xl font-extrabold text-slate-900 display">$25<span class="text-base font-medium text-slate-400">/mes</span></p>
           <p class="mt-1 text-sm text-slate-500">Para catálogos grandes y alto volumen.</p>
@@ -325,37 +357,13 @@
     </div>
   </section>
 
-  <!-- ===================== RESEÑAS ===================== -->
-  <section id="resenas" class="seccion">
-    <div class="contenedor">
-      <div class="text-center max-w-2xl mx-auto mb-12 revelar">
-        <p class="eyebrow mb-3">Reseñas</p>
-        <h2 class="text-3xl md:text-5xl font-extrabold text-slate-900">Lo que dicen quienes ya venden</h2>
-        <p class="mt-4 text-lg text-slate-600">Deja tu opinión y ayuda a otros negocios a decidirse.</p>
-      </div>
-
-      <div id="resenas-lista" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-10"></div>
-      <p id="resenas-vacio" class="text-center text-slate-400 mb-10 hidden">Aún no hay reseñas. ¡Sé el primero en dejar una!</p>
-
-      <div class="tarjeta-solida p-7 max-w-xl mx-auto">
-        <h3 class="text-lg font-bold text-slate-900 mb-4">Deja tu reseña</h3>
-        <div class="mb-4">
-          <span class="block text-sm font-medium text-slate-700 mb-2">Tu calificación</span>
-          <div id="resena-estrellas" class="flex gap-1"></div>
-        </div>
-        <input id="resena-nombre" class="campo mb-3" placeholder="Tu nombre" maxlength="60" />
-        <textarea id="resena-comentario" class="campo mb-3" rows="3" maxlength="400" placeholder="Cuéntanos tu experiencia…"></textarea>
-        <p id="resena-msg" class="text-sm mb-3 hidden"></p>
-        <button id="resena-enviar" class="btn btn-primario w-full">Enviar reseña</button>
-      </div>
-    </div>
-  </section>
-
   <!-- ===================== CTA FINAL ===================== -->
-  <section class="seccion pt-0">
+  <section class="seccion">
     <div class="contenedor">
       <div class="rounded-[2rem] px-8 py-16 text-center text-white relative overflow-hidden revelar" style="background:linear-gradient(130deg,#312e81,#2563eb 48%,#0891b2)">
         <div class="absolute inset-0 malla-puntos opacity-20"></div>
+        <div class="blob blob-1" style="width:300px;height:300px;top:-80px;right:-40px;background:radial-gradient(circle,rgba(34,211,238,.35),transparent 70%)"></div>
+        <div class="blob blob-2" style="width:280px;height:280px;bottom:-80px;left:-40px;background:radial-gradient(circle,rgba(236,72,153,.3),transparent 70%)"></div>
         <div class="relative">
           <h2 class="text-3xl md:text-5xl font-extrabold text-white">Empieza a vender hoy mismo</h2>
           <p class="mt-4 text-blue-50 text-lg max-w-xl mx-auto">Tu tienda online profesional, lista en minutos. Gratis para empezar, sin comisiones por venta.</p>
@@ -408,19 +416,34 @@
     </div>
   </footer>
 
+  <!-- CTA flotante (móvil) -->
+  <a id="cta-flotante" href="/public/acceso.html#registro" class="flotante-cta sm:hidden btn btn-primario w-full justify-center text-base py-4 shadow-xl">Crear mi tienda gratis</a>
+
   <script>
-    // Año dinámico
-    document.getElementById('anio').textContent = new Date().getFullYear();
-    // Reveal al hacer scroll
     (function () {
-      var items = document.querySelectorAll('.revelar');
-      if (!('IntersectionObserver' in window)) { items.forEach(function (el) { el.classList.add('visible'); }); return; }
-      var io = new IntersectionObserver(function (entries) {
-        entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
-      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-      items.forEach(function (el) { io.observe(el); });
+      // Año dinámico
+      var anio = document.getElementById('anio'); if (anio) anio.textContent = new Date().getFullYear();
+
+      // Reveal al hacer scroll (soporta .revelar / .revelar-izq / .revelar-der)
+      var items = document.querySelectorAll('.revelar, .revelar-izq, .revelar-der');
+      if ('IntersectionObserver' in window) {
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+        }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+        items.forEach(function (el) { io.observe(el); });
+      } else { items.forEach(function (el) { el.classList.add('visible'); }); }
+
+      // Sombra del nav + CTA flotante al hacer scroll
+      var nav = document.getElementById('nav');
+      var cta = document.getElementById('cta-flotante');
+      function onScroll() {
+        var y = window.scrollY || 0;
+        if (nav) nav.classList.toggle('shadow-lg', y > 20);
+        if (cta) cta.classList.toggle('visible', y > 600);
+      }
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
     })();
   </script>
-  <script type="module" src="/src/resenas.js"></script>
 </body>
 </html>
