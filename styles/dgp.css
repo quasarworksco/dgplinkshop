@@ -73,6 +73,35 @@ body {
   background-size: 22px 22px;
 }
 
+/* ---------- Fondo propio del HERO (se separa del header blanco) ---------- */
+@keyframes aurora { 0% { background-position: 0% 50%, 100% 50%, 0 0; } 50% { background-position: 40% 60%, 60% 40%, 0 0; } 100% { background-position: 0% 50%, 100% 50%, 0 0; } }
+.hero-fondo {
+  position: relative; isolation: isolate;
+  background:
+    radial-gradient(900px 460px at 82% -6%, rgba(79, 70, 229, 0.18), transparent 60%),
+    radial-gradient(820px 480px at -6% 16%, rgba(34, 211, 238, 0.15), transparent 60%),
+    linear-gradient(180deg, #ffffff 0%, #edf2ff 50%, #e6eeff 100%);
+  background-size: 180% 180%, 180% 180%, 100% 100%;
+  animation: aurora 18s ease-in-out infinite;
+  border-bottom: 1px solid rgba(210, 222, 244, 0.7);
+}
+.hero-fondo::before {
+  content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background-image: radial-gradient(rgba(37, 99, 235, 0.09) 1px, transparent 1px);
+  background-size: 26px 26px;
+  -webkit-mask-image: radial-gradient(75% 65% at 50% 25%, #000, transparent 78%);
+  mask-image: radial-gradient(75% 65% at 50% 25%, #000, transparent 78%);
+}
+:root[data-theme="dark"] .hero-fondo {
+  background:
+    radial-gradient(900px 460px at 82% -6%, rgba(79, 70, 229, 0.30), transparent 60%),
+    radial-gradient(820px 480px at -6% 16%, rgba(34, 211, 238, 0.14), transparent 60%),
+    linear-gradient(180deg, #0a1120 0%, #0b1424 60%, #0a1120 100%);
+  background-size: 180% 180%, 180% 180%, 100% 100%;
+  border-bottom-color: #1b2740;
+}
+@media (prefers-reduced-motion: reduce) { .hero-fondo { animation: none; } }
+
 /* Tipografía */
 h1, h2, h3, h4 { font-family: var(--fuente-display); color: var(--tinta); letter-spacing: -0.025em; font-weight: 700; text-wrap: balance; }
 h1 { letter-spacing: -0.04em; line-height: 1.02; }
