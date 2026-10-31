@@ -10,6 +10,7 @@
 import { supabase } from './supabase-client.js';
 import { obtenerSlugDeTienda } from './subdominio.js';
 import { imgLazy, observarImagenesLazy } from './lazy-imagenes.js';
+import { optimizada } from './cloudinary.js';
 import { guardarEnCache, leerDeCache } from './cache-local.js';
 import { inicializarCarrito, agregarAlCarrito } from './carrito.js';
 import { icono } from './iconos.js';
@@ -219,8 +220,24 @@ function pintarTabActiva() {
   $('tienda-nombre').textContent = negocio.name;
   $('tienda-descripcion').textContent = negocio.description ?? '';
   $('ico-destacados').style.color = colorPrimario;
-  $('tienda-banner').style.background =
-    `linear-gradient(180deg, ${tinte(colorPrimario, 0.14)} 0%, ${tinte(colorPrimario, 0.04)} 55%, transparent 100%)`;
+
+  // Portada opcional + tinte de la marca (texto siempre legible)
+  if (negocio.cover_url) {
+    $('tienda-cover').style.backgroundImage = `url('${optimizada(negocio.cover_url, 'w_1400,h_520,c_fill,q_auto,f_auto')}')`;
+    $('tienda-overlay').style.background =
+      `linear-gradient(180deg, ${tinte(colorPrimario, 0.22)} 0%, rgba(255,255,255,0.60) 46%, rgba(255,255,255,0.94) 100%)`;
+  } else {
+    $('tienda-overlay').style.background =
+      `linear-gradient(180deg, ${tinte(colorPrimario, 0.16)} 0%, ${tinte(colorPrimario, 0.05)} 55%, transparent 100%)`;
+  }
+
+  // Pastilla de categoría del negocio
+  const CAT_LABEL = { comida: 'Comida y postres', moda: 'Moda y accesorios', belleza: 'Belleza y perfumería', hogar: 'Hogar y decoración', servicios: 'Servicios', tecnologia: 'Tecnología', otro: 'Otro' };
+  if (negocio.category) {
+    const el = $('tienda-categoria');
+    el.textContent = CAT_LABEL[negocio.category] || negocio.category;
+    el.classList.remove('hidden');
+  }
 
   if (tasaBs) {
     $('tienda-tasa').textContent = `${fmtBs.format(tasaBs)} Bs / $1`;
