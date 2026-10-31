@@ -170,12 +170,7 @@ async function verificarAcceso() {
   let bloquear = false, titulo = '', texto = '';
 
   if (plan === 'free') {
-    const vence = suscripcion?.trial_ends_at ? new Date(suscripcion.trial_ends_at) : null;
-    if (vence && vence.getTime() <= Date.now()) {
-      bloquear = true;
-      titulo = 'Tu prueba gratis terminó';
-      texto = 'Tu tienda quedó en pausa. Para reactivarla y seguir vendiendo, elige un plan y realiza tu pago. La activamos apenas confirmemos tu comprobante.';
-    }
+    return; // El plan Gratuito es permanente: nunca se bloquea.
   } else {
     // Plan pago: 3 días de gracia tras la fecha de pago; luego se pausa.
     const pu = suscripcion?.paid_until ? new Date(suscripcion.paid_until + 'T00:00:00') : null;
