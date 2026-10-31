@@ -228,11 +228,14 @@ async function cargarTiendas() {
       else if (t.vigente) estado = `<span class="inline-flex items-center gap-1 text-emerald-600 font-semibold">${punto('bg-emerald-500')}Activa</span>`;
       else estado = `<span class="inline-flex items-center gap-1 text-rose-600 font-semibold">${punto('bg-rose-500')}${dePago ? 'Vencida' : 'Prueba vencida'}</span>`;
       const av = avatarDe(t.name);
+      const avatar = t.logo_url
+        ? `<img src="${escapar(t.logo_url)}" alt="${escapar(t.name)}" loading="lazy" class="avatar-inicial object-cover" style="background:#fff;" onerror="this.outerHTML='<span class=\\'avatar-inicial\\' style=\\'background:${av.grad}\\'>${av.iniciales}</span>'" />`
+        : `<span class="avatar-inicial" style="background:${av.grad};">${av.iniciales}</span>`;
       return `
         <tr class="fila-tienda border-b border-slate-50" data-tienda="${t.id}" data-nombre="${escapar(t.name)}" data-pausada="${t.is_paused ? '1' : '0'}">
           <td class="px-5 py-3.5">
             <div class="flex items-center gap-3">
-              <span class="avatar-inicial" style="background:${av.grad};">${av.iniciales}</span>
+              ${avatar}
               <div class="min-w-0">
                 <p class="font-semibold text-slate-900 truncate">${escapar(t.name)}</p>
                 <p class="text-xs text-slate-400 truncate">${escapar(t.slug)}.dgpgroupusa.com</p>
