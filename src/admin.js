@@ -191,6 +191,19 @@ async function cargarTiendas() {
   const SVG_RENOVAR = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>';
   const SVG_PAUSA = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" class="w-4 h-4"><path d="M8 4v16"/><path d="M16 4v16"/></svg>';
   const SVG_PLAY = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><path d="M6 4.5v15a1 1 0 0 0 1.52.85l12-7.5a1 1 0 0 0 0-1.7l-12-7.5A1 1 0 0 0 6 4.5z"/></svg>';
+  // Avatar con iniciales + color de marca determinista según el nombre
+  const GRADIENTES = [
+    'linear-gradient(135deg,#4f46e5,#2563eb)', 'linear-gradient(135deg,#0891b2,#06b6d4)',
+    'linear-gradient(135deg,#7c3aed,#6366f1)', 'linear-gradient(135deg,#db2777,#f472b6)',
+    'linear-gradient(135deg,#ea580c,#f59e0b)', 'linear-gradient(135deg,#059669,#10b981)',
+    'linear-gradient(135deg,#0d9488,#2dd4bf)', 'linear-gradient(135deg,#4338ca,#818cf8)',
+  ];
+  const avatarDe = (nombre) => {
+    const txt = (nombre || '?').trim();
+    const iniciales = txt.split(/\s+/).slice(0, 2).map((w) => w[0]).join('').toUpperCase() || '?';
+    let h = 0; for (let i = 0; i < txt.length; i++) h = (h * 31 + txt.charCodeAt(i)) >>> 0;
+    return { iniciales: escapar(iniciales), grad: GRADIENTES[h % GRADIENTES.length] };
+  };
   const cuerpo = $('tabla-tiendas');
   cuerpo.innerHTML = tiendas
     .map((t) => {
@@ -214,26 +227,34 @@ async function cargarTiendas() {
       if (t.is_paused) estado = `<span class="inline-flex items-center gap-1 text-amber-600 font-semibold">${punto('bg-amber-500')}Pausada</span>`;
       else if (t.vigente) estado = `<span class="inline-flex items-center gap-1 text-emerald-600 font-semibold">${punto('bg-emerald-500')}Activa</span>`;
       else estado = `<span class="inline-flex items-center gap-1 text-rose-600 font-semibold">${punto('bg-rose-500')}${dePago ? 'Vencida' : 'Prueba vencida'}</span>`;
+      const av = avatarDe(t.name);
       return `
-        <tr class="border-b border-slate-50 hover:bg-slate-50/60" data-tienda="${t.id}" data-nombre="${escapar(t.name)}" data-pausada="${t.is_paused ? '1' : '0'}">
-          <td class="px-5 py-3">
-            <p class="font-semibold text-slate-900">${escapar(t.name)}</p>
-            <p class="text-xs text-slate-400">${escapar(t.slug)}.dgpgroupusa.com</p>
+        <tr class="fila-tienda border-b border-slate-50" data-tienda="${t.id}" data-nombre="${escapar(t.name)}" data-pausada="${t.is_paused ? '1' : '0'}">
+          <td class="px-5 py-3.5">
+            <div class="flex items-center gap-3">
+              <span class="avatar-inicial" style="background:${av.grad};">${av.iniciales}</span>
+              <div class="min-w-0">
+                <p class="font-semibold text-slate-900 truncate">${escapar(t.name)}</p>
+                <p class="text-xs text-slate-400 truncate">${escapar(t.slug)}.dgpgroupusa.com</p>
+              </div>
+            </div>
           </td>
-          <td class="px-5 py-3">
+          <td class="px-5 py-3.5">
             <p class="text-slate-700">${escapar(t.owner_name || '—')}</p>
             <p class="text-xs text-slate-400">${escapar(t.owner_email)}</p>
           </td>
-          <td class="px-5 py-3"><span class="px-2.5 py-1 rounded-full text-xs font-bold uppercase ${planClase}">${escapar(t.plan)}</span></td>
-          <td class="px-5 py-3 text-center font-semibold text-slate-700">${t.num_productos}</td>
-          <td class="px-5 py-3 text-xs">${vence}</td>
-          <td class="px-5 py-3 text-xs font-medium">${estado}</td>
-          <td class="px-5 py-3">
-            <div class="flex items-center justify-end gap-1">
-              ${dePago ? `<button data-accion="renovar" title="Sumar un mes de pago" aria-label="Renovar" class="w-8 h-8 inline-flex items-center justify-center rounded-lg text-slate-400 hover:bg-emerald-50 hover:text-emerald-600 transition">${SVG_RENOVAR}</button>` : ''}
-              <button data-accion="pausar" title="${t.is_paused ? 'Reactivar tienda' : 'Pausar tienda'}" aria-label="${t.is_paused ? 'Reactivar' : 'Pausar'}" class="w-8 h-8 inline-flex items-center justify-center rounded-lg text-slate-400 hover:bg-amber-50 hover:text-amber-600 transition">${t.is_paused ? SVG_PLAY : SVG_PAUSA}</button>
-              <a href="${url}" target="_blank" rel="noopener" title="Ver tienda" aria-label="Ver" class="w-8 h-8 inline-flex items-center justify-center rounded-lg text-slate-400 hover:bg-blue-50 hover:text-blue-600 transition">${icono('externo', 'w-4 h-4')}</a>
-              <button data-accion="eliminar" title="Eliminar cuenta" aria-label="Eliminar" class="w-8 h-8 inline-flex items-center justify-center rounded-lg text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition">${icono('basura', 'w-4 h-4')}</button>
+          <td class="px-5 py-3.5"><span class="px-2.5 py-1 rounded-full text-xs font-bold uppercase ${planClase}">${escapar(t.plan)}</span></td>
+          <td class="px-5 py-3.5 text-center font-semibold text-slate-700">${t.num_productos}</td>
+          <td class="px-5 py-3.5 text-xs">${vence}</td>
+          <td class="px-5 py-3.5 text-xs font-medium">${estado}</td>
+          <td class="px-5 py-3.5">
+            <div class="flex justify-end">
+              <div class="acciones-grupo">
+                ${dePago ? `<button data-accion="renovar" title="Sumar un mes de pago" aria-label="Renovar" class="acc-btn hover:bg-emerald-100 hover:text-emerald-600">${SVG_RENOVAR}</button>` : ''}
+                <button data-accion="pausar" title="${t.is_paused ? 'Reactivar tienda' : 'Pausar tienda'}" aria-label="${t.is_paused ? 'Reactivar' : 'Pausar'}" class="acc-btn hover:bg-amber-100 hover:text-amber-600">${t.is_paused ? SVG_PLAY : SVG_PAUSA}</button>
+                <a href="${url}" target="_blank" rel="noopener" title="Ver tienda" aria-label="Ver" class="acc-btn hover:bg-blue-100 hover:text-blue-600">${icono('externo', 'w-4 h-4')}</a>
+                <button data-accion="eliminar" title="Eliminar cuenta" aria-label="Eliminar" class="acc-btn hover:bg-rose-100 hover:text-rose-600">${icono('basura', 'w-4 h-4')}</button>
+              </div>
             </div>
           </td>
         </tr>`;
