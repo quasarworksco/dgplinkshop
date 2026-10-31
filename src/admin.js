@@ -186,17 +186,29 @@ async function cargarTiendas() {
 
   $('admin-vacio').classList.toggle('hidden', tiendas.length > 0);
 
-  const hoy = new Date().toISOString().slice(0, 10);
+  const hoyD = new Date(new Date().toISOString().slice(0, 10) + 'T00:00:00');
+  // Botones de acción (iconos SVG consistentes)
+  const SVG_RENOVAR = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>';
+  const SVG_PAUSA = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" class="w-4 h-4"><path d="M8 4v16"/><path d="M16 4v16"/></svg>';
+  const SVG_PLAY = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><path d="M6 4.5v15a1 1 0 0 0 1.52.85l12-7.5a1 1 0 0 0 0-1.7l-12-7.5A1 1 0 0 0 6 4.5z"/></svg>';
   const cuerpo = $('tabla-tiendas');
   cuerpo.innerHTML = tiendas
     .map((t) => {
       const url = urlDeTienda(t.slug);
       const planClase = ESTILO_PLAN[t.plan] ?? ESTILO_PLAN.free;
       const dePago = t.plan === 'pro' || t.plan === 'premium';
-      const vencido = dePago && t.paid_until && t.paid_until < hoy;
-      const vence = dePago
-        ? (t.paid_until ? `<span class="${vencido ? 'text-rose-600 font-semibold' : 'text-slate-500'}">${new Date(t.paid_until).toLocaleDateString('es', { day: '2-digit', month: 'short' })}</span>` : '<span class="text-slate-400">—</span>')
-        : '<span class="text-slate-300">Gratis</span>';
+      const pu = t.paid_until ? new Date(t.paid_until + 'T00:00:00') : null;
+      const vencido = dePago && pu && pu < hoyD;
+      // Meses completos pagados por delante
+      let meses = 0;
+      if (pu) { meses = (pu.getFullYear() - hoyD.getFullYear()) * 12 + (pu.getMonth() - hoyD.getMonth()); if (pu.getDate() < hoyD.getDate()) meses--; }
+      const badgeMeses = meses >= 1
+        ? ` <span class="ml-1 inline-block px-1.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold">${meses} ${meses === 1 ? 'mes' : 'meses'}</span>` : '';
+      const vence = !dePago
+        ? '<span class="text-slate-300">Gratis</span>'
+        : (pu
+          ? `<span class="${vencido ? 'text-rose-600 font-semibold' : 'text-slate-700 font-medium'}">${pu.toLocaleDateString('es', { day: '2-digit', month: 'short', year: '2-digit' })}</span>${badgeMeses}`
+          : '<span class="text-slate-400">—</span>');
       const punto = (c) => `<span class="w-2 h-2 rounded-full ${c}"></span>`;
       let estado;
       if (t.is_paused) estado = `<span class="inline-flex items-center gap-1 text-amber-600 font-semibold">${punto('bg-amber-500')}Pausada</span>`;
@@ -216,13 +228,13 @@ async function cargarTiendas() {
           <td class="px-5 py-3 text-center font-semibold text-slate-700">${t.num_productos}</td>
           <td class="px-5 py-3 text-xs">${vence}</td>
           <td class="px-5 py-3 text-xs font-medium">${estado}</td>
-          <td class="px-5 py-3 text-right whitespace-nowrap">
-            ${dePago ? `<button data-accion="renovar" class="text-emerald-600 hover:text-emerald-700 text-xs font-semibold mr-3">Renovar</button>` : ''}
-            <button data-accion="pausar" class="text-amber-600 hover:text-amber-700 text-xs font-semibold mr-3">${t.is_paused ? 'Reactivar' : 'Pausar'}</button>
-            <a href="${url}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-xs font-semibold mr-3">
-              ${icono('externo', 'w-3.5 h-3.5')} Ver
-            </a>
-            <button data-accion="eliminar" class="text-rose-500 hover:text-rose-600 text-xs font-semibold">Eliminar</button>
+          <td class="px-5 py-3">
+            <div class="flex items-center justify-end gap-1">
+              ${dePago ? `<button data-accion="renovar" title="Sumar un mes de pago" aria-label="Renovar" class="w-8 h-8 inline-flex items-center justify-center rounded-lg text-slate-400 hover:bg-emerald-50 hover:text-emerald-600 transition">${SVG_RENOVAR}</button>` : ''}
+              <button data-accion="pausar" title="${t.is_paused ? 'Reactivar tienda' : 'Pausar tienda'}" aria-label="${t.is_paused ? 'Reactivar' : 'Pausar'}" class="w-8 h-8 inline-flex items-center justify-center rounded-lg text-slate-400 hover:bg-amber-50 hover:text-amber-600 transition">${t.is_paused ? SVG_PLAY : SVG_PAUSA}</button>
+              <a href="${url}" target="_blank" rel="noopener" title="Ver tienda" aria-label="Ver" class="w-8 h-8 inline-flex items-center justify-center rounded-lg text-slate-400 hover:bg-blue-50 hover:text-blue-600 transition">${icono('externo', 'w-4 h-4')}</a>
+              <button data-accion="eliminar" title="Eliminar cuenta" aria-label="Eliminar" class="w-8 h-8 inline-flex items-center justify-center rounded-lg text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition">${icono('basura', 'w-4 h-4')}</button>
+            </div>
           </td>
         </tr>`;
     })
@@ -231,10 +243,10 @@ async function cargarTiendas() {
   cuerpo.querySelectorAll('[data-accion="renovar"]').forEach((btn) => {
     const fila = btn.closest('[data-tienda]'); const id = fila.dataset.tienda;
     btn.addEventListener('click', async () => {
-      if (!confirm('¿Renovar la suscripción de esta tienda hasta el próximo mes?')) return;
+      if (!confirm('Sumar UN mes de pago a esta tienda.\nHaz clic varias veces para sumar varios meses.\n\n¿Continuar?')) return;
       const { error } = await supabase.rpc('renovar_suscripcion', { p_business_id: id });
       if (error) { registrarError('admin/renovar', error); return notificar('No se pudo renovar.', 'error'); }
-      notificar('Suscripción renovada. La tienda vuelve a estar activa.', 'exito');
+      notificar('Se sumó un mes de suscripción.', 'exito');
       await cargarTiendas();
     });
   });
