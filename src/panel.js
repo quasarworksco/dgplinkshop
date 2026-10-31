@@ -163,20 +163,42 @@ function activarPestanas() {
 // ------------------------------------------------------------
 async function verificarAcceso() {
   const plan = suscripcion?.plan ?? 'free';
-  if (plan !== 'free') return; // planes pagos nunca se bloquean aquí
-  const vence = suscripcion?.trial_ends_at ? new Date(suscripcion.trial_ends_at) : null;
-  if (!vence || vence.getTime() > Date.now()) return; // aún dentro de la prueba
 
-  // Si ya envió un comprobante y está en revisión, no lo bloqueamos:
-  // dejamos que espere la aprobación sin fricción.
+  // ¿Está pausada manualmente por el administrador?
+  if (negocio.is_paused) { mostrarBloqueo('Tu tienda está pausada', 'Un administrador pausó tu tienda. Si crees que es un error, contáctanos para reactivarla.', false); return; }
+
+  let bloquear = false, titulo = '', texto = '';
+
+  if (plan === 'free') {
+    const vence = suscripcion?.trial_ends_at ? new Date(suscripcion.trial_ends_at) : null;
+    if (vence && vence.getTime() <= Date.now()) {
+      bloquear = true;
+      titulo = 'Tu prueba gratis terminó';
+      texto = 'Tu tienda quedó en pausa. Para reactivarla y seguir vendiendo, elige un plan y realiza tu pago. La activamos apenas confirmemos tu comprobante.';
+    }
+  } else {
+    // Plan pago: 3 días de gracia tras la fecha de pago; luego se pausa.
+    const pu = suscripcion?.paid_until ? new Date(suscripcion.paid_until + 'T00:00:00') : null;
+    const limite = pu ? new Date(pu.getTime() + 3 * 86400000) : null;
+    const vencido = suscripcion?.status !== 'active' || (limite && Date.now() > limite.getTime());
+    if (vencido) {
+      bloquear = true;
+      titulo = 'Tu plan venció';
+      texto = 'Tu tienda quedó en pausa por falta de pago. Renueva tu plan (sube tu comprobante) y la reactivamos al confirmarlo.';
+    }
+  }
+
+  if (!bloquear) return;
+
+  // Si ya envió un comprobante y está en revisión, no lo bloqueamos.
   const { data: pagos } = await supabase
     .from('payments').select('id').eq('business_id', negocio.id).eq('status', 'pendiente').limit(1);
   if ((pagos ?? []).length > 0) return;
 
-  mostrarBloqueo();
+  mostrarBloqueo(titulo, texto, true);
 }
 
-function mostrarBloqueo() {
+function mostrarBloqueo(titulo, texto, permitirElegir = true) {
   if ($('bloqueo-prueba')) return;
   const cont = document.createElement('div');
   cont.id = 'bloqueo-prueba';
@@ -188,19 +210,14 @@ function mostrarBloqueo() {
       <div class="w-14 h-14 mx-auto mb-4 rounded-2xl flex items-center justify-center" style="background:#eff6ff;color:#2563eb">
         ${icono('candado', 'w-7 h-7')}
       </div>
-      <h2 class="text-xl font-bold text-slate-900 mb-2">Tu prueba gratis terminó</h2>
-      <p class="text-slate-600 text-sm leading-relaxed mb-6">
-        Tu tienda quedó en pausa. Para reactivarla y seguir vendiendo, elige un plan y
-        realiza tu pago. La activamos apenas confirmemos tu comprobante.
-      </p>
-      <button id="bloqueo-elegir" class="btn btn-primario w-full justify-center">Elegir mi plan</button>
+      <h2 class="text-xl font-bold text-slate-900 mb-2">${titulo}</h2>
+      <p class="text-slate-600 text-sm leading-relaxed mb-6">${texto}</p>
+      ${permitirElegir ? '<button id="bloqueo-elegir" class="btn btn-primario w-full justify-center">Renovar / Elegir mi plan</button>' : ''}
       <button id="bloqueo-salir" class="btn btn-claro w-full justify-center mt-3">Cerrar sesión</button>
     </div>`;
   document.body.appendChild(cont);
-  $('bloqueo-elegir').addEventListener('click', () => {
-    cont.remove();
-    irASeccion('suscripcion');
-  });
+  const elegir = $('bloqueo-elegir');
+  if (elegir) elegir.addEventListener('click', () => { cont.remove(); irASeccion('suscripcion'); });
   $('bloqueo-salir').addEventListener('click', cerrarSesion);
 }
 

@@ -197,11 +197,13 @@ async function cargarTiendas() {
       const vence = dePago
         ? (t.paid_until ? `<span class="${vencido ? 'text-rose-600 font-semibold' : 'text-slate-500'}">${new Date(t.paid_until).toLocaleDateString('es', { day: '2-digit', month: 'short' })}</span>` : '<span class="text-slate-400">—</span>')
         : '<span class="text-slate-300">Gratis</span>';
-      const estado = t.is_published
-        ? '<span class="inline-flex items-center gap-1 text-emerald-600"><span class="w-2 h-2 rounded-full bg-emerald-500"></span>Publicada</span>'
-        : '<span class="inline-flex items-center gap-1 text-slate-400"><span class="w-2 h-2 rounded-full bg-slate-300"></span>Borrador</span>';
+      const punto = (c) => `<span class="w-2 h-2 rounded-full ${c}"></span>`;
+      let estado;
+      if (t.is_paused) estado = `<span class="inline-flex items-center gap-1 text-amber-600 font-semibold">${punto('bg-amber-500')}Pausada</span>`;
+      else if (t.vigente) estado = `<span class="inline-flex items-center gap-1 text-emerald-600 font-semibold">${punto('bg-emerald-500')}Activa</span>`;
+      else estado = `<span class="inline-flex items-center gap-1 text-rose-600 font-semibold">${punto('bg-rose-500')}${dePago ? 'Vencida' : 'Prueba vencida'}</span>`;
       return `
-        <tr class="border-b border-slate-50 hover:bg-slate-50/60" data-tienda="${t.id}">
+        <tr class="border-b border-slate-50 hover:bg-slate-50/60" data-tienda="${t.id}" data-nombre="${escapar(t.name)}" data-pausada="${t.is_paused ? '1' : '0'}">
           <td class="px-5 py-3">
             <p class="font-semibold text-slate-900">${escapar(t.name)}</p>
             <p class="text-xs text-slate-400">${escapar(t.slug)}.dgpgroupusa.com</p>
@@ -216,21 +218,47 @@ async function cargarTiendas() {
           <td class="px-5 py-3 text-xs font-medium">${estado}</td>
           <td class="px-5 py-3 text-right whitespace-nowrap">
             ${dePago ? `<button data-accion="renovar" class="text-emerald-600 hover:text-emerald-700 text-xs font-semibold mr-3">Renovar</button>` : ''}
-            <a href="${url}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-xs font-semibold">
+            <button data-accion="pausar" class="text-amber-600 hover:text-amber-700 text-xs font-semibold mr-3">${t.is_paused ? 'Reactivar' : 'Pausar'}</button>
+            <a href="${url}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-xs font-semibold mr-3">
               ${icono('externo', 'w-3.5 h-3.5')} Ver
             </a>
+            <button data-accion="eliminar" class="text-rose-500 hover:text-rose-600 text-xs font-semibold">Eliminar</button>
           </td>
         </tr>`;
     })
     .join('');
 
   cuerpo.querySelectorAll('[data-accion="renovar"]').forEach((btn) => {
-    const id = btn.closest('[data-tienda]').dataset.tienda;
+    const fila = btn.closest('[data-tienda]'); const id = fila.dataset.tienda;
     btn.addEventListener('click', async () => {
-      if (!confirm('¿Renovar la suscripción de esta tienda hasta el próximo día 5?')) return;
+      if (!confirm('¿Renovar la suscripción de esta tienda hasta el próximo mes?')) return;
       const { error } = await supabase.rpc('renovar_suscripcion', { p_business_id: id });
       if (error) { registrarError('admin/renovar', error); return notificar('No se pudo renovar.', 'error'); }
-      notificar('Suscripción renovada.', 'exito');
+      notificar('Suscripción renovada. La tienda vuelve a estar activa.', 'exito');
+      await cargarTiendas();
+    });
+  });
+
+  cuerpo.querySelectorAll('[data-accion="pausar"]').forEach((btn) => {
+    const fila = btn.closest('[data-tienda]'); const id = fila.dataset.tienda;
+    const pausada = fila.dataset.pausada === '1';
+    btn.addEventListener('click', async () => {
+      const txt = pausada ? '¿Reactivar esta tienda?' : '¿Pausar esta tienda? Dejará de mostrarse al público hasta que la reactives.';
+      if (!confirm(txt)) return;
+      const { error } = await supabase.rpc('pausar_tienda', { p_business_id: id, p_pausar: !pausada });
+      if (error) { registrarError('admin/pausar', error); return notificar('No se pudo cambiar el estado.', 'error'); }
+      notificar(pausada ? 'Tienda reactivada.' : 'Tienda pausada.', 'exito');
+      await cargarTiendas();
+    });
+  });
+
+  cuerpo.querySelectorAll('[data-accion="eliminar"]').forEach((btn) => {
+    const fila = btn.closest('[data-tienda]'); const id = fila.dataset.tienda; const nombre = fila.dataset.nombre;
+    btn.addEventListener('click', async () => {
+      if (!confirm(`Eliminar DEFINITIVAMENTE la cuenta "${nombre}".\n\nSe borran su tienda, productos, pedidos y datos. Esta acción no se puede deshacer.\n\n¿Continuar?`)) return;
+      const { error } = await supabase.rpc('eliminar_cuenta', { p_business_id: id });
+      if (error) { registrarError('admin/eliminar', error); return notificar('No se pudo eliminar la cuenta.', 'error'); }
+      notificar('Cuenta eliminada.', 'exito');
       await cargarTiendas();
     });
   });
