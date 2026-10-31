@@ -15,7 +15,7 @@ import { guardarEnCache, leerDeCache } from './cache-local.js';
 import { inicializarCarrito, agregarAlCarrito } from './carrito.js';
 import { icono } from './iconos.js';
 import { chipTag } from './tags-estilo.js';
-import { registrarError } from './notificaciones.js';
+import { registrarError, notificar } from './notificaciones.js';
 
 const POR_PAGINA = 12;
 const $ = (id) => document.getElementById(id);
@@ -104,14 +104,132 @@ function crearTarjeta(p, { compacta = false } = {}) {
       <button data-add aria-label="Agregar ${escapar(p.name)}" ${agotado ? 'disabled' : ''} class="w-9 h-9 shrink-0 rounded-full flex items-center justify-center text-white shadow-sm transition hover:brightness-110 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed" style="background:${colorPrimario}">${icono('mas', 'w-4 h-4')}</button>
     </div>`;
   if (!agotado) {
-    art.querySelector('[data-add]').addEventListener('click', () =>
-      agregarAlCarrito({ id: p.id, nombre: p.name, precio: final, minimo: minMayor, max: p.stock ?? null })
-    );
+    art.querySelector('[data-add]').addEventListener('click', (e) => {
+      e.stopPropagation();
+      agregarAlCarrito({ id: p.id, nombre: p.name, precio: final, minimo: minMayor, max: p.stock ?? null });
+    });
   }
   art.querySelectorAll('[data-tag]').forEach((b) =>
-    b.addEventListener('click', () => filtrarPorTag(b.dataset.tag))
+    b.addEventListener('click', (e) => { e.stopPropagation(); filtrarPorTag(b.dataset.tag); })
   );
+  // Toda la tarjeta abre la vista rápida del producto
+  art.classList.add('cursor-pointer');
+  art.addEventListener('click', () => abrirQuickView(p));
   return art;
+}
+
+// ------------------------------------------------------------
+// Vista rápida de producto (quick-view)
+// ------------------------------------------------------------
+let pvCantidad = 1;
+
+function cerrarQuickView() {
+  const ov = $('pv-overlay');
+  ov.classList.remove('abierto');
+  ov.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+  // Limpia el parámetro ?producto de la URL sin recargar
+  if (new URLSearchParams(location.search).has('producto')) {
+    const u = new URL(location.href); u.searchParams.delete('producto');
+    history.replaceState(null, '', u.pathname + u.search);
+  }
+}
+
+async function compartirProducto(p) {
+  const u = new URL(location.href);
+  u.searchParams.set('producto', p.id);
+  const url = u.origin + u.pathname + '?producto=' + p.id;
+  const datos = { title: p.name, text: `${p.name} — ${negocio?.name ?? ''}`, url };
+  try {
+    if (navigator.share) { await navigator.share(datos); return; }
+    await navigator.clipboard.writeText(url);
+    notificar('Enlace del producto copiado', 'exito');
+  } catch (_) { /* el usuario canceló */ }
+}
+
+function abrirQuickView(p) {
+  const final = precioFinal(p);
+  const conDesc = !modoMayorista && (p.discount_percent ?? 0) > 0;
+  const minMayor = modoMayorista ? Math.max(1, p.wholesale_min ?? 1) : 1;
+  const esTop = !modoMayorista && topVendidos.has(p.id);
+  const agotado = p.stock === 0;
+  const topeStock = p.stock != null ? p.stock : 99;
+  pvCantidad = Math.max(1, minMayor);
+
+  const insignia = esTop
+    ? `<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-50 text-amber-600">${icono('estrella', 'w-3.5 h-3.5')} Más vendido</span>`
+    : (p.is_featured ? `<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold" style="background:${tinte(colorPrimario, .12)};color:${colorPrimario}">${icono('destello', 'w-3.5 h-3.5')} Destacado</span>` : '');
+  const disponibles = (p.stock != null && p.stock > 0)
+    ? (p.stock <= 5 ? `<span class="text-amber-600 font-semibold">¡Solo quedan ${p.stock}!</span>` : `<span class="text-emerald-600 font-semibold">${p.stock} disponibles</span>`)
+    : (p.stock === 0 ? '<span class="text-rose-600 font-semibold">Agotado</span>' : '');
+
+  const img = p.image_url
+    ? `<img src="${optimizada(p.image_url, 'w_900,h_900,c_fill,q_auto,f_auto')}" alt="${escapar(p.name)}" class="w-full h-full object-cover" />`
+    : `<div class="w-full h-full flex items-center justify-center text-slate-300">${icono('paquete', 'w-16 h-16')}</div>`;
+
+  const panel = $('pv-panel');
+  panel.innerHTML = `
+    <button data-cerrar aria-label="Cerrar" class="absolute top-3 right-3 z-20 w-9 h-9 rounded-full bg-white/90 shadow-md flex items-center justify-center text-slate-600 hover:text-slate-900 transition">${icono('cerrar', 'w-5 h-5')}</button>
+    <div class="overflow-y-auto">
+      <div class="grid sm:grid-cols-2">
+        <div class="relative aspect-square sm:aspect-auto sm:min-h-full bg-slate-100">
+          ${img}
+          ${conDesc ? `<span class="absolute top-3 left-3 px-2.5 py-1 rounded-full text-xs font-bold text-white" style="background:${colorPrimario}">-${p.discount_percent}%</span>` : ''}
+          ${agotado ? '<span class="absolute inset-0 bg-white/55 flex items-center justify-center text-base font-bold text-slate-700">Agotado</span>' : ''}
+        </div>
+        <div class="p-5 sm:p-6 flex flex-col">
+          ${insignia ? `<div class="mb-2">${insignia}</div>` : ''}
+          <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 leading-tight">${escapar(p.name)}</h2>
+          <div class="mt-2 flex items-baseline gap-2 flex-wrap">
+            ${conDesc ? `<span class="text-sm text-slate-400 line-through">${usd(p.price)}</span>` : ''}
+            <span class="text-2xl font-extrabold" style="color:${colorPrimario}">${usd(final)}</span>
+          </div>
+          ${tasaBs ? `<p class="text-sm text-slate-500 mt-0.5">Bs ${fmtBs.format(final * tasaBs)}</p>` : ''}
+          ${modoMayorista && minMayor > 1 ? `<p class="text-xs font-semibold text-slate-500 mt-1">Compra mínima: ${minMayor} unidades</p>` : ''}
+          ${disponibles ? `<p class="text-sm mt-2">${disponibles}</p>` : ''}
+          ${p.description ? `<p class="text-sm text-slate-600 leading-relaxed mt-3 whitespace-pre-line">${escapar(p.description)}</p>` : ''}
+          ${(p.tags && p.tags.length) ? `<div class="flex flex-wrap gap-1.5 mt-3">${p.tags.slice(0, 6).map((t) => chipTag(t)).join('')}</div>` : ''}
+
+          <div class="mt-auto pt-5 flex items-center gap-3 flex-wrap">
+            <div class="pv-stepper" ${agotado ? 'style="display:none"' : ''}>
+              <button data-menos class="pv-step-btn" aria-label="Quitar uno">${icono('menos', 'w-4 h-4')}</button>
+              <span data-cant class="min-w-[2.5rem] text-center font-bold text-slate-900">${pvCantidad}</span>
+              <button data-mas class="pv-step-btn" aria-label="Agregar uno">${icono('mas', 'w-4 h-4')}</button>
+            </div>
+            <button data-agregar ${agotado ? 'disabled' : ''} class="btn btn-primario flex-1 min-w-[12rem] justify-center" style="background:${colorPrimario};box-shadow:none">
+              ${icono('carrito', 'w-5 h-5')} ${agotado ? 'No disponible' : 'Agregar al carrito'}
+            </button>
+            <button data-compartir aria-label="Compartir producto" class="btn btn-claro w-11 h-11 !p-0 justify-center" title="Compartir">${icono('enviar', 'w-5 h-5')}</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+
+  // Controles
+  const elCant = panel.querySelector('[data-cant]');
+  const btnMenos = panel.querySelector('[data-menos]');
+  const btnMas = panel.querySelector('[data-mas]');
+  const pintarStepper = () => {
+    elCant.textContent = pvCantidad;
+    if (btnMenos) btnMenos.disabled = pvCantidad <= Math.max(1, minMayor);
+    if (btnMas) btnMas.disabled = pvCantidad >= topeStock;
+  };
+  pintarStepper();
+  btnMenos?.addEventListener('click', () => { pvCantidad = Math.max(Math.max(1, minMayor), pvCantidad - 1); pintarStepper(); });
+  btnMas?.addEventListener('click', () => { pvCantidad = Math.min(topeStock, pvCantidad + 1); pintarStepper(); });
+  panel.querySelector('[data-cerrar]').addEventListener('click', cerrarQuickView);
+  panel.querySelector('[data-compartir]').addEventListener('click', () => compartirProducto(p));
+  if (!agotado) {
+    panel.querySelector('[data-agregar]').addEventListener('click', () => {
+      agregarAlCarrito({ id: p.id, nombre: p.name, precio: final, minimo: minMayor, max: p.stock ?? null, cantidad: pvCantidad });
+      cerrarQuickView();
+    });
+  }
+
+  const ov = $('pv-overlay');
+  ov.classList.add('abierto');
+  ov.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
 }
 
 // Buscar por una etiqueta al tocarla en una tarjeta
@@ -305,8 +423,22 @@ function pintarTabActiva() {
   $('pag-next').addEventListener('click', () => { pagina++; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
 
   inicializarCarrito(negocio, { mayorista: modoMayorista });
+
+  // Vista rápida: cerrar al tocar el fondo o con Escape
+  $('pv-fondo').addEventListener('click', cerrarQuickView);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && $('pv-overlay').classList.contains('abierto')) cerrarQuickView();
+  });
+
   // Cuenta la visita (contador de la tienda), sin bloquear el render
   supabase.rpc('sumar_vista', { p_business_id: negocio.id }).then(() => {}, () => {});
   render();
   mostrarEstado('tienda');
+
+  // Enlace profundo: ?producto=<id> abre su vista rápida directamente
+  const idProducto = new URLSearchParams(location.search).get('producto');
+  if (idProducto) {
+    const p = todos.find((x) => x.id === idProducto);
+    if (p) abrirQuickView(p);
+  }
 })();

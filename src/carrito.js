@@ -48,16 +48,19 @@ export function inicializarCarrito(negocioActual, { mayorista = false } = {}) {
   actualizarBurbuja();
 }
 
-export function agregarAlCarrito({ id, nombre, precio, minimo = 1, max = null }) {
+export function agregarAlCarrito({ id, nombre, precio, minimo = 1, max = null, cantidad = null }) {
   const min = Math.max(1, minimo | 0);
   const tope = Math.min(99, max == null ? 99 : Math.max(1, max | 0));
+  const sumar = Math.max(1, (cantidad | 0) || 1); // cuántas unidades añadir
   const ex = items.get(id);
   if (ex) {
-    const nueva = Math.min(ex.cantidad + 1, tope);
+    const nueva = Math.min(ex.cantidad + sumar, tope);
     if (nueva === ex.cantidad) { notificar('No hay más unidades disponibles de este producto.', 'error'); return; }
     ex.cantidad = nueva;
   } else {
-    items.set(id, { id, nombre, precio, cantidad: Math.max(1, Math.min(min, tope)), minimo: min, max: (max == null ? null : tope) });
+    // Sin cantidad explícita se mantiene el comportamiento previo (inicia en el mínimo).
+    const inicial = cantidad != null ? Math.max(min, sumar) : min;
+    items.set(id, { id, nombre, precio, cantidad: Math.max(1, Math.min(inicial, tope)), minimo: min, max: (max == null ? null : tope) });
   }
   persistir();
   actualizarBurbuja();
