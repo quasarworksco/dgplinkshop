@@ -361,13 +361,17 @@ async function confirmarPedido() {
     cupon = null; persistir(); actualizarBurbuja(); actualizarTotales(); cerrar();
   } catch (err) {
     registrarError('carrito/crear-pedido', err);
-    const msg = err.message ?? '';
+    // Combina todos los campos del error (message/details/hint/code) para que
+    // el mensaje correcto se muestre aunque el texto venga en otro campo.
+    const msg = [err?.message, err?.details, err?.hint, err?.code].filter(Boolean).join(' ');
     if (msg.includes('CUPON_INVALIDO')) { cupon = null; actualizarTotales(); notificar('El cupón dejó de ser válido.', 'error'); }
     else if (msg.includes('CANTIDAD_MINIMA')) notificar('No alcanzas la cantidad mínima al mayor de un producto.', 'error');
-    else if (msg.includes('STOCK_INSUFICIENTE')) notificar('Ya no hay suficiente stock de un producto. Ajusta las cantidades.', 'error');
+    else if (msg.includes('STOCK_INSUFICIENTE')) notificar('Uno de los productos se quedó sin stock suficiente. Reduce la cantidad e intenta de nuevo.', 'error');
     else if (msg.includes('MAYORISTA_NO_DISPONIBLE')) notificar('Esta tienda ya no ofrece catálogo mayorista.', 'error');
     else if (msg.includes('PRODUCTO_NO_DISPONIBLE')) notificar('Un producto ya no está disponible. Actualiza la página.', 'error');
-    else notificar('No se pudo registrar el pedido. Revisa tu conexión.', 'error');
+    else if (msg.includes('TIENDA_NO_DISPONIBLE')) notificar('La tienda no está disponible en este momento.', 'error');
+    else if (msg.includes('CANTIDAD_INVALIDA') || msg.includes('PEDIDO_VACIO') || msg.includes('PEDIDO_INVALIDO')) notificar('Revisa las cantidades de tu carrito.', 'error');
+    else notificar('No se pudo completar el pedido. Actualiza la página e inténtalo de nuevo.', 'error');
   } finally {
     boton.disabled = items.size === 0;
     boton.innerHTML = `${icono('mensaje', 'w-5 h-5')} Finalizar compra por WhatsApp`;
