@@ -251,7 +251,7 @@
           <!-- Formulario de pago -->
           <div id="sus-pago" class="tarjeta-solida p-6 mt-6 hidden">
             <div class="flex items-center justify-between mb-4">
-              <h3 class="text-lg font-bold text-slate-900">Pagar plan <span id="sus-pago-plan" class="text-blue-700"></span> — $<span id="sus-pago-monto"></span>/mes</h3>
+              <h3 class="text-lg font-bold text-slate-900">Pagar plan <span id="sus-pago-plan" class="text-blue-700"></span> — $<span id="sus-pago-monto"></span>/mes <span id="sus-pago-bs" class="hidden text-sm font-semibold text-emerald-600"></span></h3>
               <button id="sus-pago-cancelar" class="text-sm text-slate-400 hover:text-slate-600">Cancelar</button>
             </div>
 
@@ -264,15 +264,16 @@
             <!-- Datos PagoMóvil -->
             <div id="sus-datos-pagomovil" class="rounded-xl bg-slate-50 border border-slate-200 p-4 text-sm space-y-1 mb-4">
               <p class="font-semibold text-slate-700 mb-1">Datos para Pago Móvil</p>
-              <p><span class="text-slate-400">Titular:</span> Paul Espina</p>
-              <p><span class="text-slate-400">C.I:</span> 27.610.902</p>
-              <p><span class="text-slate-400">Teléfono:</span> 0412-1002090</p>
-              <p><span class="text-slate-400">Banco:</span> BNC</p>
+              <p id="sus-pm-monto-bs" class="hidden font-bold text-emerald-700 mb-1"></p>
+              <p><span class="text-slate-400">Titular:</span> <span id="sus-pm-titular"></span></p>
+              <p><span class="text-slate-400">C.I:</span> <span id="sus-pm-ci"></span></p>
+              <p><span class="text-slate-400">Teléfono:</span> <span id="sus-pm-telefono"></span></p>
+              <p><span class="text-slate-400">Banco:</span> <span id="sus-pm-banco"></span></p>
             </div>
             <!-- Datos Binance -->
             <div id="sus-datos-binance" class="rounded-xl bg-slate-50 border border-slate-200 p-4 text-sm space-y-1 mb-4 hidden">
               <p class="font-semibold text-slate-700 mb-1">Datos para Binance</p>
-              <p><span class="text-slate-400">Correo / Pay ID:</span> Paulalejo123@gmail.com</p>
+              <p><span class="text-slate-400">Correo / Pay ID:</span> <span id="sus-binance-id"></span></p>
             </div>
 
             <div id="sus-ref-wrap" class="mb-3">

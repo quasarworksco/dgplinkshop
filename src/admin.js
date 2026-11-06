@@ -42,11 +42,59 @@ const ESTILO_PLAN = {
   }
   if (!esAdmin) return mostrar('denegado');
 
+  await cargarConfigCobros();
   await cargarPagos();
   await cargarResenas();
   await cargarTiendas();
   mostrar('ok');
 })();
+
+// ------------------------------------------------------------
+// Cobros y suscripciones (configuración central)
+// ------------------------------------------------------------
+async function cargarConfigCobros() {
+  const { data, error } = await supabase
+    .from('config_plataforma')
+    .select('tasa_bs, pm_titular, pm_ci, pm_telefono, pm_banco, binance_id, updated_at')
+    .eq('id', 1)
+    .maybeSingle();
+  if (error) { registrarError('admin/cargar-config', error); return; }
+  const c = data ?? {};
+  $('cfg-cobros-tasa').value = c.tasa_bs ?? '';
+  $('cfg-cobros-pm-titular').value = c.pm_titular ?? '';
+  $('cfg-cobros-pm-ci').value = c.pm_ci ?? '';
+  $('cfg-cobros-pm-telefono').value = c.pm_telefono ?? '';
+  $('cfg-cobros-pm-banco').value = c.pm_banco ?? '';
+  $('cfg-cobros-binance').value = c.binance_id ?? '';
+  if (c.updated_at) {
+    const f = new Date(c.updated_at).toLocaleString('es', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
+    $('cfg-cobros-estado').textContent = `Última actualización: ${f}`;
+  }
+}
+
+$('btn-cobros-guardar').addEventListener('click', async () => {
+  const boton = $('btn-cobros-guardar');
+  const valor = $('cfg-cobros-tasa').value.trim();
+  const tasa = valor === '' ? null : Number(valor);
+  if (tasa !== null && (!isFinite(tasa) || tasa <= 0)) {
+    return notificar('Escribe una tasa válida (mayor a 0) o déjala vacía.', 'error');
+  }
+  boton.disabled = true;
+  boton.innerHTML = '<span class="spinner"></span> Guardando…';
+  const { error } = await supabase.rpc('guardar_config_cobros', {
+    p_tasa_bs: tasa,
+    p_pm_titular: $('cfg-cobros-pm-titular').value.trim(),
+    p_pm_ci: $('cfg-cobros-pm-ci').value.trim(),
+    p_pm_telefono: $('cfg-cobros-pm-telefono').value.trim(),
+    p_pm_banco: $('cfg-cobros-pm-banco').value.trim(),
+    p_binance_id: $('cfg-cobros-binance').value.trim(),
+  });
+  boton.disabled = false;
+  boton.textContent = 'Guardar configuración';
+  if (error) { registrarError('admin/guardar-config', error); return notificar('No se pudo guardar la configuración.', 'error'); }
+  notificar('Configuración de cobros guardada.', 'exito');
+  await cargarConfigCobros();
+});
 
 function estrellasSVG(n) {
   let o = '';

@@ -1079,8 +1079,29 @@ async function cargarEstadisticas() {
 // ============================================================
 // SECCIÓN: SUSCRIPCIÓN Y PAGOS
 // ============================================================
+let configCobros = null;
+const fmtBsPanel = new Intl.NumberFormat('es-VE', { maximumFractionDigits: 2 });
+
+async function cargarConfigCobros() {
+  if (configCobros) return configCobros;
+  const { data } = await supabase
+    .from('config_plataforma')
+    .select('tasa_bs, pm_titular, pm_ci, pm_telefono, pm_banco, binance_id')
+    .eq('id', 1).maybeSingle();
+  configCobros = data ?? {};
+  // Rellena los datos de pago (los controla el súper-admin desde su panel)
+  const set = (id, v) => { const el = $(id); if (el) el.textContent = v || '—'; };
+  set('sus-pm-titular', configCobros.pm_titular);
+  set('sus-pm-ci', configCobros.pm_ci);
+  set('sus-pm-telefono', configCobros.pm_telefono);
+  set('sus-pm-banco', configCobros.pm_banco);
+  set('sus-binance-id', configCobros.binance_id);
+  return configCobros;
+}
+
 async function cargarSuscripcion() {
   suscripcionCargada = true;
+  await cargarConfigCobros();
   const plan = suscripcion?.plan ?? 'free';
   $('sus-plan-actual').textContent = PLANES[plan].nombre;
   $('sus-limite-txt').textContent = `Hasta ${PLANES[plan].limiteProductos}`;
@@ -1120,6 +1141,15 @@ document.querySelectorAll('#sus-planes [data-plan]').forEach((btn) =>
     comprobanteUrl = null;
     $('sus-pago-plan').textContent = PLANES[planElegido].nombre;
     $('sus-pago-monto').textContent = btn.dataset.monto;
+    // Monto en bolívares según la tasa que fijó el administrador
+    const tasa = Number(configCobros?.tasa_bs) || 0;
+    const montoUsd = Number(PLANES[planElegido].mensualidad) || 0;
+    const bsTxt = tasa > 0 ? `Bs ${fmtBsPanel.format(montoUsd * tasa)}` : '';
+    const bsHead = $('sus-pago-bs');
+    bsHead.textContent = bsTxt ? `≈ ${bsTxt}` : '';
+    bsHead.classList.toggle('hidden', !bsTxt);
+    const bsPm = $('sus-pm-monto-bs');
+    if (bsPm) { bsPm.textContent = bsTxt ? `Monto a pagar: ${bsTxt}` : ''; bsPm.classList.toggle('hidden', !bsTxt); }
     $('sus-comprobante').value = '';
     $('sus-referencia').value = '';
     $('sus-comprobante-barra').classList.add('hidden');

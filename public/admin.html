@@ -150,6 +150,65 @@
       </div>
     </div>
 
+    <!-- Cobros y suscripciones (config central) -->
+    <section class="mb-8">
+      <h2 class="text-lg font-bold text-slate-900 mb-3 flex items-center gap-2">
+        <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-emerald-50 text-emerald-600">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><rect width="20" height="14" x="2" y="5" rx="2"/><path d="M2 10h20"/></svg>
+        </span>
+        Cobros y suscripciones
+      </h2>
+      <div class="tarjeta-solida p-6">
+        <p class="text-sm text-slate-500 mb-5">Aquí controlas a dónde te pagan tus clientes su plan, y la tasa del día para mostrarles el monto en bolívares. Estos datos aparecen en la pantalla de pago de cada cliente.</p>
+
+        <div class="grid sm:grid-cols-2 gap-x-8 gap-y-5">
+          <!-- Tasa -->
+          <div class="sm:col-span-2">
+            <label class="block text-sm font-semibold text-slate-700 mb-1.5">Tasa del día — Bolívares por 1 USD</label>
+            <div class="flex gap-2 max-w-xs">
+              <input id="cfg-cobros-tasa" type="number" min="0" step="0.01" class="campo flex-1" placeholder="Ej: 150.00" />
+            </div>
+            <p class="text-xs text-slate-400 mt-1.5">Con esto, al cliente se le muestra su plan también en Bs (ej: PRO $15 ≈ Bs 2.250). Déjala vacía para ocultar los Bs.</p>
+          </div>
+
+          <!-- Pago Móvil -->
+          <div class="sm:col-span-2 pt-2 border-t border-slate-100">
+            <p class="text-xs font-bold uppercase tracking-wide text-slate-400 mt-3 mb-1">Datos para Pago Móvil</p>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1.5">Titular</label>
+            <input id="cfg-cobros-pm-titular" class="campo" placeholder="Nombre del titular" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1.5">Cédula (C.I.)</label>
+            <input id="cfg-cobros-pm-ci" class="campo" placeholder="Ej: 27.610.902" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1.5">Teléfono</label>
+            <input id="cfg-cobros-pm-telefono" class="campo" placeholder="Ej: 0412-1002090" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1.5">Banco</label>
+            <input id="cfg-cobros-pm-banco" class="campo" placeholder="Ej: BNC" />
+          </div>
+
+          <!-- Binance -->
+          <div class="sm:col-span-2 pt-2 border-t border-slate-100">
+            <p class="text-xs font-bold uppercase tracking-wide text-slate-400 mt-3 mb-1">Datos para Binance</p>
+          </div>
+          <div class="sm:col-span-2">
+            <label class="block text-sm font-medium text-slate-700 mb-1.5">Correo / Pay ID</label>
+            <input id="cfg-cobros-binance" class="campo max-w-md" placeholder="correo@ejemplo.com" />
+          </div>
+        </div>
+
+        <div class="flex items-center gap-4 mt-6">
+          <button id="btn-cobros-guardar" class="btn btn-primario text-sm">Guardar configuración</button>
+          <span id="cfg-cobros-estado" class="text-xs text-slate-400"></span>
+        </div>
+      </div>
+    </section>
+
     <!-- Pagos por confirmar -->
     <section id="admin-pagos-seccion" class="mb-8 hidden">
       <h2 class="text-lg font-bold text-slate-900 mb-3 flex items-center gap-2">
