@@ -18,6 +18,7 @@ import { icono, hidratarIconos } from './iconos.js';
 import { estiloTag, chipTag } from './tags-estilo.js';
 import { notificar, registrarError } from './notificaciones.js';
 import { iniciarTutorial } from './tutorial.js';
+import { normalizarWhatsapp, whatsappValido } from './telefono.js';
 
 const PASOS_TUTORIAL = [
   { tab: 'dashboard', icono: 'cuadricula', titulo: '¡Bienvenido a tu panel!', texto: 'Te muestro en 30 segundos cómo manejar tu tienda. Usa el menú lateral para moverte entre secciones.' },
@@ -966,7 +967,13 @@ async function guardarDatosTienda() {
     err.textContent = 'El nombre de la tienda es obligatorio.';
     return err.classList.remove('hidden');
   }
-  const whatsapp = $('cfg-whatsapp').value.replace(/\D/g, '') || null;
+  // WhatsApp obligatorio: sin él no se pueden recibir pedidos.
+  const whatsapp = normalizarWhatsapp($('cfg-whatsapp').value);
+  if (!whatsappValido(whatsapp)) {
+    err.textContent = 'Agrega tu número de WhatsApp (obligatorio para recibir pedidos). Ej: 0412 123 4567.';
+    return err.classList.remove('hidden');
+  }
+  $('cfg-whatsapp').value = whatsapp; // muestra el número ya corregido (con 58)
 
   const boton = $('cfg-guardar-datos');
   boton.disabled = true;

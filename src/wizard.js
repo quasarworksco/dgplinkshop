@@ -10,6 +10,7 @@ import { requerirSesion } from './auth.js';
 import { subirImagen, optimizada } from './cloudinary.js';
 import { normalizarSlug, urlDeTienda, esSlugReservado } from './subdominio.js';
 import { hidratarIconos } from './iconos.js';
+import { normalizarWhatsapp, whatsappValido } from './telefono.js';
 
 const TOTAL_PASOS = 4;
 
@@ -70,8 +71,12 @@ async function validarPasoActual() {
     if (estado.slugDisponible === null) await verificarSlug();
     if (estado.slugDisponible === false) return 'Esa dirección ya está ocupada. Prueba otra.';
   }
-  if (estado.paso === 3 && estado.whatsapp && !/^\d{8,15}$/.test(estado.whatsapp)) {
-    return 'El WhatsApp debe tener solo números, con código de país (8 a 15 dígitos).';
+  if (estado.paso === 3) {
+    // WhatsApp obligatorio: es por donde la tienda recibe los pedidos.
+    if (!estado.whatsapp) return 'Agrega tu número de WhatsApp: por ahí recibirás los pedidos.';
+    if (!whatsappValido(estado.whatsapp)) {
+      return 'Escribe un WhatsApp válido. Ej: 0412 123 4567 (el sistema le pone el 58 solo).';
+    }
   }
   return null;
 }
@@ -271,7 +276,7 @@ async function publicarTienda() {
       description: estado.descripcion.trim() || null,
       category: estado.categoria,
       logo_url: estado.logoUrl,
-      whatsapp: estado.whatsapp || null,
+      whatsapp: normalizarWhatsapp(estado.whatsapp) || null,
       theme: { color_primario: estado.colorPrimario, color_acento: '#22d3ee' },
       is_published: true,
     });

@@ -12,6 +12,7 @@
 import { supabase } from './supabase-client.js';
 import { icono } from './iconos.js';
 import { notificar, registrarError } from './notificaciones.js';
+import { normalizarWhatsapp, whatsappValido } from './telefono.js';
 
 let negocio = null;
 let color = '#2563eb';
@@ -336,7 +337,8 @@ async function aplicarCupon() {
 // Confirmación → pedido → WhatsApp
 // ------------------------------------------------------------
 async function confirmarPedido() {
-  if (!negocio.whatsapp) { notificar('Esta tienda aún no configuró su WhatsApp.', 'error'); return; }
+  const wsp = normalizarWhatsapp(negocio.whatsapp);
+  if (!whatsappValido(wsp)) { notificar('Esta tienda aún no configuró su WhatsApp.', 'error'); return; }
   const boton = document.getElementById('carrito-confirmar');
   boton.disabled = true;
   boton.innerHTML = `<span class="spinner"></span> Enviando…`;
@@ -353,7 +355,7 @@ async function confirmarPedido() {
     // Cuenta el clic a WhatsApp (contador de la tienda) antes de redirigir
     await supabase.rpc('sumar_whatsapp', { p_business_id: negocio.id }).catch(() => {});
 
-    window.location.href = `https://wa.me/${negocio.whatsapp}?text=${encodeURIComponent(construirMensaje(pedido))}`;
+    window.location.href = `https://wa.me/${wsp}?text=${encodeURIComponent(construirMensaje(pedido))}`;
 
     items.clear(); filas.forEach((f) => f.remove()); filas.clear();
     cupon = null; persistir(); actualizarBurbuja(); actualizarTotales(); cerrar();
