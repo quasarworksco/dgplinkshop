@@ -9,55 +9,43 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="/styles/dgp.css" />
   <style>
-    /* Banda de control premium (encabezado del panel) */
-    .admin-hero {
-      position: relative; overflow: hidden; border-radius: var(--radio-xl);
-      background: linear-gradient(130deg, #312e81 0%, #4f46e5 42%, #2563eb 72%, #0891b2 100%);
-      box-shadow: var(--sombra-xl); isolation: isolate;
-    }
-    .admin-hero::before {
-      content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
-      background-image: radial-gradient(rgba(255,255,255,.10) 1px, transparent 1px);
-      background-size: 20px 20px;
-      -webkit-mask-image: radial-gradient(90% 80% at 80% 0%, #000, transparent 75%);
-      mask-image: radial-gradient(90% 80% at 80% 0%, #000, transparent 75%);
-    }
-    .admin-hero .blob-luz {
-      position: absolute; border-radius: 50%; filter: blur(60px); pointer-events: none; z-index: -1;
-    }
-    /* Tarjeta de métrica premium */
+    /* Panel interno: estética sobria y minimalista (sin degradados llamativos) */
+    body.dgp-lienzo { background: #f7f8fb; }
+    :root[data-theme="dark"] body.dgp-lienzo { background: #0a0f1c; }
+
+    .seccion-titulo { font-size: .78rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #94a3b8; }
+
+    /* Tarjeta de métrica minimalista */
     .metrica {
-      position: relative; background: var(--panel); border: 1px solid var(--linea);
-      border-radius: var(--radio-lg); box-shadow: var(--sombra-sm); padding: 1.25rem;
-      transition: transform .35s cubic-bezier(.2,.7,.2,1), box-shadow .35s ease, border-color .35s ease;
+      background: var(--panel); border: 1px solid var(--linea); border-radius: 1rem;
+      padding: 1.3rem 1.4rem; transition: border-color .2s ease, box-shadow .2s ease;
     }
-    .metrica:hover { transform: translateY(-4px); box-shadow: var(--sombra-md); border-color: #d6e0f5; }
-    .metrica-ico {
-      width: 2.75rem; height: 2.75rem; border-radius: .85rem; color: #fff;
-      display: flex; align-items: center; justify-content: center; box-shadow: var(--sombra-sm);
-    }
-    /* Avatar con iniciales del negocio */
+    .metrica:hover { border-color: #cbd5e1; box-shadow: var(--sombra-sm); }
+    .metrica-label { display: flex; align-items: center; gap: .5rem; color: #94a3b8; font-size: .72rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+    .metrica-num { font-family: var(--fuente-display); font-weight: 700; font-size: 2.1rem; color: var(--tinta); margin-top: .65rem; letter-spacing: -.02em; line-height: 1; }
+
+    /* Avatar con iniciales del negocio (gris sobrio, sin colores aleatorios) */
     .avatar-inicial {
-      width: 2.5rem; height: 2.5rem; border-radius: .8rem; flex-shrink: 0;
+      width: 2.4rem; height: 2.4rem; border-radius: .7rem; flex-shrink: 0;
       display: flex; align-items: center; justify-content: center;
-      font-family: var(--fuente-display); font-weight: 800; font-size: .95rem; color: #fff;
-      box-shadow: var(--sombra-sm);
+      font-family: var(--fuente-display); font-weight: 700; font-size: .9rem;
+      color: #475569; background: #f1f5f9; border: 1px solid var(--linea);
     }
-    /* Grupo de acciones (contenedor sutil) */
+    /* Grupo de acciones (contenedor sutil y neutro) */
     .acciones-grupo {
       display: inline-flex; align-items: center; gap: .15rem; padding: .2rem;
-      border-radius: .8rem; background: var(--azul-suave); border: 1px solid var(--linea);
+      border-radius: .7rem; background: #f1f5f9; border: 1px solid var(--linea);
     }
     .acc-btn {
-      width: 2rem; height: 2rem; border-radius: .6rem; display: inline-flex;
-      align-items: center; justify-content: center; color: var(--muted);
-      transition: background .18s ease, color .18s ease, transform .18s ease;
+      width: 2rem; height: 2rem; border-radius: .5rem; display: inline-flex;
+      align-items: center; justify-content: center; color: #64748b;
+      transition: background .15s ease, color .15s ease;
     }
-    .acc-btn:hover { transform: translateY(-1px); }
-    .fila-tienda { transition: background .18s ease; }
-    .fila-tienda:hover { background: rgba(37,99,235,.035); }
-    :root[data-theme="dark"] .fila-tienda:hover { background: rgba(59,130,246,.07); }
-    :root[data-theme="dark"] .acciones-grupo { background: #0f1e33; border-color: #2a3650; }
+    .fila-tienda { transition: background .15s ease; }
+    .fila-tienda:hover { background: #f8fafc; }
+    :root[data-theme="dark"] .fila-tienda:hover { background: #0f1729; }
+    :root[data-theme="dark"] .acciones-grupo,
+    :root[data-theme="dark"] .avatar-inicial { background: #0f1e33; border-color: #2a3650; color: #cbd5e1; }
   </style>
 </head>
 <body class="dgp-lienzo">
@@ -97,63 +85,56 @@
   <main id="estado-ok" class="contenedor-ancho py-8 hidden">
 
     <!-- Banda de control premium -->
-    <section class="admin-hero px-6 sm:px-10 py-8 sm:py-10 mb-8">
-      <div class="blob-luz" style="width:260px;height:260px;background:rgba(34,211,238,.45);top:-80px;right:-40px;"></div>
-      <div class="blob-luz" style="width:220px;height:220px;background:rgba(129,140,248,.5);bottom:-90px;left:10%;"></div>
-      <div class="relative flex flex-col sm:flex-row sm:items-end sm:justify-between gap-5">
+    <section class="mb-9 pb-6 border-b border-slate-200/80">
+      <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
         <div>
-          <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 text-white text-xs font-bold backdrop-blur-sm border border-white/20">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5"><path d="M12 2 4 5v6c0 5 3.4 7.7 8 9 4.6-1.3 8-4 8-9V5z"/></svg>
-            Súper-admin
-          </span>
-          <h1 class="text-3xl sm:text-4xl font-extrabold text-white mt-3 leading-tight">Centro de control</h1>
-          <p class="text-white/80 mt-1.5 max-w-xl">Gestiona todas las tiendas, pagos y suscripciones de la plataforma desde un solo lugar.</p>
-          <p id="admin-saludo" class="inline-flex items-center gap-2 mt-4 text-white/90 text-sm font-medium bg-white/10 border border-white/15 rounded-full px-3 py-1.5 backdrop-blur-sm">
-            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-            <span>Acceso privado · solo tu cuenta de administrador</span>
-          </p>
+          <p class="seccion-titulo">Panel interno</p>
+          <h1 class="text-[1.9rem] sm:text-3xl font-bold text-slate-900 mt-2 tracking-tight">Centro de control</h1>
+          <p class="text-slate-500 mt-1.5 max-w-xl text-[0.95rem]">Tiendas, pagos y suscripciones de la plataforma.</p>
         </div>
+        <span id="admin-saludo" class="inline-flex items-center gap-2 text-xs font-medium text-slate-500 bg-white border border-slate-200 rounded-full px-3 py-1.5 self-start sm:self-auto">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5 text-slate-400"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          Acceso privado
+        </span>
       </div>
     </section>
 
     <!-- Métricas -->
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
       <div class="metrica">
-        <div class="flex items-center justify-between">
-          <div class="metrica-ico" style="background:linear-gradient(135deg,#4f46e5,#2563eb);">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M3 9 12 2l9 7"/><path d="M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10"/></svg>
-          </div>
+        <div class="metrica-label">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M3 9 12 2l9 7"/><path d="M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10"/></svg>
+          Tiendas
         </div>
-        <p id="m-total" class="text-3xl font-extrabold text-slate-900 mt-3 leading-none">—</p>
-        <p class="text-xs text-slate-400 uppercase tracking-wide mt-1.5 font-semibold">Tiendas</p>
+        <p id="m-total" class="metrica-num">—</p>
       </div>
       <div class="metrica">
-        <div class="metrica-ico" style="background:linear-gradient(135deg,#0891b2,#06b6d4);">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+        <div class="metrica-label">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+          Publicadas
         </div>
-        <p id="m-publicadas" class="text-3xl font-extrabold text-slate-900 mt-3 leading-none">—</p>
-        <p class="text-xs text-slate-400 uppercase tracking-wide mt-1.5 font-semibold">Publicadas</p>
+        <p id="m-publicadas" class="metrica-num">—</p>
       </div>
       <div class="metrica">
-        <div class="metrica-ico" style="background:linear-gradient(135deg,#7c3aed,#4f46e5);">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="m12 2 2.4 7.4H22l-6 4.6 2.3 7.4-6.3-4.6L5.7 21 8 14 2 9.4h7.6z"/></svg>
+        <div class="metrica-label">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="m12 2 2.4 7.4H22l-6 4.6 2.3 7.4-6.3-4.6L5.7 21 8 14 2 9.4h7.6z"/></svg>
+          Plan PRO
         </div>
-        <p id="m-pro" class="text-3xl font-extrabold text-blue-600 mt-3 leading-none">—</p>
-        <p class="text-xs text-slate-400 uppercase tracking-wide mt-1.5 font-semibold">Plan PRO</p>
+        <p id="m-pro" class="metrica-num">—</p>
       </div>
       <div class="metrica">
-        <div class="metrica-ico" style="background:linear-gradient(135deg,#059669,#10b981);">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <div class="metrica-label">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          Productos
         </div>
-        <p id="m-productos" class="text-3xl font-extrabold text-slate-900 mt-3 leading-none">—</p>
-        <p class="text-xs text-slate-400 uppercase tracking-wide mt-1.5 font-semibold">Productos</p>
+        <p id="m-productos" class="metrica-num">—</p>
       </div>
     </div>
 
     <!-- Cobros y suscripciones (config central) -->
     <section class="mb-8">
       <h2 class="text-lg font-bold text-slate-900 mb-3 flex items-center gap-2">
-        <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-emerald-50 text-emerald-600">
+        <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-slate-100 text-slate-500">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><rect width="20" height="14" x="2" y="5" rx="2"/><path d="M2 10h20"/></svg>
         </span>
         Cobros y suscripciones
@@ -212,7 +193,7 @@
     <!-- Pagos por confirmar -->
     <section id="admin-pagos-seccion" class="mb-8 hidden">
       <h2 class="text-lg font-bold text-slate-900 mb-3 flex items-center gap-2">
-        <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-amber-50 text-amber-600">
+        <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-slate-100 text-slate-500">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
         </span>
         Pagos por confirmar <span id="admin-pagos-conteo" class="chip">0</span>
@@ -223,7 +204,7 @@
     <!-- Distribuidores (socios) -->
     <section class="mb-8">
       <h2 class="text-lg font-bold text-slate-900 mb-3 flex items-center gap-2">
-        <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-50 text-indigo-600">
+        <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-slate-100 text-slate-500">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         </span>
         Distribuidores
@@ -281,7 +262,7 @@
     <!-- Reseñas por aprobar -->
     <section id="admin-resenas-seccion" class="mb-8 hidden">
       <h2 class="text-lg font-bold text-slate-900 mb-3 flex items-center gap-2">
-        <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-50 text-indigo-600">
+        <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-slate-100 text-slate-500">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
         </span>
         Reseñas por aprobar <span id="admin-resenas-conteo" class="chip">0</span>
@@ -292,7 +273,7 @@
     <!-- Tabla de tiendas -->
     <div class="flex items-center justify-between mb-3">
       <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
-        <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-blue-50 text-blue-600">
+        <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-slate-100 text-slate-500">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M3 3v18h18"/><rect width="4" height="7" x="7" y="10" rx="1"/><rect width="4" height="11" x="14" y="6" rx="1"/></svg>
         </span>
         Tiendas

@@ -19,16 +19,10 @@ function mostrar(cual) {
 }
 function escapar(t) { const d = document.createElement('div'); d.textContent = t ?? ''; return d.innerHTML; }
 
-const GRADIENTES = [
-  'linear-gradient(135deg,#4f46e5,#2563eb)', 'linear-gradient(135deg,#0891b2,#06b6d4)',
-  'linear-gradient(135deg,#7c3aed,#6366f1)', 'linear-gradient(135deg,#db2777,#f472b6)',
-  'linear-gradient(135deg,#ea580c,#f59e0b)', 'linear-gradient(135deg,#059669,#10b981)',
-];
 function avatarDe(nombre) {
   const txt = (nombre || '?').trim();
   const ini = txt.split(/\s+/).slice(0, 2).map((w) => w[0]).join('').toUpperCase() || '?';
-  let h = 0; for (let i = 0; i < txt.length; i++) h = (h * 31 + txt.charCodeAt(i)) >>> 0;
-  return { ini: escapar(ini), grad: GRADIENTES[h % GRADIENTES.length] };
+  return { ini: escapar(ini) };
 }
 
 (async function iniciar() {
@@ -70,8 +64,8 @@ async function cargarClientes() {
     else if (t.vigente) estado = `<span class="inline-flex items-center gap-1 text-emerald-600 font-semibold">${punto('bg-emerald-500')}Al día</span>`;
     else estado = `<span class="inline-flex items-center gap-1 text-rose-600 font-semibold">${punto('bg-rose-500')}${dePago ? 'Vencida' : 'Gratis'}</span>`;
     const avatar = t.logo_url
-      ? `<img src="${escapar(t.logo_url)}" alt="" loading="lazy" class="avatar-inicial object-cover" style="background:#fff" onerror="this.outerHTML='<span class=\\'avatar-inicial\\' style=\\'background:${av.grad}\\'>${av.ini}</span>'" />`
-      : `<span class="avatar-inicial" style="background:${av.grad};">${av.ini}</span>`;
+      ? `<img src="${escapar(t.logo_url)}" alt="" loading="lazy" class="avatar-inicial object-cover" style="background:#fff" onerror="this.outerHTML='<span class=\\'avatar-inicial\\'>${av.ini}</span>'" />`
+      : `<span class="avatar-inicial">${av.ini}</span>`;
     return `
       <tr class="border-b border-slate-50 hover:bg-slate-50/60">
         <td class="px-5 py-3.5"><div class="flex items-center gap-3">${avatar}<div class="min-w-0"><p class="font-semibold text-slate-900 truncate">${escapar(t.name)}</p><p class="text-xs text-slate-400 truncate">${escapar(t.slug)}.dgpgroupusa.com</p></div></div></td>

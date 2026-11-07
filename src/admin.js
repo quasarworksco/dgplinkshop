@@ -339,18 +339,11 @@ async function cargarTiendas() {
   const SVG_RENOVAR = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>';
   const SVG_PAUSA = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" class="w-4 h-4"><path d="M8 4v16"/><path d="M16 4v16"/></svg>';
   const SVG_PLAY = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><path d="M6 4.5v15a1 1 0 0 0 1.52.85l12-7.5a1 1 0 0 0 0-1.7l-12-7.5A1 1 0 0 0 6 4.5z"/></svg>';
-  // Avatar con iniciales + color de marca determinista según el nombre
-  const GRADIENTES = [
-    'linear-gradient(135deg,#4f46e5,#2563eb)', 'linear-gradient(135deg,#0891b2,#06b6d4)',
-    'linear-gradient(135deg,#7c3aed,#6366f1)', 'linear-gradient(135deg,#db2777,#f472b6)',
-    'linear-gradient(135deg,#ea580c,#f59e0b)', 'linear-gradient(135deg,#059669,#10b981)',
-    'linear-gradient(135deg,#0d9488,#2dd4bf)', 'linear-gradient(135deg,#4338ca,#818cf8)',
-  ];
+  // Avatar con iniciales (gris sobrio, el color lo da la clase .avatar-inicial)
   const avatarDe = (nombre) => {
     const txt = (nombre || '?').trim();
     const iniciales = txt.split(/\s+/).slice(0, 2).map((w) => w[0]).join('').toUpperCase() || '?';
-    let h = 0; for (let i = 0; i < txt.length; i++) h = (h * 31 + txt.charCodeAt(i)) >>> 0;
-    return { iniciales: escapar(iniciales), grad: GRADIENTES[h % GRADIENTES.length] };
+    return { iniciales: escapar(iniciales) };
   };
   const cuerpo = $('tabla-tiendas');
   cuerpo.innerHTML = tiendas
@@ -377,8 +370,8 @@ async function cargarTiendas() {
       else estado = `<span class="inline-flex items-center gap-1 text-rose-600 font-semibold">${punto('bg-rose-500')}${dePago ? 'Vencida' : 'Prueba vencida'}</span>`;
       const av = avatarDe(t.name);
       const avatar = t.logo_url
-        ? `<img src="${escapar(t.logo_url)}" alt="${escapar(t.name)}" loading="lazy" class="avatar-inicial object-cover" style="background:#fff;" onerror="this.outerHTML='<span class=\\'avatar-inicial\\' style=\\'background:${av.grad}\\'>${av.iniciales}</span>'" />`
-        : `<span class="avatar-inicial" style="background:${av.grad};">${av.iniciales}</span>`;
+        ? `<img src="${escapar(t.logo_url)}" alt="${escapar(t.name)}" loading="lazy" class="avatar-inicial object-cover" style="background:#fff;" onerror="this.outerHTML='<span class=\\'avatar-inicial\\'>${av.iniciales}</span>'" />`
+        : `<span class="avatar-inicial">${av.iniciales}</span>`;
       return `
         <tr class="fila-tienda border-b border-slate-50" data-tienda="${t.id}" data-nombre="${escapar(t.name)}" data-pausada="${t.is_paused ? '1' : '0'}">
           <td class="px-5 py-3.5">
