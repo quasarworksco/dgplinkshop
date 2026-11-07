@@ -44,10 +44,50 @@ const ESTILO_PLAN = {
 
   await cargarConfigCobros();
   await cargarPagos();
+  await cargarHistorialPagos();
   await cargarResenas();
   await cargarTiendas();
   mostrar('ok');
 })();
+
+// ------------------------------------------------------------
+// Historial de pagos (confirmados / rechazados)
+// ------------------------------------------------------------
+async function cargarHistorialPagos() {
+  const { data, error } = await supabase
+    .from('admin_pagos')
+    .select('*')
+    .neq('status', 'pendiente')
+    .order('created_at', { ascending: false })
+    .limit(100);
+  if (error) { registrarError('admin/historial-pagos', error); return; }
+  const pagos = data ?? [];
+  $('historial-vacio').classList.toggle('hidden', pagos.length > 0);
+
+  const estadoBadge = (s) => {
+    if (s === 'confirmado') return '<span class="inline-flex items-center gap-1 text-emerald-600 font-semibold"><span class="w-2 h-2 rounded-full bg-emerald-500"></span>Confirmado</span>';
+    if (s === 'rechazado') return '<span class="inline-flex items-center gap-1 text-rose-600 font-semibold"><span class="w-2 h-2 rounded-full bg-rose-500"></span>Rechazado</span>';
+    return `<span class="text-slate-500">${escapar(s)}</span>`;
+  };
+
+  $('tabla-historial-pagos').innerHTML = pagos.map((p) => {
+    const fecha = new Date(p.created_at).toLocaleDateString('es', { day: '2-digit', month: 'short', year: '2-digit' });
+    const metodo = p.method === 'pagomovil' ? 'Pago Móvil' : (p.method === 'binance' ? 'Binance' : escapar(p.method || '—'));
+    const comp = p.receipt_url
+      ? `<a href="${p.receipt_url}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-blue-600 font-semibold hover:text-blue-700">${icono('imagen', 'w-4 h-4')} Ver</a>`
+      : '<span class="text-slate-300">—</span>';
+    return `
+      <tr class="border-b border-slate-50 hover:bg-slate-50/60">
+        <td class="px-5 py-3 text-slate-500 whitespace-nowrap">${fecha}</td>
+        <td class="px-5 py-3"><p class="font-semibold text-slate-900">${escapar(p.negocio)}</p><p class="text-xs text-slate-400">${escapar(p.owner_email)}</p></td>
+        <td class="px-5 py-3"><span class="uppercase font-bold text-xs text-blue-700">${escapar(p.plan)}</span></td>
+        <td class="px-5 py-3 font-semibold text-slate-800">$${Number(p.amount || 0).toFixed(2)}</td>
+        <td class="px-5 py-3 text-slate-600">${metodo}</td>
+        <td class="px-5 py-3 text-xs">${estadoBadge(p.status)}</td>
+        <td class="px-5 py-3 text-right">${comp}</td>
+      </tr>`;
+  }).join('');
+}
 
 // ------------------------------------------------------------
 // Cobros y suscripciones (configuración central)

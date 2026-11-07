@@ -220,6 +220,37 @@
       <div id="admin-pagos" class="grid sm:grid-cols-2 gap-4"></div>
     </section>
 
+    <!-- Historial de pagos -->
+    <section class="mb-8">
+      <h2 class="text-lg font-bold text-slate-900 mb-3 flex items-center gap-2">
+        <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-slate-100 text-slate-500">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l4 2"/></svg>
+        </span>
+        Historial de pagos
+      </h2>
+      <div class="tarjeta-solida overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="text-left text-slate-400 bg-slate-50/70 border-b border-slate-100">
+                <th class="px-5 py-3.5 font-semibold text-xs uppercase tracking-wide">Fecha</th>
+                <th class="px-5 py-3.5 font-semibold text-xs uppercase tracking-wide">Negocio</th>
+                <th class="px-5 py-3.5 font-semibold text-xs uppercase tracking-wide">Plan</th>
+                <th class="px-5 py-3.5 font-semibold text-xs uppercase tracking-wide">Monto</th>
+                <th class="px-5 py-3.5 font-semibold text-xs uppercase tracking-wide">Método</th>
+                <th class="px-5 py-3.5 font-semibold text-xs uppercase tracking-wide">Estado</th>
+                <th class="px-5 py-3.5 font-semibold text-xs uppercase tracking-wide text-right">Comprobante</th>
+              </tr>
+            </thead>
+            <tbody id="tabla-historial-pagos"></tbody>
+          </table>
+        </div>
+      </div>
+      <p id="historial-vacio" class="tarjeta-solida p-8 text-center text-slate-500 hidden mt-4">
+        Aún no hay pagos registrados.
+      </p>
+    </section>
+
     <!-- Reseñas por aprobar -->
     <section id="admin-resenas-seccion" class="mb-8 hidden">
       <h2 class="text-lg font-bold text-slate-900 mb-3 flex items-center gap-2">
