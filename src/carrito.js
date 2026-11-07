@@ -96,7 +96,7 @@ function inyectarUI() {
       <span id="carrito-conteo" class="min-w-6 h-6 px-1.5 rounded-full bg-white/25 text-xs font-bold flex items-center justify-center">0</span>
     </button>
 
-    <div id="carrito-fondo" class="fixed inset-0 z-40 hidden bg-slate-900/40 backdrop-blur-sm"></div>
+    <div id="carrito-fondo" class="fixed inset-0 z-40 hidden bg-slate-900/50 opacity-0 transition-opacity duration-300" style="will-change:opacity"></div>
 
     <aside id="carrito-panel" aria-label="Carrito"
       class="fixed top-0 right-0 z-50 h-full w-full max-w-md bg-white shadow-2xl flex flex-col translate-x-full transition-transform duration-300">
@@ -171,15 +171,24 @@ function inyectarUI() {
   elegirEntrega('recoger');
 }
 
+let cerrarTimer = null;
 function abrir() {
   for (const id of items.keys()) sincronizarFila(id);
   actualizarTotales();
-  document.getElementById('carrito-fondo').classList.remove('hidden');
-  requestAnimationFrame(() => document.getElementById('carrito-panel').classList.remove('translate-x-full'));
+  if (cerrarTimer) { clearTimeout(cerrarTimer); cerrarTimer = null; }
+  const fondo = document.getElementById('carrito-fondo');
+  fondo.classList.remove('hidden');
+  requestAnimationFrame(() => {
+    fondo.classList.remove('opacity-0');                 // fundido suave (sin desenfoque)
+    document.getElementById('carrito-panel').classList.remove('translate-x-full');
+  });
 }
 function cerrar() {
   document.getElementById('carrito-panel').classList.add('translate-x-full');
-  document.getElementById('carrito-fondo').classList.add('hidden');
+  const fondo = document.getElementById('carrito-fondo');
+  fondo.classList.add('opacity-0');
+  if (cerrarTimer) clearTimeout(cerrarTimer);
+  cerrarTimer = setTimeout(() => { fondo.classList.add('hidden'); cerrarTimer = null; }, 300);
 }
 
 // ------------------------------------------------------------
@@ -352,8 +361,9 @@ async function confirmarPedido() {
     });
     if (error) throw error;
 
-    // Cuenta el clic a WhatsApp (contador de la tienda) antes de redirigir
-    await supabase.rpc('sumar_whatsapp', { p_business_id: negocio.id }).catch(() => {});
+    // Cuenta el clic a WhatsApp (contador, no crítico). El builder de Supabase
+    // no tiene .catch(); usamos .then(ok, err) para no romper el pedido.
+    supabase.rpc('sumar_whatsapp', { p_business_id: negocio.id }).then(() => {}, () => {});
 
     window.location.href = `https://wa.me/${wsp}?text=${encodeURIComponent(construirMensaje(pedido))}`;
 
