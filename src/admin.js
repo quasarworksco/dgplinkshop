@@ -358,53 +358,55 @@ async function cargarTiendas() {
       let meses = 0;
       if (pu) { meses = (pu.getFullYear() - hoyD.getFullYear()) * 12 + (pu.getMonth() - hoyD.getMonth()); if (pu.getDate() < hoyD.getDate()) meses--; }
       const badgeMeses = meses >= 1
-        ? ` <span class="ml-1 inline-block px-1.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold">${meses} ${meses === 1 ? 'mes' : 'meses'}</span>` : '';
-      const vence = !dePago
-        ? '<span class="text-slate-300">Gratis</span>'
+        ? ` <span class="inline-block px-1.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold">${meses}m</span>` : '';
+      const subVence = !dePago ? ''
         : (pu
-          ? `<span class="${vencido ? 'text-rose-600 font-semibold' : 'text-slate-700 font-medium'}">${pu.toLocaleDateString('es', { day: '2-digit', month: 'short', year: '2-digit' })}</span>${badgeMeses}`
-          : '<span class="text-slate-400">—</span>');
-      const punto = (c) => `<span class="w-2 h-2 rounded-full ${c}"></span>`;
+          ? `<span class="${vencido ? 'text-rose-500 font-semibold' : 'text-slate-400'}">vence ${pu.toLocaleDateString('es', { day: '2-digit', month: 'short' })}</span>${badgeMeses}`
+          : '');
+      const punto = (c) => `<span class="w-1.5 h-1.5 rounded-full ${c}"></span>`;
       let estado;
-      if (t.is_paused) estado = `<span class="inline-flex items-center gap-1 text-amber-600 font-semibold">${punto('bg-amber-500')}Pausada</span>`;
-      else if (t.vigente) estado = `<span class="inline-flex items-center gap-1 text-emerald-600 font-semibold">${punto('bg-emerald-500')}Activa</span>`;
-      else estado = `<span class="inline-flex items-center gap-1 text-rose-600 font-semibold">${punto('bg-rose-500')}${dePago ? 'Vencida' : 'Prueba vencida'}</span>`;
+      if (t.is_paused) estado = `<span class="inline-flex items-center gap-1.5 text-amber-600 font-semibold">${punto('bg-amber-500')}Pausada</span>`;
+      else if (t.vigente) estado = `<span class="inline-flex items-center gap-1.5 text-emerald-600 font-semibold">${punto('bg-emerald-500')}Activa</span>`;
+      else estado = `<span class="inline-flex items-center gap-1.5 text-rose-600 font-semibold">${punto('bg-rose-500')}Vencida</span>`;
       const av = avatarDe(t.name);
       const avatar = t.logo_url
         ? `<img src="${escapar(t.logo_url)}" alt="${escapar(t.name)}" loading="lazy" class="avatar-inicial object-cover" style="background:#fff;" onerror="this.outerHTML='<span class=\\'avatar-inicial\\'>${av.iniciales}</span>'" />`
         : `<span class="avatar-inicial">${av.iniciales}</span>`;
       return `
         <tr class="fila-tienda border-b border-slate-50" data-tienda="${t.id}" data-nombre="${escapar(t.name)}" data-pausada="${t.is_paused ? '1' : '0'}">
-          <td class="px-5 py-3.5">
-            <div class="flex items-center gap-3">
+          <td class="px-4 py-3">
+            <div class="flex items-center gap-2.5 max-w-[15rem]">
               ${avatar}
               <div class="min-w-0">
-                <p class="font-semibold text-slate-900 truncate">${escapar(t.name)}</p>
-                <p class="text-xs text-slate-400 truncate">${escapar(t.slug)}.dgpgroupusa.com</p>
+                <p class="font-semibold text-slate-900 truncate text-[0.9rem]">${escapar(t.name)}</p>
+                <p class="text-[11px] text-slate-400 truncate">${escapar(t.slug)}.dgpgroupusa.com · ${t.num_productos} prod.</p>
               </div>
             </div>
           </td>
-          <td class="px-5 py-3.5">
-            <p class="text-slate-700">${escapar(t.owner_name || '—')}</p>
-            <p class="text-xs text-slate-400">${escapar(t.owner_email)}</p>
+          <td class="px-4 py-3">
+            <div class="min-w-0 max-w-[12rem]">
+              <p class="text-slate-700 text-[0.9rem] truncate">${escapar(t.owner_name || '—')}</p>
+              <p class="text-[11px] text-slate-400 truncate">${escapar(t.owner_email)}</p>
+            </div>
           </td>
-          <td class="px-5 py-3.5">
-            <select data-plan class="text-xs font-bold uppercase rounded-lg border border-slate-200 bg-white py-1.5 pl-2.5 pr-6 text-slate-700 cursor-pointer">
+          <td class="px-4 py-3">
+            <select data-plan class="text-[11px] font-bold uppercase rounded-lg border border-slate-200 bg-white py-1.5 pl-2 pr-5 text-slate-700 cursor-pointer">
               <option value="free" ${t.plan === 'free' ? 'selected' : ''}>FREE</option>
               <option value="pro" ${t.plan === 'pro' ? 'selected' : ''}>PRO</option>
               <option value="premium" ${t.plan === 'premium' ? 'selected' : ''}>PREMIUM</option>
             </select>
           </td>
-          <td class="px-5 py-3.5 text-center font-semibold text-slate-700">${t.num_productos}</td>
-          <td class="px-5 py-3.5 text-xs">${vence}</td>
-          <td class="px-5 py-3.5 text-xs font-medium">${estado}</td>
-          <td class="px-5 py-3.5">
-            <select data-asignar-dist class="text-xs rounded-lg border border-slate-200 bg-white py-1.5 px-2 text-slate-700 max-w-[11rem]">
+          <td class="px-4 py-3 text-xs whitespace-nowrap">
+            <div class="font-medium">${estado}</div>
+            ${subVence ? `<div class="text-[11px] mt-0.5">${subVence}</div>` : ''}
+          </td>
+          <td class="px-4 py-3">
+            <select data-asignar-dist class="text-[11px] rounded-lg border border-slate-200 bg-white py-1.5 px-2 text-slate-600 w-[8.5rem] truncate">
               <option value="">— Sin distribuidor</option>
               ${distribuidores.map((d) => `<option value="${d.id}" ${t.distribuidor_id === d.id ? 'selected' : ''}>${escapar(d.email)}</option>`).join('')}
             </select>
           </td>
-          <td class="px-5 py-3.5">
+          <td class="px-4 py-3">
             <div class="flex justify-end">
               <div class="acciones-grupo">
                 ${dePago ? `<button data-accion="renovar" title="Sumar un mes de pago" aria-label="Renovar" class="acc-btn hover:bg-emerald-100 hover:text-emerald-600">${SVG_RENOVAR}</button>` : ''}
