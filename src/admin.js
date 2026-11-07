@@ -43,12 +43,72 @@ const ESTILO_PLAN = {
   if (!esAdmin) return mostrar('denegado');
 
   await cargarConfigCobros();
+  await cargarDistribuidores();
   await cargarPagos();
   await cargarHistorialPagos();
   await cargarResenas();
   await cargarTiendas();
   mostrar('ok');
 })();
+
+// ------------------------------------------------------------
+// Distribuidores (socios)
+// ------------------------------------------------------------
+let distribuidores = [];
+
+async function cargarDistribuidores() {
+  const { data, error } = await supabase
+    .from('admin_distribuidores').select('*').order('email', { ascending: true });
+  if (error) { registrarError('admin/distribuidores', error); return; }
+  distribuidores = data ?? [];
+  $('dist-vacio').classList.toggle('hidden', distribuidores.length > 0);
+
+  $('dist-lista').innerHTML = distribuidores.map((d) => `
+    <div class="tarjeta-borde p-4" data-dist="${d.id}">
+      <div class="flex items-start justify-between gap-3">
+        <div class="min-w-0">
+          <p class="font-bold text-slate-900 truncate">${escapar(d.full_name || d.email)}</p>
+          <p class="text-xs text-slate-400 truncate">${escapar(d.email)}</p>
+        </div>
+        <span class="chip shrink-0">${Number(d.porcentaje)}%</span>
+      </div>
+      <div class="grid grid-cols-3 gap-2 mt-3 text-center">
+        <div><p class="text-lg font-extrabold text-slate-900">${d.num_clientes}</p><p class="text-[10px] uppercase tracking-wide text-slate-400 font-semibold">Clientes</p></div>
+        <div><p class="text-lg font-extrabold text-slate-900">$${Number(d.total_generado).toFixed(2)}</p><p class="text-[10px] uppercase tracking-wide text-slate-400 font-semibold">Generado</p></div>
+        <div><p class="text-lg font-extrabold text-blue-600">$${Number(d.comision_total).toFixed(2)}</p><p class="text-[10px] uppercase tracking-wide text-slate-400 font-semibold">Su comisión</p></div>
+      </div>
+      <button data-quitar-dist="${escapar(d.email)}" class="text-xs text-rose-600 font-semibold mt-3 hover:text-rose-700">Quitar como distribuidor</button>
+    </div>`).join('');
+
+  $('dist-lista').querySelectorAll('[data-quitar-dist]').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const email = btn.dataset.quitarDist;
+      if (!confirm(`Quitar a ${email} como distribuidor. Sus clientes asignados quedarán sin distribuidor.\n\n¿Continuar?`)) return;
+      const { error } = await supabase.rpc('set_distribuidor', { p_email: email, p_comision: null });
+      if (error) { registrarError('admin/quitar-dist', error); return notificar('No se pudo quitar.', 'error'); }
+      notificar('Distribuidor removido.', 'exito');
+      await cargarDistribuidores(); await cargarTiendas();
+    });
+  });
+}
+
+$('btn-dist-agregar').addEventListener('click', async () => {
+  const email = $('dist-email').value.trim();
+  const comision = Number($('dist-comision').value);
+  if (!email) return notificar('Escribe el correo de la cuenta.', 'error');
+  if (!isFinite(comision) || comision <= 0 || comision > 100) return notificar('Comisión inválida (1 a 100).', 'error');
+  const boton = $('btn-dist-agregar'); boton.disabled = true; boton.innerHTML = '<span class="spinner"></span> Guardando…';
+  const { error } = await supabase.rpc('set_distribuidor', { p_email: email, p_comision: comision });
+  boton.disabled = false; boton.textContent = 'Guardar distribuidor';
+  if (error) {
+    registrarError('admin/set-dist', error);
+    const m = error.message || '';
+    return notificar(m.includes('USUARIO_NO_ENCONTRADO') ? 'No existe una cuenta con ese correo.' : 'No se pudo guardar.', 'error');
+  }
+  $('dist-email').value = '';
+  notificar('Distribuidor guardado.', 'exito');
+  await cargarDistribuidores(); await cargarTiendas();
+});
 
 // ------------------------------------------------------------
 // Historial de pagos (confirmados / rechazados)
@@ -339,6 +399,12 @@ async function cargarTiendas() {
           <td class="px-5 py-3.5 text-xs">${vence}</td>
           <td class="px-5 py-3.5 text-xs font-medium">${estado}</td>
           <td class="px-5 py-3.5">
+            <select data-asignar-dist class="text-xs rounded-lg border border-slate-200 bg-white py-1.5 px-2 text-slate-700 max-w-[11rem]">
+              <option value="">— Sin distribuidor</option>
+              ${distribuidores.map((d) => `<option value="${d.id}" ${t.distribuidor_id === d.id ? 'selected' : ''}>${escapar(d.email)}</option>`).join('')}
+            </select>
+          </td>
+          <td class="px-5 py-3.5">
             <div class="flex justify-end">
               <div class="acciones-grupo">
                 ${dePago ? `<button data-accion="renovar" title="Sumar un mes de pago" aria-label="Renovar" class="acc-btn hover:bg-emerald-100 hover:text-emerald-600">${SVG_RENOVAR}</button>` : ''}
@@ -373,6 +439,16 @@ async function cargarTiendas() {
       if (error) { registrarError('admin/pausar', error); return notificar('No se pudo cambiar el estado.', 'error'); }
       notificar(pausada ? 'Tienda reactivada.' : 'Tienda pausada.', 'exito');
       await cargarTiendas();
+    });
+  });
+
+  cuerpo.querySelectorAll('[data-asignar-dist]').forEach((sel) => {
+    const fila = sel.closest('[data-tienda]'); const id = fila.dataset.tienda;
+    sel.addEventListener('change', async () => {
+      const { error } = await supabase.rpc('asignar_distribuidor', { p_business_id: id, p_distribuidor_id: sel.value || null });
+      if (error) { registrarError('admin/asignar-dist', error); return notificar('No se pudo asignar.', 'error'); }
+      notificar(sel.value ? 'Tienda asignada al distribuidor.' : 'Tienda sin distribuidor.', 'exito');
+      await cargarDistribuidores();
     });
   });
 

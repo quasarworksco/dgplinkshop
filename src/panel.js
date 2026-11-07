@@ -109,6 +109,10 @@ const ESTADOS_PEDIDO = {
   supabase.rpc('es_superadmin').then(({ data }) => {
     if (data) $('enlace-admin').classList.remove('hidden');
   });
+  // Enlace al panel de distribuidor, solo si esta cuenta lo es
+  supabase.rpc('es_distribuidor').then(({ data }) => {
+    if (data) $('enlace-distribuidor').classList.remove('hidden');
+  });
 
   $('ajuste-tasa').value = negocio.tasa_bs ?? '';
   await cargarCategorias();

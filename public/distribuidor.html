@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#4f46e5" />
+  <title>Panel de distribuidor — DGP LinkShop</title>
+  <script>try{if(localStorage.getItem('dgp-tema')==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}</script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/styles/dgp.css" />
+  <style>
+    .dist-hero{position:relative;overflow:hidden;border-radius:var(--radio-xl);
+      background:linear-gradient(130deg,#312e81 0%,#4f46e5 42%,#2563eb 72%,#0891b2 100%);
+      box-shadow:var(--sombra-xl);isolation:isolate;}
+    .dist-hero::before{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;
+      background-image:radial-gradient(rgba(255,255,255,.10) 1px,transparent 1px);background-size:20px 20px;
+      -webkit-mask-image:radial-gradient(90% 80% at 80% 0%,#000,transparent 75%);mask-image:radial-gradient(90% 80% at 80% 0%,#000,transparent 75%);}
+    .dist-hero .blob-luz{position:absolute;border-radius:50%;filter:blur(60px);pointer-events:none;z-index:-1;}
+    .metrica{position:relative;background:var(--panel);border:1px solid var(--linea);border-radius:var(--radio-lg);
+      box-shadow:var(--sombra-sm);padding:1.25rem;transition:transform .35s cubic-bezier(.2,.7,.2,1),box-shadow .35s ease;}
+    .metrica:hover{transform:translateY(-4px);box-shadow:var(--sombra-md);}
+    .metrica-ico{width:2.75rem;height:2.75rem;border-radius:.85rem;color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:var(--sombra-sm);}
+    .avatar-inicial{width:2.5rem;height:2.5rem;border-radius:.8rem;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+      font-family:var(--fuente-display);font-weight:800;font-size:.95rem;color:#fff;box-shadow:var(--sombra-sm);}
+  </style>
+</head>
+<body class="dgp-lienzo">
+
+  <header class="nav-glass sticky top-0 z-40">
+    <div class="contenedor-ancho flex items-center justify-between h-16">
+      <div class="flex items-center gap-3">
+        <a href="/" class="inline-block"><img src="/assets/logo.svg" alt="DGP LinkShop" class="h-8" /></a>
+        <span class="hidden sm:inline-flex chip">Distribuidor</span>
+      </div>
+      <div class="flex items-center gap-2 sm:gap-3">
+        <a href="/public/panel.html" class="btn btn-claro text-sm">Mi panel</a>
+        <button id="btn-logout" class="btn btn-fantasma text-sm">Salir</button>
+      </div>
+    </div>
+  </header>
+
+  <div id="estado-cargando" class="min-h-[60vh] flex flex-col items-center justify-center gap-4">
+    <div class="w-10 h-10 rounded-full border-2 border-slate-200 border-t-blue-500 animate-spin"></div>
+    <p class="text-sm text-slate-400">Cargando…</p>
+  </div>
+
+  <div id="estado-denegado" class="min-h-[60vh] hidden flex-col items-center justify-center text-center px-4">
+    <div class="tarjeta-borde p-10 max-w-md">
+      <div class="w-14 h-14 mx-auto rounded-2xl flex items-center justify-center text-rose-600 bg-rose-50 border border-rose-100">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-7 h-7"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      </div>
+      <h1 class="text-2xl font-extrabold text-slate-900 mt-5">Acceso restringido</h1>
+      <p class="text-slate-500 mt-2">Esta sección es solo para distribuidores de DGP LinkShop. Si crees que es un error, contacta al administrador.</p>
+      <a href="/public/panel.html" class="btn btn-primario mt-6">Ir a mi panel</a>
+    </div>
+  </div>
+
+  <main id="estado-ok" class="contenedor-ancho py-8 hidden">
+
+    <section class="dist-hero px-6 sm:px-10 py-8 sm:py-10 mb-8">
+      <div class="blob-luz" style="width:260px;height:260px;background:rgba(34,211,238,.45);top:-80px;right:-40px;"></div>
+      <div class="blob-luz" style="width:220px;height:220px;background:rgba(129,140,248,.5);bottom:-90px;left:10%;"></div>
+      <div class="relative">
+        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 text-white text-xs font-bold backdrop-blur-sm border border-white/20">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Distribuidor
+        </span>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-white mt-3 leading-tight">Panel de distribuidor</h1>
+        <p class="text-white/80 mt-1.5 max-w-xl">Controla a tus clientes: quién tiene su plan al día, fechas de pago y tu comisión acumulada.</p>
+        <p id="dist-saludo" class="inline-flex items-center gap-2 mt-4 text-white/90 text-sm font-medium bg-white/10 border border-white/15 rounded-full px-3 py-1.5 backdrop-blur-sm"></p>
+      </div>
+    </section>
+
+    <!-- Métricas -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      <div class="metrica">
+        <div class="metrica-ico" style="background:linear-gradient(135deg,#4f46e5,#2563eb);">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/></svg>
+        </div>
+        <p id="m-clientes" class="text-3xl font-extrabold text-slate-900 mt-3 leading-none">—</p>
+        <p class="text-xs text-slate-400 uppercase tracking-wide mt-1.5 font-semibold">Mis clientes</p>
+      </div>
+      <div class="metrica">
+        <div class="metrica-ico" style="background:linear-gradient(135deg,#059669,#10b981);">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
+        </div>
+        <p id="m-activos" class="text-3xl font-extrabold text-emerald-600 mt-3 leading-none">—</p>
+        <p class="text-xs text-slate-400 uppercase tracking-wide mt-1.5 font-semibold">Al día</p>
+      </div>
+      <div class="metrica">
+        <div class="metrica-ico" style="background:linear-gradient(135deg,#0891b2,#06b6d4);">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><line x1="12" x2="12" y1="2" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <p id="m-generado" class="text-3xl font-extrabold text-slate-900 mt-3 leading-none">—</p>
+        <p class="text-xs text-slate-400 uppercase tracking-wide mt-1.5 font-semibold">Generado</p>
+      </div>
+      <div class="metrica">
+        <div class="metrica-ico" style="background:linear-gradient(135deg,#7c3aed,#4f46e5);">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
+        </div>
+        <p id="m-comision" class="text-3xl font-extrabold text-blue-600 mt-3 leading-none">—</p>
+        <p class="text-xs text-slate-400 uppercase tracking-wide mt-1.5 font-semibold">Mi comisión</p>
+      </div>
+    </div>
+
+    <!-- Mis clientes -->
+    <h2 class="text-lg font-bold text-slate-900 mb-3 flex items-center gap-2">
+      <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-blue-50 text-blue-600">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/></svg>
+      </span>
+      Mis clientes
+    </h2>
+    <div class="tarjeta-solida overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="text-left text-slate-400 bg-slate-50/70 border-b border-slate-100">
+              <th class="px-5 py-3.5 font-semibold text-xs uppercase tracking-wide">Negocio</th>
+              <th class="px-5 py-3.5 font-semibold text-xs uppercase tracking-wide">Dueño</th>
+              <th class="px-5 py-3.5 font-semibold text-xs uppercase tracking-wide">Plan</th>
+              <th class="px-5 py-3.5 font-semibold text-xs uppercase tracking-wide">Vence</th>
+              <th class="px-5 py-3.5 font-semibold text-xs uppercase tracking-wide">Estado</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-clientes"></tbody>
+        </table>
+      </div>
+    </div>
+    <p id="clientes-vacio" class="tarjeta-solida p-8 text-center text-slate-500 hidden mt-4">
+      Aún no tienes clientes asignados. El administrador te los vincula desde su panel.
+    </p>
+
+    <!-- Historial de pagos de mis clientes -->
+    <h2 class="text-lg font-bold text-slate-900 mb-3 mt-8 flex items-center gap-2">
+      <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-slate-100 text-slate-500">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l4 2"/></svg>
+      </span>
+      Historial de pagos
+    </h2>
+    <div class="tarjeta-solida overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="text-left text-slate-400 bg-slate-50/70 border-b border-slate-100">
+              <th class="px-5 py-3.5 font-semibold text-xs uppercase tracking-wide">Fecha</th>
+              <th class="px-5 py-3.5 font-semibold text-xs uppercase tracking-wide">Negocio</th>
+              <th class="px-5 py-3.5 font-semibold text-xs uppercase tracking-wide">Plan</th>
+              <th class="px-5 py-3.5 font-semibold text-xs uppercase tracking-wide">Monto</th>
+              <th class="px-5 py-3.5 font-semibold text-xs uppercase tracking-wide">Método</th>
+              <th class="px-5 py-3.5 font-semibold text-xs uppercase tracking-wide">Estado</th>
+              <th class="px-5 py-3.5 font-semibold text-xs uppercase tracking-wide text-right">Mi comisión</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-pagos"></tbody>
+        </table>
+      </div>
+    </div>
+    <p id="pagos-vacio" class="tarjeta-solida p-8 text-center text-slate-500 hidden mt-4">
+      Aún no hay pagos de tus clientes.
+    </p>
+  </main>
+
+  <footer class="border-t border-slate-200 bg-white/70 mt-8">
+    <div class="contenedor-ancho py-6 text-center text-xs text-slate-500">
+      DGP LinkShop · Panel de distribuidor · Desarrollado por
+      <a href="https://dgpglobalgroup.com" target="_blank" rel="noopener" class="text-blue-600 font-semibold">DGP Global Group</a>
+    </div>
+  </footer>
+
+  <script type="module" src="/src/distribuidor.js"></script>
+</body>
+</html>
