@@ -329,7 +329,8 @@ async function cargarTiendas() {
   // Métricas
   $('m-total').textContent = tiendas.length;
   $('m-publicadas').textContent = tiendas.filter((t) => t.is_published).length;
-  $('m-pro').textContent = tiendas.filter((t) => t.plan === 'pro').length;
+  // Solo cuentan los PRO que están activos (los que no pagaron no cuentan)
+  $('m-pro').textContent = tiendas.filter((t) => t.plan === 'pro' && t.vigente).length;
   $('m-productos').textContent = tiendas.reduce((s, t) => s + Number(t.num_productos || 0), 0);
 
   $('admin-vacio').classList.toggle('hidden', tiendas.length > 0);
@@ -387,7 +388,13 @@ async function cargarTiendas() {
             <p class="text-slate-700">${escapar(t.owner_name || '—')}</p>
             <p class="text-xs text-slate-400">${escapar(t.owner_email)}</p>
           </td>
-          <td class="px-5 py-3.5"><span class="px-2.5 py-1 rounded-full text-xs font-bold uppercase ${planClase}">${escapar(t.plan)}</span></td>
+          <td class="px-5 py-3.5">
+            <select data-plan class="text-xs font-bold uppercase rounded-lg border border-slate-200 bg-white py-1.5 pl-2.5 pr-6 text-slate-700 cursor-pointer">
+              <option value="free" ${t.plan === 'free' ? 'selected' : ''}>FREE</option>
+              <option value="pro" ${t.plan === 'pro' ? 'selected' : ''}>PRO</option>
+              <option value="premium" ${t.plan === 'premium' ? 'selected' : ''}>PREMIUM</option>
+            </select>
+          </td>
           <td class="px-5 py-3.5 text-center font-semibold text-slate-700">${t.num_productos}</td>
           <td class="px-5 py-3.5 text-xs">${vence}</td>
           <td class="px-5 py-3.5 text-xs font-medium">${estado}</td>
@@ -431,6 +438,22 @@ async function cargarTiendas() {
       const { error } = await supabase.rpc('pausar_tienda', { p_business_id: id, p_pausar: !pausada });
       if (error) { registrarError('admin/pausar', error); return notificar('No se pudo cambiar el estado.', 'error'); }
       notificar(pausada ? 'Tienda reactivada.' : 'Tienda pausada.', 'exito');
+      await cargarTiendas();
+    });
+  });
+
+  cuerpo.querySelectorAll('[data-plan]').forEach((sel) => {
+    const fila = sel.closest('[data-tienda]'); const id = fila.dataset.tienda;
+    const anterior = sel.value;
+    sel.addEventListener('change', async () => {
+      const nuevo = sel.value;
+      const msg = nuevo === 'free'
+        ? '¿Cambiar a plan FREE? La tienda queda activa con el límite gratuito.'
+        : `¿Cambiar a plan ${nuevo.toUpperCase()}? Si no tiene un pago vigente, quedará como "Vencida" hasta que pague o la renueves.`;
+      if (!confirm(msg)) { sel.value = anterior; return; }
+      const { error } = await supabase.rpc('cambiar_plan', { p_business_id: id, p_plan: nuevo });
+      if (error) { registrarError('admin/cambiar-plan', error); sel.value = anterior; return notificar('No se pudo cambiar el plan.', 'error'); }
+      notificar(`Plan cambiado a ${nuevo.toUpperCase()}.`, 'exito');
       await cargarTiendas();
     });
   });
