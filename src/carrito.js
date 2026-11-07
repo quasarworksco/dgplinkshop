@@ -100,18 +100,19 @@ function inyectarUI() {
 
     <aside id="carrito-panel" aria-label="Carrito"
       class="fixed top-0 right-0 z-50 h-full w-full max-w-md bg-white shadow-2xl flex flex-col translate-x-full transition-transform duration-300">
-      <header class="flex items-center justify-between px-5 py-4 border-b border-slate-100">
+      <header class="shrink-0 flex items-center justify-between px-5 py-4 border-b border-slate-100">
         <h2 class="font-bold text-lg flex items-center gap-2" style="color:${color}">${icono('carrito', 'w-5 h-5')}<span class="text-slate-900">Tu pedido</span></h2>
         <button id="carrito-cerrar" aria-label="Cerrar" class="w-9 h-9 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-500">${icono('cerrar', 'w-4 h-4')}</button>
       </header>
 
-      <ul id="carrito-lineas" class="flex-1 overflow-y-auto p-5 space-y-3"></ul>
-      <div id="carrito-vacio" class="flex-1 flex-col items-center justify-center gap-3 text-slate-400 text-sm p-5 hidden">
-        ${icono('paquete', 'w-12 h-12')}<p>Tu carrito está vacío</p>
-      </div>
+      <!-- Área scrollable: productos + datos del pedido -->
+      <div class="flex-1 overflow-y-auto">
+        <ul id="carrito-lineas" class="p-4 space-y-2.5"></ul>
+        <div id="carrito-vacio" class="flex-col items-center justify-center gap-3 text-slate-400 text-sm py-16 px-5 hidden">
+          ${icono('paquete', 'w-12 h-12')}<p>Tu carrito está vacío</p>
+        </div>
 
-      <footer class="border-t border-slate-100 bg-slate-50/60 max-h-[62vh] overflow-y-auto">
-        <div class="p-5 space-y-4">
+        <div class="px-4 pb-4 space-y-4">
           <!-- Cupón -->
           <div class="flex gap-2">
             <input id="carrito-cupon" class="campo flex-1 uppercase text-sm" placeholder="¿Tienes un cupón?" maxlength="24" autocomplete="off" />
@@ -135,23 +136,22 @@ function inyectarUI() {
             </div>
             <textarea id="carrito-direccion" class="campo text-sm mt-2 hidden" rows="2" maxlength="200" placeholder="Dirección de envío (ciudad, calle, referencias)"></textarea>
           </div>
-
-          <!-- Totales -->
-          <dl class="text-sm space-y-1.5 pt-1">
-            <div class="flex justify-between text-slate-500"><dt>Subtotal</dt><dd id="carrito-subtotal">$0.00</dd></div>
-            <div id="carrito-fila-descuento" class="flex justify-between text-emerald-600 hidden"><dt>Descuento</dt><dd id="carrito-descuento">-$0.00</dd></div>
-            <div class="flex justify-between font-bold text-base text-slate-900 pt-1.5 border-t border-slate-200"><dt>Total</dt><dd id="carrito-total">$0.00</dd></div>
-            <div id="carrito-fila-bs" class="flex justify-between text-slate-500 hidden"><dt>Total en Bs</dt><dd id="carrito-total-bs">Bs 0</dd></div>
-          </dl>
-
-          <div class="space-y-2">
-            <button id="carrito-confirmar" class="btn w-full text-white text-sm" style="background:#25D366" disabled>
-              ${icono('mensaje', 'w-5 h-5')} Finalizar compra por WhatsApp
-            </button>
-            <button id="carrito-seguir" class="btn btn-claro w-full text-sm">Seguir comprando</button>
-          </div>
-          <p class="text-[11px] text-slate-400 text-center">No pagas aquí: coordinas el pago y la entrega con la tienda.</p>
         </div>
+      </div>
+
+      <!-- Barra de acción fija abajo (total + botones), con margen seguro en móvil -->
+      <footer class="shrink-0 border-t border-slate-200 bg-white px-4 pt-3 space-y-2.5" style="padding-bottom:calc(0.9rem + env(safe-area-inset-bottom))">
+        <dl class="text-sm space-y-1">
+          <div class="flex justify-between text-slate-500"><dt>Subtotal</dt><dd id="carrito-subtotal">$0.00</dd></div>
+          <div id="carrito-fila-descuento" class="flex justify-between text-emerald-600 hidden"><dt>Descuento</dt><dd id="carrito-descuento">-$0.00</dd></div>
+          <div class="flex justify-between font-bold text-base text-slate-900 pt-1.5 border-t border-slate-200"><dt>Total</dt><dd id="carrito-total">$0.00</dd></div>
+          <div id="carrito-fila-bs" class="flex justify-between text-slate-500 hidden"><dt>Total en Bs</dt><dd id="carrito-total-bs">Bs 0</dd></div>
+        </dl>
+        <button id="carrito-confirmar" class="btn w-full text-white text-sm" style="background:#25D366" disabled>
+          ${icono('mensaje', 'w-5 h-5')} Finalizar compra por WhatsApp
+        </button>
+        <button id="carrito-seguir" class="btn btn-claro w-full text-sm">Seguir comprando</button>
+        <p class="text-[11px] text-slate-400 text-center">No pagas aquí: coordinas el pago y la entrega con la tienda.</p>
       </footer>
     </aside>`;
   document.body.appendChild(raiz);
