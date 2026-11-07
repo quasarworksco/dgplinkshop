@@ -330,6 +330,17 @@ function actualizarContadores() {
   $('btn-nuevo-producto').disabled = total >= limite;
 }
 
+// Muestra/oculta el campo de cantidad según el interruptor "Stock ilimitado".
+function sincronizarStockUI() {
+  const ilim = $('prod-stock-ilimitado').checked;
+  $('prod-stock').classList.toggle('hidden', ilim);
+  $('prod-stock').disabled = ilim;
+  $('prod-stock-ayuda').textContent = ilim
+    ? 'Este producto se vende sin límite: nunca se marca “Agotado”.'
+    : 'Cuántas unidades te quedan. Al llegar a 0 se marca “Agotado”.';
+}
+document.getElementById('prod-stock-ilimitado')?.addEventListener('change', sincronizarStockUI);
+
 // --- Modal de producto -------------------------------------
 function abrirModalProducto(producto = null) {
   imagenSubidaUrl = producto?.image_url ?? null;
@@ -340,7 +351,10 @@ function abrirModalProducto(producto = null) {
   $('prod-descuento').value = producto?.discount_percent ?? 0;
   $('prod-destacado').checked = producto?.is_featured ?? false;
   $('prod-categoria').value = producto?.category_id ?? '';
+  // Inventario: nuevo producto = ilimitado por defecto; al editar depende de si tenía control de stock.
+  $('prod-stock-ilimitado').checked = producto ? (producto.stock == null) : true;
   $('prod-stock').value = producto?.stock ?? '';
+  sincronizarStockUI();
   $('prod-descripcion').value = producto?.description ?? '';
   tagsProducto = Array.isArray(producto?.tags) ? [...producto.tags] : [];
   $('prod-tags-input').value = '';
@@ -484,7 +498,7 @@ $('form-producto').addEventListener('submit', async (e) => {
     discount_percent: Math.min(90, Math.max(0, Number($('prod-descuento').value) || 0)),
     is_featured: $('prod-destacado').checked,
     category_id: $('prod-categoria').value || null,
-    stock: $('prod-stock').value === '' ? null : Math.max(0, parseInt($('prod-stock').value, 10) || 0),
+    stock: $('prod-stock-ilimitado').checked ? null : Math.max(0, parseInt($('prod-stock').value, 10) || 0),
     description: $('prod-descripcion').value.trim() || null,
     tags: tagsProducto,
     wholesale_price: $('prod-precio-mayor').value === '' ? null : Math.max(0, Number($('prod-precio-mayor').value) || 0),
